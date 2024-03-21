@@ -15,7 +15,7 @@ const MainLayout = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-    
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
@@ -49,17 +49,8 @@ const MainLayout = () => {
                         </Col>
                     </Row>
                 </Header>
-                <Content style={{ margin: '0 16px' }}>
-                    <div
-                        style={{
-                            padding: 24,
-                            minHeight: 360,
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                        }}
-                    >
-                        <PageRouter />
-                    </div>
+                <Content style={{ margin: '20px 20px', backgroundColor: '#F0F0F0' }}>
+                    <PageRouter />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                     Design by <strong>Dao Duc Hung</strong>

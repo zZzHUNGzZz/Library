@@ -21,7 +21,7 @@ const publicRouter: MenuItem[] = [
     getItem('Dashbroad', '/', <PieChartOutlined />),
     getItem('Option 2', '/folowing', <DesktopOutlined />),
     getItem('User', 'sub1', <UserOutlined />, [
-        getItem('Tom', '/folowing'),
+        getItem('Tom', '3'),
         getItem('Bill', '4'),
         getItem('Alex', '5'),
     ]),

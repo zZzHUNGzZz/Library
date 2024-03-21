@@ -1,0 +1,11 @@
+.ant-card {
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.card-content-icon {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
