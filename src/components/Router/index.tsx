@@ -18,7 +18,7 @@ function getItem(
 }
 
 const publicRouter: MenuItem[] = [
-    getItem('Option 1', '/', <PieChartOutlined />),
+    getItem('Dashbroad', '/', <PieChartOutlined />),
     getItem('Option 2', '/folowing', <DesktopOutlined />),
     getItem('User', 'sub1', <UserOutlined />, [
         getItem('Tom', '/folowing'),

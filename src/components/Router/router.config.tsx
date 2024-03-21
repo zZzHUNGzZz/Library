@@ -1,16 +1,16 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "./../../scenes/Home"
 import Folowing from './../../scenes/Folowing';
+import DashBroad from "../../scenes/Dashbroad";
 
-const PageContent = () => {
+const PageRouter = () => {
     return (
         <>
             <Routes>
-                <Route path='/' element={<Home />}></Route>
+                <Route path='/' element={<DashBroad />}></Route>
                 <Route path='/folowing' element={<Folowing />}></Route>
             </Routes >
         </>
     )
 }
 
-export default PageContent;
+export default PageRouter;
