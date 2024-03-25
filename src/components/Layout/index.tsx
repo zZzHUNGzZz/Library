@@ -18,7 +18,7 @@ const MainLayout = () => {
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={250}>
                 <div className="demo-logo-vertical">Library</div>
                 <Menu
                     theme="dark"
@@ -31,7 +31,7 @@ const MainLayout = () => {
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>
                     <Row>
-                        <Col span={12}>
+                        <Col span={4}>
                             <Button
                                 type="text"
                                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -43,7 +43,7 @@ const MainLayout = () => {
                                 }}
                             />
                         </Col>
-                        <Col span={12} className='header-col-right-user'>
+                        <Col span={20} className='header-col-right-user'>
                             <FaRegCircleUser style={{ width: 20, height: 20, marginRight: 8 }} />
                             <span style={{ marginRight: 16 }}>Đào Đức Hưng</span>
                         </Col>
@@ -53,7 +53,7 @@ const MainLayout = () => {
                     <PageRouter />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    Design by <strong>Dao Duc Hung</strong>
+                    Design by <strong>Đào Đức Hưng</strong>
                 </Footer>
             </Layout>
         </Layout>
