@@ -13,7 +13,7 @@ const MainLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer },
     } = theme.useToken();
 
     return (
@@ -33,14 +33,10 @@ const MainLayout = () => {
                     <Row>
                         <Col span={4}>
                             <Button
+                                className='button-collapsed'
                                 type="text"
                                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                                 onClick={() => setCollapsed(!collapsed)}
-                                style={{
-                                    fontSize: '16px',
-                                    width: 64,
-                                    height: 64,
-                                }}
                             />
                         </Col>
                         <Col span={20} className='header-col-right-user'>

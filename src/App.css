@@ -13,3 +13,10 @@
     justify-content: right;
     align-items: center;
 }
+
+.button-collapsed {
+    width: 64px !important;
+    height: 64px;
+}
+
+
