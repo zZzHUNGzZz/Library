@@ -12,31 +12,7 @@ code {
         monospace;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p {
     margin: 0;
     color: #000000;
 }
-
-p {
-    margin: 0;
-    color: #073B91;
-    font-weight: 600;
-}
-
-
-.ant-btn-default {
-    height: 35px;
-    background-color: #1677FF;
-    color: #ffffff;
-    font-weight: 450;
-}
-
-.ant-btn-default:hover {
-    background-color: #136dec !important;
-    color: #ffffff !important;
-}
-
-.ant-table-wrapper {
-    background-color: #073B91 !important;
-}
-

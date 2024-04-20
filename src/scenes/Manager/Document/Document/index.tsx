@@ -87,6 +87,7 @@ function Document() {
                 </Col>
             </Row>
             <Table
+                bordered
                 columns={columns}
                 dataSource={data}
             />
