@@ -1,9 +1,12 @@
 import { Button, Card, Col, Input, Row, Table } from "antd";
 import { useEffect, useState } from "react";
 import { createDocument, getDocument } from "../../../../stores/DocumentStore";
+import { cssResponsive } from "../../../../components/Manager/AppConst";
+import { CreateOrUpdateDocument } from "./CreateUpdateDocument";
 
 function Document() {
     const [data, setData] = useState<any[]>([]);
+    const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -19,7 +22,11 @@ function Document() {
     };
 
     const onCreateOrUpdateData = () => {
-        createDocument("ten tl", "tg", 100, "", "", "k biet", "cx ko luon", "vn", "chu de", null);
+
+    }
+
+    const onCancel = () => {
+        setCreateUpdateFormOpen(false);
     }
 
     const columns = [
@@ -34,27 +41,26 @@ function Document() {
         { title: 'Chủ đề', dataIndex: 'do_topic', key: 'do_topic', },
         { title: 'Danh mục', dataIndex: 'do_category' },
     ];
+
+    const leftCol = isCreateUpdate ? cssResponsive(24, 24, 12, 12, 12, 12) : cssResponsive(24, 24, 24, 24, 24, 24);
+    const rightCol = isCreateUpdate ? cssResponsive(24, 24, 12, 12, 12, 12) : cssResponsive(0, 0, 0, 0, 0, 0);
     return (
         <Card>
             <Row>
                 <Col span={12}><h2>Thông tin tài liệu</h2></Col>
                 <Col span={12} style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end", gap: 8 }}>
-                    <Button onClick={() => onCreateOrUpdateData()}>Thêm dữ liệu</Button>
-                    <Button>Xuất dữ liệu</Button>
-                    <Button>Nhập dữ liệu</Button>
+                    <Button type="primary" onClick={() => setCreateUpdateFormOpen(true)}>Thêm dữ liệu</Button>
+                    <Button type="primary">Xuất dữ liệu</Button>
+                    <Button type="primary">Nhập dữ liệu</Button>
                 </Col>
             </Row>
-            <Row style={{margin: "20px 0"}}>
+            <Row style={{ margin: "20px 0" }}>
                 <Col span={6}>
                     <p>Tên tài liệu</p>
                     <Input></Input>
                 </Col>
                 <Col span={6}>
                     <p>Tác giả</p>
-                    <Input></Input>
-                </Col>
-                <Col span={6}>
-                    <p>Số lượng</p>
                     <Input></Input>
                 </Col>
                 <Col span={6}>
@@ -65,32 +71,22 @@ function Document() {
                     <p>Mã đầu sách</p>
                     <Input></Input>
                 </Col>
-                <Col span={6}>
-                    <p>Dịch giả</p>
-                    <Input></Input>
+            </Row>
+            <Row>
+                <Col {...leftCol}>
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={data}
+                        scroll={{ x: 1000 }}
+                    />
                 </Col>
-                <Col span={6}>
-                    <p>Nhà xuất bản</p>
-                    <Input></Input>
-                </Col>
-                <Col span={6}>
-                    <p>Ngôn ngữ</p>
-                    <Input></Input>
-                </Col>
-                <Col span={6}>
-                    <p>Chủ đề</p>
-                    <Input></Input>
-                </Col>
-                <Col span={6}>
-                    <p>Danh mục</p>
-                    <Input></Input>
+                <Col {...rightCol}>
+                    <CreateOrUpdateDocument
+                        onCancelData={onCancel}
+                    />
                 </Col>
             </Row>
-            <Table
-                bordered
-                columns={columns}
-                dataSource={data}
-            />
         </Card>
     );
 }

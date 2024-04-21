@@ -12,7 +12,22 @@ code {
         monospace;
 }
 
+/* css thành phần mặc định của antd mà không dùng được design token*/
 h1, h2, h3, h4, h5, h6, p {
     margin: 0;
     color: #000000;
+}
+
+.div-form-data {
+    padding: 15px;
+    border: solid #d9d9d9 1px;
+}
+
+/* css mẫu - chỉ việc gọi sử dụng */
+
+.align-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: end;
 }

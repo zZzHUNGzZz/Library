@@ -11,15 +11,10 @@ const App = () => {
                },
                Button: {
                   controlHeight: 35,
-                  defaultBg: '#1677ff',
-                  defaultColor: '#ffffff',
-                  defaultHoverBg: '#0958d9',
-                  defaultHoverColor: '#ffffff',
-                  defaultActiveBg: '#0958d9',
-                  defaultActiveColor: '#ffffff',
+                  borderRadius: 5,
                },
                Input: {
-                  borderRadius: 5,
+                  borderRadius: 3,
                },
                Table: {
                   headerBg: '#0958d9',
@@ -30,8 +25,9 @@ const App = () => {
                },
                Card: {
 
+               },
+               Form: {
                }
-
             },
          }}
       >
