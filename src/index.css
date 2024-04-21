@@ -23,7 +23,16 @@ h1, h2, h3, h4, h5, h6, p {
     border: solid #d9d9d9 1px;
 }
 
+.p-title-search {
+    font-weight: 600;
+}
+
 /* css mẫu - chỉ việc gọi sử dụng */
+.align-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
 .align-right {
     display: flex;
@@ -31,3 +40,4 @@ h1, h2, h3, h4, h5, h6, p {
     gap: 8px;
     justify-content: end;
 }
+

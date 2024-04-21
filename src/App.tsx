@@ -16,6 +16,9 @@ const App = () => {
                Input: {
                   borderRadius: 3,
                },
+               InputNumber: {
+                  borderRadius: 3,
+               },
                Table: {
                   headerBg: '#0958d9',
                   headerColor: '#ffffff',

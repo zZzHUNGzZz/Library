@@ -1,20 +1,24 @@
 import database from "../firebase";
 
-export const createDocument = (do_title: string | null, author: string | null, do_total: number | null,
-    do_date_publish: string | null, do_identifier: string | null, do_translator: string | null, do_publisher: string | null,
-    do_language: string | null, do_topic: string | null, do_category: string | null) => {
-    database.ref("document/").push().set({
-        do_title: do_title,
-        author: author,
-        do_total: do_total,
-        do_date_publish: do_date_publish,
-        do_identifier: do_identifier,
-        do_translator: do_translator,
-        do_publisher: do_publisher,
-        do_language: do_language,
-        do_topic: do_topic,
-        do_category: do_category,
-    }, function (error) {
+export interface DocumentStore {
+    do_id: string | null,
+    do_title: string | null,
+    author: string | null,
+    do_total: string | null,
+    do_date_publish: string | null,
+    do_identifier: string | null,
+    do_translator: string | null,
+    do_publisher: string | null,
+    do_language: string | null,
+    do_topic: string | null,
+    do_category: string | null,
+}
+
+export const createDocument = (data: DocumentStore) => {
+    const filteredData = Object.fromEntries(
+        Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
+    );
+    database.ref("document/").push().set(filteredData, function (error) {
         if (error) {
             alert('Ghi dữ liệu bị lỗi!');
         }

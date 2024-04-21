@@ -1,10 +1,7 @@
 
-import { Button, Col, Input, Row, Table } from "antd";
+import { Input, Table } from "antd";
 import { useEffect, useState } from "react";
-import { createDocumentInfo, updateDocumentInfo, getDocumentInfo } from "../../../../stores/DocumentInfoStore";
-const columns = [
-    {}
-]
+import { createDocumentInfo, getDocumentInfo } from "../../../../stores/DocumentInfoStore";
 
 function DocumentInfo() {
     const [name, setName] = useState("");
@@ -21,25 +18,25 @@ function DocumentInfo() {
                 console.error("Lỗi khi lấy dữ liệu:", error);
             }
         };
-        fetchData(); 
+        fetchData();
     }, []);
-    const columns = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-        },
-        {
-            title: 'Tên',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Tuổi',
-            dataIndex: 'age',
-            key: 'age',
-        },
-    ];
+    // const columns = [
+    //     {
+    //         title: 'ID',
+    //         dataIndex: 'id',
+    //         key: 'id',
+    //     },
+    //     {
+    //         title: 'Tên',
+    //         dataIndex: 'name',
+    //         key: 'name',
+    //     },
+    //     {
+    //         title: 'Tuổi',
+    //         dataIndex: 'age',
+    //         key: 'age',
+    //     },
+    // ];
     return (
         <>
 
@@ -47,11 +44,12 @@ function DocumentInfo() {
                 onChange={async (e) => await setName(e.target.value)}
             />
             <Input placeholder="Enter your age" value={age}
-                onChange={(e) => setAge(e.target.value)} />
+                onChange={(e) => setAge(e.target.value)}
+            />
             <button onClick={() => createDocumentInfo(name, age)}>PUSH</button>
             <div className="App">
                 <h1>Dữ liệu từ Firebase</h1>
-                <Table columns={columns} dataSource={data} />
+                {/* <Table columns={columns} dataSource={data} /> */}
             </div>
 
             {/* <Row>
