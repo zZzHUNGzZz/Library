@@ -4,6 +4,7 @@ import { DocumentStore, deleteDocument, getDocument } from "../../../../stores/D
 import { cssResponsive } from "../../../../components/Manager/AppConst";
 import { CreateOrUpdateDocument } from "./CreateUpdateDocument";
 import TableDocument from "./TableDocument";
+import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 
 function Document() {
     const [data, setData] = useState<DocumentStore[]>([]);
@@ -51,29 +52,39 @@ function Document() {
     return (
         <Card>
             <Row>
-                <Col span={12}><h2 style={{ color: '#0958d9' }}>Tài liệu</h2></Col>
-                <Col span={12} className="align-right">
-                    <Button type="primary" onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
-                    <Button type="primary">Xuất dữ liệu</Button>
-                    <Button type="primary">Nhập dữ liệu</Button>
+                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}><h2>Tài liệu</h2></Col>
+                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">
+                    <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />}
+                        onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
+                    <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} >Nhập dữ liệu</Button>
+                    <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} >Xuất dữ liệu</Button>
                 </Col>
             </Row>
-            <Row gutter={8} style={{ margin: "20px 0" }}>
-                <Col span={6}>
+            <Row gutter={[8, 8]} style={{ margin: "20px 0 10px 0" }}>
+                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
                     <p className="p-title-search">Tên tài liệu</p>
                     <Input></Input>
                 </Col>
-                <Col span={6}>
+                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
                     <p className="p-title-search">Tác giả</p>
                     <Input></Input>
                 </Col>
-                <Col span={6}>
+                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
                     <p className="p-title-search">Năm xuất bản</p>
                     <Input></Input>
                 </Col>
-                <Col span={6}>
+                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
                     <p className="p-title-search">Mã đầu sách</p>
                     <Input></Input>
+                </Col>
+            </Row>
+            <Row gutter={[0, 8]} style={{ margin: "20px 0 10px 0" }}>
+                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-content">
+                    <Button title="Tìm kiếm" icon={<SearchOutlined />}>Tìm kiếm</Button>
+                    <Button title="Xóa tìm kiếm" className="button-danger" danger icon={<DeleteOutlined />}>Xóa tìm kiếm</Button>
+                </Col>
+                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">
+                    <Button title="Thao tác hàng loạt" type="primary">Thao tác hàng loạt</Button>
                 </Col>
             </Row>
             <Row>

@@ -11,6 +11,7 @@ import MemberHistory from "../../scenes/Manager/Member/MemberHistory";
 import BorrowReturnStatistic from "../../scenes/Manager/Statistic/BorrowReturnStatistic";
 import DocumentStatistic from "../../scenes/Manager/Statistic/DocumentStatistic";
 import MemberStatistic from "../../scenes/Manager/Statistic/MemberStatistic";
+import Author from "../../scenes/Manager/General/Author";
 
 const PageRouter = () => {
     return (
@@ -28,6 +29,8 @@ const PageRouter = () => {
                 <Route path='/borrow-return-statistic' element={<BorrowReturnStatistic />}></Route>
                 <Route path='/document-statistic' element={<DocumentStatistic />}></Route>
                 <Route path='/member-statistic' element={<MemberStatistic />}></Route>
+                
+                <Route path='/author' element={<Author />}></Route>
             </Routes>
         </>
     )

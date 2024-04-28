@@ -38,6 +38,10 @@ const publicRouter: MenuItem[] = [
         getItem('Báo cáo độc giả', '/member-statistic'),
         getItem('Báo cáo mượn trả', '/borrow-return-statistic'),
     ]),
+    getItem('Quản lý chung', '/5', <UserOutlined />, [
+        getItem('Tác giả', '/author'),
+        getItem('Danh mục', '/category'),
+    ]),
 ];
 
 export default publicRouter;

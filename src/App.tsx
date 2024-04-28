@@ -11,7 +11,14 @@ const App = () => {
                },
                Button: {
                   controlHeight: 35,
-                  borderRadius: 5,
+                  borderRadius: 4,
+                  defaultBorderColor: '#1677ff',
+                  defaultColor: '#1677ff',
+                  defaultHoverColor: '#ffffff',
+                  defaultActiveColor: '#ffffff',
+                  defaultBg: '#ffffff',
+                  defaultHoverBg: '#1677ff',
+                  defaultActiveBg: '#0958d9',
                },
                Input: {
                   borderRadius: 3,

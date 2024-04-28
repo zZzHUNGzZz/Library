@@ -1,5 +1,5 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Table } from "antd";
+import { Table, TableColumnsType } from "antd";
 import React from "react";
 import { DocumentStore } from "../../../../stores/DocumentStore";
 
@@ -10,8 +10,8 @@ interface IProps {
     onDelete: (id: string) => void;
 }
 export const TableDocument: React.FC<IProps> = ({ datasource, onUpdate, onDelete }) => {
-    const columns = [
-        { title: 'STT', dataIndex: 'stt', render: (index: number) => index + 1 },
+    const columns : TableColumnsType<DocumentStore> = [
+        { title: 'STT', dataIndex: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
         { title: 'Tên tài liệu', dataIndex: 'do_title', },
         { title: 'Tác giả', dataIndex: 'author', },
         { title: 'Số lượng', dataIndex: 'do_total', },
@@ -23,7 +23,7 @@ export const TableDocument: React.FC<IProps> = ({ datasource, onUpdate, onDelete
         { title: 'Chủ đề', dataIndex: 'do_topic', },
         { title: 'Danh mục', dataIndex: 'do_category', },
         {
-            title: 'Chức năng', dataIndex: 'do_action',
+            title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
             render: ( text: any, record: DocumentStore) => (
                 <div className="align-center">
                     <EditTwoTone twoToneColor="#52c41a" onClick={() => onUpdate(record)} />
@@ -38,7 +38,7 @@ export const TableDocument: React.FC<IProps> = ({ datasource, onUpdate, onDelete
             columns={columns}
             dataSource={datasource}
             rowKey="do_id"
-            scroll={{ x: 1000 }}
+            scroll={{ x: 1500 }}
         />
     )
 }
