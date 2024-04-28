@@ -1,44 +1,50 @@
-import { Button, Card, Col, Input, Row, Table } from "antd";
+import { Button, Card, Col, Input, Row } from "antd";
 import { useEffect, useState } from "react";
-import { getDocument } from "../../../../stores/DocumentStore";
+import { DocumentStore, deleteDocument, getDocument } from "../../../../stores/DocumentStore";
 import { cssResponsive } from "../../../../components/Manager/AppConst";
 import { CreateOrUpdateDocument } from "./CreateUpdateDocument";
+import TableDocument from "./TableDocument";
 
 function Document() {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<DocumentStore[]>([]);
+    const [isLoadDone, setIsLoadDone] = useState(true);
+    const [documentSelected, setdocumentSelected] = useState<DocumentStore>()
     const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => { fetchData() }, []);
 
     const fetchData = async () => {
         try {
             const infoArray = await getDocument();
             const dataWithIndex = infoArray.map((item, index) => ({ ...item, stt: index }));
             setData(dataWithIndex);
+
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu:", error);
         }
     };
 
-    const onCancel = () => {
-        setCreateUpdateFormOpen(false);
+    const onCreateOrUpdateModalOpen = (value?: DocumentStore) => {
+        if (!!value) setdocumentSelected(value)
+        setCreateUpdateFormOpen(true);
     }
 
-    const columns = [
-        { title: 'STT', dataIndex: 'stt', render: (index: number) => index + 1 },
-        { title: 'Tên tài liệu', dataIndex: 'do_title', },
-        { title: 'Tác giả', dataIndex: 'author', },
-        { title: 'Số lượng', dataIndex: 'do_total', },
-        { title: 'Năm xuất bản', dataIndex: 'do_date_publish', },
-        { title: 'Mã đầu sách', dataIndex: 'do_identifier', },
-        { title: 'Dịch giả', dataIndex: 'do_translator', },
-        { title: 'Nhà xuất bản', dataIndex: 'do_publisher', },
-        { title: 'Ngôn ngữ', dataIndex: 'do_language', },
-        { title: 'Chủ đề', dataIndex: 'do_topic', },
-        { title: 'Danh mục', dataIndex: 'do_category', },
-    ];
+    const onCreateOrUpdateSuccess = async () => {
+        await fetchData();
+        onCancel();
+        setIsLoadDone(!isLoadDone);
+    }
+
+    const onDeleteDocument = async (id: string) => {
+        await deleteDocument(id);
+        await fetchData();
+        setIsLoadDone(!isLoadDone);
+    }
+
+    const onCancel = () => {
+        setdocumentSelected(undefined)
+        setCreateUpdateFormOpen(false);
+    }
 
     const leftCol = isCreateUpdate ? cssResponsive(24, 24, 14, 14, 14, 14) : cssResponsive(24, 24, 24, 24, 24, 24);
     const rightCol = isCreateUpdate ? cssResponsive(24, 24, 10, 10, 10, 10) : cssResponsive(0, 0, 0, 0, 0, 0);
@@ -47,7 +53,7 @@ function Document() {
             <Row>
                 <Col span={12}><h2 style={{ color: '#0958d9' }}>Tài liệu</h2></Col>
                 <Col span={12} className="align-right">
-                    <Button type="primary" onClick={() => setCreateUpdateFormOpen(true)}>Thêm dữ liệu</Button>
+                    <Button type="primary" onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
                     <Button type="primary">Xuất dữ liệu</Button>
                     <Button type="primary">Nhập dữ liệu</Button>
                 </Col>
@@ -72,16 +78,16 @@ function Document() {
             </Row>
             <Row>
                 <Col {...leftCol}>
-                    <Table
-                        bordered
-                        columns={columns}
-                        dataSource={data}
-                        rowKey="do_id"
-                        scroll={{ x: 1000 }}
+                    <TableDocument
+                        datasource={data}
+                        onUpdate={onCreateOrUpdateModalOpen}
+                        onDelete={onDeleteDocument}
                     />
                 </Col>
                 <Col {...rightCol}>
                     <CreateOrUpdateDocument
+                        documentSelected={documentSelected}
+                        onCreateOrUpdateSuccess={onCreateOrUpdateSuccess}
                         onCancelData={onCancel}
                     />
                 </Col>

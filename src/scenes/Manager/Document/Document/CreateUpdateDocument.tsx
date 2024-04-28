@@ -1,19 +1,35 @@
 import { Button, Col, Form, FormProps, Input, InputNumber, Row } from "antd"
-import { DocumentStore, createDocument } from "../../../../stores/DocumentStore";
-import { useState } from "react";
+import { DocumentStore, createDocument, updateDocument } from "../../../../stores/DocumentStore";
+import { useEffect, useState } from "react";
 
 interface IProps {
     onCancelData: () => void;
+    documentSelected: DocumentStore | undefined;
+    onCreateOrUpdateSuccess: () => void;
 }
 
+export const CreateOrUpdateDocument: React.FC<IProps> = ({ onCancelData, documentSelected, onCreateOrUpdateSuccess }) => {
+    const [form] = Form.useForm();
 
-export const CreateOrUpdateDocument: React.FC<IProps> = ({ onCancelData }) => {
-    const [isLoadDone, setIsLoadDone] = useState(true);
-    const onCancel = () => onCancelData();
+    const onCancel = () => { onCancelData(); }
 
-    const onCreateOrUpdateData = (values: DocumentStore) => {
-        createDocument(values);
-        setIsLoadDone(!isLoadDone);
+    useEffect(() => {
+        if (!!documentSelected) {
+            form.setFieldsValue(documentSelected);
+        }
+        else {
+            form.resetFields();
+        }
+    })
+
+    const onCreateOrUpdateData = async (value: DocumentStore) => {
+        if (!!documentSelected) {
+            await updateDocument(documentSelected.do_id, value);
+        }
+        else {
+            await createDocument(value);
+        }
+        onCreateOrUpdateSuccess();
     }
     const onFinish: FormProps<DocumentStore>['onFinish'] = (values) => {
         onCreateOrUpdateData(values)
@@ -26,6 +42,7 @@ export const CreateOrUpdateDocument: React.FC<IProps> = ({ onCancelData }) => {
     return (
         <div className="div-form-data">
             <Form
+                form={form}
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
@@ -33,7 +50,7 @@ export const CreateOrUpdateDocument: React.FC<IProps> = ({ onCancelData }) => {
                 onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>Thêm tài liệu</h3></Col>
+                    <Col span={12}><h3>{!!documentSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
                     <Col span={12} className="align-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button danger onClick={onCancel}>Hủy</Button>
@@ -57,7 +74,7 @@ export const CreateOrUpdateDocument: React.FC<IProps> = ({ onCancelData }) => {
                     label="Số lượng"
                     name="do_total"
                 >
-                    <InputNumber style={{ width: '100%'}}/>
+                    <InputNumber style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
                     label="Năm xuất bản"
