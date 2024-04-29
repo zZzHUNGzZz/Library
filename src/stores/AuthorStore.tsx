@@ -1,42 +1,42 @@
 import { message } from "antd";
 import database from "../firebase";
 
-export interface DocumentStore {
-    do_id: string,
-    do_title: string | null,
-    author: string | null,
-    do_total: string | null,
-    do_date_publish: string | null,
-    do_identifier: string | null,
-    do_translator: string | null,
-    do_publisher: string | null,
-    do_language: string | null,
-    do_topic: string | null,
-    do_category: string | null,
+export interface AuthorStore {
+    au_id: string,
+    au_avatar: string | null,
+    au_code: string | null,
+    au_name: string | null,
+    au_date: string | null,
+    au_address: string | null,
+    au_email: string | null,
+    academic_rank: string | null,
+    au_degree: string | null,
+    au_pen_name: string | null,
+    au_infor: string | null,
 }
 
-export const getDocument = async (searchKey: keyof DocumentStore = "do_id", searchValue: string | null = null) => {
+export const getAuthor = async (searchValue: string) => {
     try {
-        const snapshot = await database.ref("document").once("value");
+        const snapshot = await database.ref("author").once("value");
         const dataObj = snapshot.val();
-        const dataArray: DocumentStore[] = [];
+        const dataArray: AuthorStore[] = [];
 
         if (dataObj) {
             Object.keys(dataObj).forEach(key => {
-                const document = dataObj[key];
-                if (searchValue === null || document[searchKey] === searchValue) {
+                const author = dataObj[key];
+                if (checkAnyField(author, searchValue)) {
                     dataArray.push({
-                        do_id: key,
-                        do_title: document.do_title,
-                        author: document.author,
-                        do_total: document.do_total,
-                        do_date_publish: document.do_date_publish,
-                        do_identifier: document.do_identifier,
-                        do_translator: document.do_translator,
-                        do_publisher: document.do_publisher,
-                        do_language: document.do_language,
-                        do_topic: document.do_topic,
-                        do_category: document.do_category,
+                        au_id: key,
+                        au_avatar: author.au_avatar,
+                        au_code: author.au_code,
+                        au_name: author.au_name,
+                        au_date: author.au_date,
+                        au_address: author.au_address,
+                        academic_rank: author.academic_rank,
+                        au_degree: author.au_degree,
+                        au_email: author.au_email,
+                        au_pen_name: author.au_pen_name,
+                        au_infor: author.au_infor,
                     });
                 }
             });
@@ -44,16 +44,26 @@ export const getDocument = async (searchKey: keyof DocumentStore = "do_id", sear
 
         return dataArray;
     } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu document:", error);
+        console.error("Error fetching author data:", error);
         throw error;
     }
 }
 
-export const createDocument = (data: DocumentStore) => {
+const checkAnyField = (author: AuthorStore, searchValue: string): boolean => {
+    const authorValues = Object.values(author);
+    for (const value of authorValues) {
+        if (value && typeof value === 'string' && value.toLowerCase().includes(searchValue.toLowerCase())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export const createAuthor = (data: AuthorStore) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("document/").push().set(filteredData, function (error) {
+    database.ref("author/").push().set(filteredData, function (error) {
         if (error) {
             message.error('Ghi dữ liệu bị lỗi!');
         }
@@ -63,11 +73,11 @@ export const createDocument = (data: DocumentStore) => {
     });
 }
 
-export const updateDocument = (do_id: string, data: DocumentStore) => {
+export const updateAuthor = (au_id: string, data: AuthorStore) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("document/" + do_id).set(filteredData, function (error) {
+    database.ref("author/" + au_id).set(filteredData, function (error) {
         if (error) {
             message.error('Sửa dữ liệu bị lỗi!');
         }
@@ -77,8 +87,8 @@ export const updateDocument = (do_id: string, data: DocumentStore) => {
     });
 }
 
-export const deleteDocument = (do_id: string) => {
-    database.ref("document/" + do_id).remove(function (error) {
+export const deleteAuthor = (au_id: string) => {
+    database.ref("author/" + au_id).remove(function (error) {
         if (error) {
             message.error('Xóa dữ liệu bị lỗi!');
         }

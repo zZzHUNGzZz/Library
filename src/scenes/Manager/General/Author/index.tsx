@@ -1,32 +1,31 @@
 import { Button, Card, Col, Input, Row } from "antd";
 import { useEffect, useState } from "react";
-import { DocumentStore, deleteDocument, getDocument } from "../../../../stores/DocumentStore";
+import { AuthorStore, deleteAuthor, getAuthor } from "../../../../stores/AuthorStore";
 import { cssResponsive } from "../../../../components/Manager/AppConst";
-import { CreateOrUpdateDocument } from "./CreateUpdateDocument";
-import TableDocument from "./TableDocument";
+import { CreateOrUpdateAuthor } from "./CreateUpdateAuthor";
+import TableAuthor from "./TableAuthor";
 import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 
 function Author() {
-    const [data, setData] = useState<DocumentStore[]>([]);
+    const [data, setData] = useState<AuthorStore[]>([]);
     const [isLoadDone, setIsLoadDone] = useState(true);
-    const [documentSelected, setdocumentSelected] = useState<DocumentStore>()
+    const [authorSelected, setAuthorSelected] = useState<AuthorStore>()
     const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
 
     useEffect(() => { fetchData() }, []);
-
+    const [valueSearch, setValueSearch] = useState('');
     const fetchData = async () => {
         try {
-            const infoArray = await getDocument();
+            const infoArray = await getAuthor(valueSearch);
             const dataWithIndex = infoArray.map((item, index) => ({ ...item, stt: index }));
             setData(dataWithIndex);
-
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu:", error);
         }
     };
 
-    const onCreateOrUpdateModalOpen = (value?: DocumentStore) => {
-        if (!!value) setdocumentSelected(value)
+    const onCreateOrUpdateModalOpen = (value?: AuthorStore) => {
+        if (!!value) setAuthorSelected(value)
         setCreateUpdateFormOpen(true);
     }
 
@@ -36,14 +35,14 @@ function Author() {
         setIsLoadDone(!isLoadDone);
     }
 
-    const onDeleteDocument = async (id: string) => {
-        await deleteDocument(id);
+    const onDeleteAuthor = async (id: string) => {
+        await deleteAuthor(id);
         await fetchData();
         setIsLoadDone(!isLoadDone);
     }
 
     const onCancel = () => {
-        setdocumentSelected(undefined)
+        setAuthorSelected(undefined)
         setCreateUpdateFormOpen(false);
     }
 
@@ -51,8 +50,12 @@ function Author() {
     const rightCol = isCreateUpdate ? cssResponsive(24, 24, 10, 10, 10, 10) : cssResponsive(0, 0, 0, 0, 0, 0);
     return (
         <Card>
-            <Row>
-                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}><h2>Tài liệu</h2></Col>
+            <Row gutter={[8, 8]} align={"bottom"}>
+                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Tác giả</h2></Col>
+                <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
+                    <p className="p-title-search">Tác giả</p>
+                    <Input placeholder="Mã, tên, bút danh" onChange={(e) => setValueSearch(e.target.value)}></Input>
+                </Col>
                 <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">
                     <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />}
                         onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
@@ -60,27 +63,17 @@ function Author() {
                     <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} >Xuất dữ liệu</Button>
                 </Col>
             </Row>
-            <Row gutter={[8, 8]} style={{ margin: "20px 0 10px 0" }}>
-                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
-                    <p className="p-title-search">Tên tài liệu</p>
-                    <Input></Input>
-                </Col>
-                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
-                    <p className="p-title-search">Tác giả</p>
-                    <Input></Input>
-                </Col>
-                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
-                    <p className="p-title-search">Năm xuất bản</p>
-                    <Input></Input>
-                </Col>
-                <Col {...cssResponsive(24, 12, 6, 6, 6, 4)}>
-                    <p className="p-title-search">Mã đầu sách</p>
-                    <Input></Input>
-                </Col>
-            </Row>
+
+
             <Row gutter={[0, 8]} style={{ margin: "20px 0 10px 0" }}>
                 <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-content">
-                    <Button title="Tìm kiếm" icon={<SearchOutlined />}>Tìm kiếm</Button>
+                    <Button
+                        title="Tìm kiếm"
+                        icon={<SearchOutlined />}
+                        onClick={async () => {}}
+                    >
+                        Tìm kiếm
+                    </Button>
                     <Button title="Xóa tìm kiếm" className="button-danger" danger icon={<DeleteOutlined />}>Xóa tìm kiếm</Button>
                 </Col>
                 <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">
@@ -89,15 +82,15 @@ function Author() {
             </Row>
             <Row>
                 <Col {...leftCol}>
-                    <TableDocument
+                    <TableAuthor
                         datasource={data}
                         onUpdate={onCreateOrUpdateModalOpen}
-                        onDelete={onDeleteDocument}
+                        onDelete={onDeleteAuthor}
                     />
                 </Col>
                 <Col {...rightCol}>
-                    <CreateOrUpdateDocument
-                        documentSelected={documentSelected}
+                    <CreateOrUpdateAuthor
+                        authorSelected={authorSelected}
                         onCreateOrUpdateSuccess={onCreateOrUpdateSuccess}
                         onCancelData={onCancel}
                     />
