@@ -11,13 +11,13 @@ function Author() {
     const [isLoadDone, setIsLoadDone] = useState(true);
     const [authorSelected, setAuthorSelected] = useState<AuthorStore>()
     const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
+    const [valueSearch, setValueSearch] = useState('');
 
     useEffect(() => { fetchData() }, []);
-    const [valueSearch, setValueSearch] = useState('');
     const fetchData = async () => {
         try {
             const infoArray = await getAuthor(valueSearch);
-            const dataWithIndex = infoArray.map((item, index) => ({ ...item, stt: index }));
+            const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
             setData(dataWithIndex);
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu:", error);
@@ -60,7 +60,17 @@ function Author() {
                     <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />}
                         onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
                     <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} >Nhập dữ liệu</Button>
-                    <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} >Xuất dữ liệu</Button>
+
+                    <Button
+                        type="primary"
+                        title="Xuất dữ liệu"
+                        icon={<ExportOutlined />}
+                        onClick={() => { console.log(44) }
+                        }
+                    >
+                    </Button>
+
+
                 </Col>
             </Row>
 
@@ -70,7 +80,7 @@ function Author() {
                     <Button
                         title="Tìm kiếm"
                         icon={<SearchOutlined />}
-                        onClick={async () => {}}
+                        onClick={async () => { }}
                     >
                         Tìm kiếm
                     </Button>
