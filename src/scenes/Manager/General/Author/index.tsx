@@ -5,13 +5,16 @@ import { cssResponsive } from "../../../../components/Manager/AppConst";
 import { CreateOrUpdateAuthor } from "./CreateUpdateAuthor";
 import TableAuthor from "./TableAuthor";
 import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import ExportAuthor from "./ExportAuthor";
 
 function Author() {
     const [data, setData] = useState<AuthorStore[]>([]);
+    const [multiDatarSelected, setMultiDataSelected] = useState<AuthorStore[]>()
     const [isLoadDone, setIsLoadDone] = useState(true);
     const [authorSelected, setAuthorSelected] = useState<AuthorStore>()
     const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
     const [valueSearch, setValueSearch] = useState('');
+    const [isModalExportOpen, setModalExportOpen] = useState(false)
 
     useEffect(() => { fetchData() }, []);
     const fetchData = async () => {
@@ -46,6 +49,9 @@ function Author() {
         setCreateUpdateFormOpen(false);
     }
 
+    const setMultiAuthorSelect = (data: AuthorStore[]) => {
+        setMultiDataSelected(data);
+    }
     const leftCol = isCreateUpdate ? cssResponsive(24, 24, 14, 14, 14, 14) : cssResponsive(24, 24, 24, 24, 24, 24);
     const rightCol = isCreateUpdate ? cssResponsive(24, 24, 10, 10, 10, 10) : cssResponsive(0, 0, 0, 0, 0, 0);
     return (
@@ -65,22 +71,19 @@ function Author() {
                         type="primary"
                         title="Xuất dữ liệu"
                         icon={<ExportOutlined />}
-                        onClick={() => { console.log(44) }
-                        }
+                        onClick={() => setModalExportOpen(true)}
                     >
+                        Xuất dữ liệu
                     </Button>
-
-
                 </Col>
             </Row>
-
 
             <Row gutter={[0, 8]} style={{ margin: "20px 0 10px 0" }}>
                 <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-content">
                     <Button
                         title="Tìm kiếm"
                         icon={<SearchOutlined />}
-                        onClick={async () => { }}
+                        onClick={async () => await fetchData()}
                     >
                         Tìm kiếm
                     </Button>
@@ -96,6 +99,7 @@ function Author() {
                         datasource={data}
                         onUpdate={onCreateOrUpdateModalOpen}
                         onDelete={onDeleteAuthor}
+                        setMultiDataSelected={setMultiAuthorSelect}
                     />
                 </Col>
                 <Col {...rightCol}>
@@ -105,6 +109,11 @@ function Author() {
                         onCancelData={onCancel}
                     />
                 </Col>
+                <ExportAuthor
+                    openModalExport={isModalExportOpen}
+                    setOpenModalExport={setModalExportOpen}
+                    datasource={!!multiDatarSelected ? multiDatarSelected! : data}
+                />
             </Row>
         </Card>
     );

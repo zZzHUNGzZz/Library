@@ -53,7 +53,7 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = ({ onCancelData, authorSel
                     <Col span={12}><h3>{!!authorSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
                     <Col span={12} className="align-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
-                        <Button danger onClick={onCancel}>Hủy</Button>
+                        <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
                     </Col>
                 </Row>
                 <Form.Item
