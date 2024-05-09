@@ -1,41 +1,41 @@
 import { Button, Col, Form, FormProps, Input, InputNumber, Row } from "antd"
-import { AuthorStore, createAuthor, updateAuthor } from "../../../../stores/AuthorStore";
+import { AuthorDTO, createAuthor, updateAuthor } from "../../../../stores/AuthorStore";
 import { useEffect } from "react";
 
 interface IProps {
     onCancelData: () => void;
-    authorSelected: AuthorStore | undefined;
+    authorSelected: AuthorDTO | undefined;
     onCreateOrUpdateSuccess: () => void;
 }
 
-export const CreateOrUpdateAuthor: React.FC<IProps> = ({ onCancelData, authorSelected, onCreateOrUpdateSuccess }) => {
+export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
 
-    const onCancel = () => { onCancelData(); }
+    const onCancel = () => { props.onCancelData(); }
 
     useEffect(() => {
-        if (!!authorSelected) {
-            form.setFieldsValue(authorSelected);
+        if (!!props.authorSelected) {
+            form.setFieldsValue(props.authorSelected);
         }
         else {
             form.resetFields();
         }
     })
 
-    const onCreateOrUpdateData = async (value: AuthorStore) => {
-        if (!!authorSelected) {
-            await updateAuthor(authorSelected.au_id, value);
+    const onCreateOrUpdateData = async (value: AuthorDTO) => {
+        if (!!props.authorSelected) {
+            await updateAuthor(props.authorSelected.au_id, value);
         }
         else {
             await createAuthor(value);
         }
-        onCreateOrUpdateSuccess();
+        props.onCreateOrUpdateSuccess();
     }
-    const onFinish: FormProps<AuthorStore>['onFinish'] = (values) => {
+    const onFinish: FormProps<AuthorDTO>['onFinish'] = (values) => {
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<AuthorStore>['onFinishFailed'] = (errorInfo) => {
+    const onFinishFailed: FormProps<AuthorDTO>['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
 
@@ -50,7 +50,7 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = ({ onCancelData, authorSel
                 onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>{!!authorSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
+                    <Col span={12}><h3>{!!props.authorSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
                     <Col span={12} className="align-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>

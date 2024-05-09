@@ -1,25 +1,33 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
-import { AuthorStore } from "../../../../stores/AuthorStore";
+import { AuthorDTO } from "../../../../stores/AuthorStore";
 interface IProps {
-    onUpdate?: (value: AuthorStore) => void;
+    onUpdate?: (value: AuthorDTO) => void;
     onDelete?: (id: string) => void;
-    setMultiDataSelected?: (data: AuthorStore[]) => void;
-    datasource?: AuthorStore[];
+    setMultiDataSelected?: (data: AuthorDTO[]) => void;
+    datasource?: AuthorDTO[];
     isExportTable?: boolean;
+    columnImport?: (column: TableColumnsType<AuthorDTO>) => void;
 }
-export const TableAuthor: React.FC<IProps> = ({ onUpdate, onDelete, setMultiDataSelected, datasource, isExportTable }) => {
-    const [multiSelectAuthor, setMultiSelectAuthor] = useState<AuthorStore[]>([]);
+export const TableAuthor: React.FC<IProps> = (props) => {
+    const [multiSelectAuthor, setMultiSelectAuthor] = useState<AuthorDTO[]>([]);
 
     useEffect(() => {
-        if (setMultiDataSelected) {        
-            const multiDataSelected = multiSelectAuthor.length > 0 ? multiSelectAuthor : datasource!;
-            setMultiDataSelected(multiDataSelected);
+        if (props.setMultiDataSelected) {
+            const multiDataSelected = multiSelectAuthor.length > 0 ? multiSelectAuthor : props.datasource!;
+            props.setMultiDataSelected(multiDataSelected);
         }
-    }, [multiSelectAuthor, datasource, setMultiDataSelected]);
+    }, [multiSelectAuthor, props.datasource, props.setMultiDataSelected]);
 
-    const columns: TableColumnsType<AuthorStore> = [
+    useEffect(() => {
+        if (props.columnImport) {
+            props.columnImport!(columnData);
+            props.columnImport!(columnData);
+        }
+    }, []);
+
+    const columns: TableColumnsType<AuthorDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
         { title: 'Ảnh đại diện', dataIndex: 'au_avatar', key: 'au_avatar' },
         { title: 'Mã tác giả', dataIndex: 'au_code', key: 'au_code' },
@@ -33,36 +41,37 @@ export const TableAuthor: React.FC<IProps> = ({ onUpdate, onDelete, setMultiData
         { title: 'Thông tin thêm', dataIndex: 'au_infor', key: 'au_infor' },
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
-            render: (text: any, record: AuthorStore) => (
+            render: (text: any, record: AuthorDTO) => (
                 <div className="align-center">
-                    <EditTwoTone twoToneColor="#52c41a" onClick={() => onUpdate!(record)} />
-                    <DeleteTwoTone twoToneColor="#f5222d" onClick={() => onDelete!(record.au_id)} />
+                    <EditTwoTone twoToneColor="#52c41a" onClick={() => props.onUpdate!(record)} />
+                    <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record.au_id)} />
                 </div>
             )
         }
     ];
 
     const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: AuthorStore[]) => {
-            setMultiSelectAuthor(selectedRows)         
+        onChange: (selectedRowKeys: React.Key[], selectedRows: AuthorDTO[]) => {
+            setMultiSelectAuthor(selectedRows)
         },
     };
 
-    const columnToExport = columns.slice(0, 11);
+    const columnData = columns.slice(0, 11);
 
     return (
         <Table
             bordered
-            columns={isExportTable ? columnToExport : columns}
-            dataSource={datasource}
-            rowKey="au_id"
+            columns={props.isExportTable ? columnData : columns}
+            dataSource={props.datasource}
+            key={'stt'}
+            rowKey="stt"
             scroll={{ x: 1551 }}
             onRow={(record) => {
                 return {
-                    onDoubleClick: () => onUpdate!(record)
+                    onDoubleClick: () => props.onUpdate!(record)
                 };
             }}
-            rowSelection={isExportTable ? undefined : { ...rowSelection }}
+            rowSelection={props.isExportTable ? undefined : { ...rowSelection }}
         />
     )
 }

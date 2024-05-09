@@ -83,3 +83,10 @@ h1, h2, h3, h4, h5, h6, p {
     background-color: #bae0ff;
     margin: 10px 0;
 }
+
+.line-space-2 {
+    width: 0.5px;
+    height: 100%;
+    background-color: #bae0ff;
+}
+

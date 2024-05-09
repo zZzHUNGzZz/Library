@@ -1,7 +1,7 @@
 import { message } from "antd";
 import database from "../firebase";
 
-export interface AuthorStore {
+export interface AuthorDTO {
     au_id: string,
     au_avatar: string | null,
     au_code: string | null,
@@ -19,7 +19,7 @@ export const getAuthor = async (searchValue: string) => {
     try {
         const snapshot = await database.ref("author").once("value");
         const dataObj = snapshot.val();
-        const dataArray: AuthorStore[] = [];
+        const dataArray: AuthorDTO[] = [];
 
         if (dataObj) {
             Object.keys(dataObj).forEach(key => {
@@ -49,7 +49,7 @@ export const getAuthor = async (searchValue: string) => {
     }
 }
 
-const checkAnyField = (author: AuthorStore, searchValue: string): boolean => {
+const checkAnyField = (author: AuthorDTO, searchValue: string): boolean => {
     const authorValues = Object.values(author);
     for (const value of authorValues) {
         if (value && typeof value === 'string' && value.toLowerCase().includes(searchValue.toLowerCase())) {
@@ -59,7 +59,7 @@ const checkAnyField = (author: AuthorStore, searchValue: string): boolean => {
     return false;
 }
 
-export const createAuthor = (data: AuthorStore) => {
+export const createAuthor = (data: AuthorDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
@@ -73,7 +73,7 @@ export const createAuthor = (data: AuthorStore) => {
     });
 }
 
-export const updateAuthor = (au_id: string, data: AuthorStore) => {
+export const updateAuthor = (au_id: string, data: AuthorDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
@@ -87,15 +87,17 @@ export const updateAuthor = (au_id: string, data: AuthorStore) => {
     });
 }
 
-export const deleteAuthor = (au_id: string) => {
-    database.ref("author/" + au_id).remove(function (error) {
-        if (error) {
-            message.error('Xóa dữ liệu bị lỗi!');
-        }
-        else {
-            message.success("Xóa dữ liệu thành công!");
-        }
-    });
+export const deleteAuthor = (au_id: string[]) => {
+    au_id.forEach(au_id => {
+        database.ref("author/" + au_id).remove(function (error) {
+            if (error) {
+                message.error('Xóa dữ liệu bị lỗi!');
+            }
+            else {
+                message.success("Xóa dữ liệu thành công!");
+            }
+        });
+    })
 }
 
 
