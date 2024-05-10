@@ -48,7 +48,7 @@ export const TablePublisher: React.FC<IProps> = (props) => {
 
     const rowSelection = {
         onChange: (selectedRowKeys: React.Key[], selectedRows: PublisherDTO[]) => {
-            setMultiSelectPublisher(selectedRows)
+            setMultiSelectPublisher(selectedRows);
         },
     };
 

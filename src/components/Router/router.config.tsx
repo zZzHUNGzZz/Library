@@ -14,6 +14,8 @@ import MemberStatistic from "../../scenes/Manager/Statistic/MemberStatistic";
 import Author from "../../scenes/Manager/General/Author";
 import Supplier from "../../scenes/Manager/General/Supplier";
 import Publisher from "../../scenes/Manager/General/Publisher";
+import Language from "../../scenes/Manager/General/Language";
+import Punish from "../../scenes/Manager/General/Punish";
 
 const PageRouter = () => {
     return (
@@ -36,6 +38,8 @@ const PageRouter = () => {
                 <Route path='/author' element={<Author />}></Route>
                 <Route path='/supplier' element={<Supplier />}></Route>
                 <Route path='/publisher' element={<Publisher />}></Route>
+                <Route path='/language' element={<Language />}></Route>
+                <Route path='/punish' element={<Punish />}></Route>
 
             </Routes>
         </>

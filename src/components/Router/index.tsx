@@ -43,6 +43,8 @@ const publicRouter: MenuItem[] = [
         getItem('Danh mục', '/category'),
         getItem('Nhà cung cấp', '/supplier'),
         getItem('Nhà xuất bản', '/publisher'),
+        getItem('Ngôn ngữ', '/language'),
+        getItem('Phạt', '/punish'),
     ]),
 ];
 
