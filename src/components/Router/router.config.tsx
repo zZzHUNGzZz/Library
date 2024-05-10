@@ -12,6 +12,7 @@ import BorrowReturnStatistic from "../../scenes/Manager/Statistic/BorrowReturnSt
 import DocumentStatistic from "../../scenes/Manager/Statistic/DocumentStatistic";
 import MemberStatistic from "../../scenes/Manager/Statistic/MemberStatistic";
 import Author from "../../scenes/Manager/General/Author";
+import Supplier from "../../scenes/Manager/General/Supplier";
 
 const PageRouter = () => {
     return (
@@ -30,7 +31,10 @@ const PageRouter = () => {
                 <Route path='/document-statistic' element={<DocumentStatistic />}></Route>
                 <Route path='/member-statistic' element={<MemberStatistic />}></Route>
                 
+                {/* general */}
                 <Route path='/author' element={<Author />}></Route>
+                <Route path='/supplier' element={<Supplier />}></Route>
+
             </Routes>
         </>
     )

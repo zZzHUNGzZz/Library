@@ -1,4 +1,3 @@
-import { message } from "antd";
 import database from "../firebase";
 
 export interface AuthorDTO {
@@ -41,7 +40,6 @@ export const getAuthor = async (searchValue: string) => {
                 }
             });
         }
-
         return dataArray;
     } catch (error) {
         console.error("Error fetching author data:", error);
@@ -64,12 +62,7 @@ export const createAuthor = (data: AuthorDTO) => {
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
     database.ref("author/").push().set(filteredData, function (error) {
-        if (error) {
-            message.error('Ghi dữ liệu bị lỗi!');
-        }
-        else {
-            message.success("Thêm mới thành công!");
-        }
+        console.error("Error create author data:", error);
     });
 }
 
@@ -78,24 +71,16 @@ export const updateAuthor = (au_id: string, data: AuthorDTO) => {
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
     database.ref("author/" + au_id).set(filteredData, function (error) {
-        if (error) {
-            message.error('Sửa dữ liệu bị lỗi!');
-        }
-        else {
-            message.success("Sửa dữ liệu thành công!");
-        }
+        console.error("Error update author data:", error);
+
     });
 }
 
 export const deleteAuthor = (au_id: string[]) => {
     au_id.forEach(au_id => {
         database.ref("author/" + au_id).remove(function (error) {
-            if (error) {
-                message.error('Xóa dữ liệu bị lỗi!');
-            }
-            else {
-                message.success("Xóa dữ liệu thành công!");
-            }
+            console.error("Error delete author data:", error);
+
         });
     })
 }
