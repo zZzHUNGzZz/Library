@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, Row } from "antd";
+import { Button, Card, Col, Input, Row, message } from "antd";
 import { useEffect, useState } from "react";
 import { AuthorDTO, deleteAuthor, getAuthor } from "../../../../stores/AuthorStore";
 import { cssResponsive } from "../../../../components/Manager/AppConst";
@@ -7,6 +7,7 @@ import TableAuthor from "./TableAuthor";
 import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import ExportAuthor from "./ExportAuthor";
 import ImportAuthor from "./ImportAuthor";
+import { showDeleteConfirm } from "../../../../utils/showDeleteConfirm";
 
 function Author() {
     const [data, setData] = useState<AuthorDTO[]>([]);
@@ -21,13 +22,9 @@ function Author() {
     useEffect(() => { fetchData() }, []);
 
     const fetchData = async () => {
-        try {
-            const infoArray = await getAuthor(valueSearch);
-            const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
-            setData(dataWithIndex);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu:", error);
-        }
+        const infoArray = await getAuthor(valueSearch);
+        const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
+        setData(dataWithIndex);
     };
 
     const onCreateOrUpdateModalOpen = (value?: AuthorDTO) => {
@@ -42,15 +39,21 @@ function Author() {
     }
 
     const onDeleteAuthor = async (id: string) => {
-        await deleteAuthor([id]);
-        await fetchData();
+        showDeleteConfirm(async () => {
+            await deleteAuthor([id]);
+            await fetchData();
+            message.success("Xóa dữ liệu thành công!");
+        })
         setIsLoadDone(!isLoadDone);
     }
 
-    const onMultiDeleteAuthor = async () => {
-        const listIdAuthor = multiDatarSelected?.map(item => item.au_id)
-        await deleteAuthor(listIdAuthor!);
-        await fetchData();
+    const onMultiDeleteAuthor = () => {
+        const listIdAuthor = multiDatarSelected?.map(item => item.au_id);
+        showDeleteConfirm(async () => {
+            await deleteAuthor(listIdAuthor!);
+            await fetchData();
+            message.success("Xóa " + listIdAuthor?.length + " dữ liệu thành công!");
+        })
         setIsLoadDone(!isLoadDone);
     }
 
@@ -68,10 +71,9 @@ function Author() {
 
     return (
         <Card>
-            <Row gutter={[8, 8]} align={"bottom"}>
+            <Row gutter={[8, 8]}>
                 <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Tác giả</h2></Col>
                 <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
-                    <p className="p-title-search">Tác giả</p>
                     <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
                 </Col>
                 <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">

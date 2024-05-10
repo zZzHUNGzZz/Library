@@ -21,13 +21,9 @@ function Supplier() {
     useEffect(() => { fetchData() }, []);
 
     const fetchData = async () => {
-        try {
-            const infoArray = await getSupplier(valueSearch);
-            const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
-            setData(dataWithIndex);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu:", error);
-        }
+        const infoArray = await getSupplier(valueSearch);
+        const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
+        setData(dataWithIndex);
     };
 
     const onCreateOrUpdateModalOpen = (value?: SupplierDTO) => {
@@ -44,6 +40,7 @@ function Supplier() {
     const onDeleteSupplier = async (id: string) => {
         await deleteSupplier([id]);
         await fetchData();
+        message.success("Xóa dữ liệu thành công!");
         setIsLoadDone(!isLoadDone);
     }
 
@@ -51,6 +48,7 @@ function Supplier() {
         const listIdSupplier = multiDatarSelected?.map(item => item.su_id)
         await deleteSupplier(listIdSupplier!);
         await fetchData();
+        message.success("Xóa " + listIdSupplier?.length + " dữ liệu thành công!");
         setIsLoadDone(!isLoadDone);
     }
 
@@ -68,10 +66,9 @@ function Supplier() {
 
     return (
         <Card>
-            <Row gutter={[8, 8]} align={"bottom"}>
+            <Row gutter={[8, 8]}>
                 <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Nhà cung cấp</h2></Col>
                 <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
-                    <p className="p-title-search">Nhà cung cấp</p>
                     <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
                 </Col>
                 <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">

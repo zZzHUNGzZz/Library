@@ -1,4 +1,4 @@
-import { Button, Col, Form, FormProps, Input, InputNumber, Row } from "antd"
+import { Button, Col, Form, FormProps, Input, InputNumber, Row, message } from "antd"
 import { AuthorDTO, createAuthor, updateAuthor } from "../../../../stores/AuthorStore";
 import { useEffect } from "react";
 
@@ -25,9 +25,11 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
     const onCreateOrUpdateData = async (value: AuthorDTO) => {
         if (!!props.authorSelected) {
             await updateAuthor(props.authorSelected.au_id, value);
+            message.success("Cập nhật dữ liệu thành công!");
         }
         else {
             await createAuthor(value);
+            message.success("Thêm mới dữ liệu thành công!");
         }
         props.onCreateOrUpdateSuccess();
     }

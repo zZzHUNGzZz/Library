@@ -104,7 +104,7 @@ const ImportAuthor: React.FC<IProps> = (props) => {
                 </Col>
             </Row>
             <TableAuthor
-                columnImport={async (value) => await setColumn(value!)}
+                columnImportExport={async (value) => await setColumn(value!)}
                 datasource={datasource}
                 isExportTable={true}
             />

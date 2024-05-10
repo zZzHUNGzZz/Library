@@ -9,7 +9,7 @@ interface IProps {
     setMultiDataSelected?: (data: SupplierDTO[]) => void;
     datasource?: SupplierDTO[];
     isExportTable?: boolean;
-    columnImport?: (column: TableColumnsType<SupplierDTO>) => void;
+    columnImportExport?: (column: TableColumnsType<SupplierDTO>) => void;
 }
 export const TableSupplier: React.FC<IProps> = (props) => {
     const [multiSelectSupplier, setMultiSelectSupplier] = useState<SupplierDTO[]>([]);
@@ -22,22 +22,21 @@ export const TableSupplier: React.FC<IProps> = (props) => {
     }, [multiSelectSupplier, props.datasource, props.setMultiDataSelected]);
 
     useEffect(() => {
-        if (props.columnImport) {
-            props.columnImport!(columnData);
-            props.columnImport!(columnData);
+        if (props.columnImportExport) {
+            props.columnImportExport!(columnData);
         }
     }, []);
 
     const columns: TableColumnsType<SupplierDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
+        { title: 'Mã số thuế', dataIndex: 'su_tax_code', key: 'su_tax_code' },
         { title: 'Tên viết tắt', dataIndex: 'su_short_name', key: 'su_short_name' },
         { title: 'Tên nhà cung cấp', dataIndex: 'su_name', key: 'su_name' },
-        { title: 'Tên liên hệ', dataIndex: 'su_contact_name', key: 'su_contact_name' },
-        { title: 'Địa chỉ', dataIndex: 'su_contact_possition', key: 'su_contact_possition' },
+        { title: 'Người liên hệ', dataIndex: 'su_contact_name', key: 'su_contact_name' },
         { title: 'Địa chỉ', dataIndex: 'su_contact_address', key: 'su_contact_address' },
         { title: 'Số điện thoại', dataIndex: 'su_contact_phone', key: 'su_contact_phone' },
-        { title: 'Fax', dataIndex: 'su_contact_fax', key: 'su_contact_fax' },
         { title: 'Email', dataIndex: 'su_contact_email', key: 'su_contact_email' },
+        { title: 'Fax', dataIndex: 'su_contact_fax', key: 'su_contact_fax' },
         { title: 'Ghi chú', dataIndex: 'su_contact_note', key: 'su_contact_note' },
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,

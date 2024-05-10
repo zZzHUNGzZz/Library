@@ -1,11 +1,12 @@
+import { message } from "antd";
 import database from "../firebase";
 
 export interface SupplierDTO {
     su_id: string,
+    su_tax_code: string | null,
     su_short_name: string | null,
     su_name: string | null,
     su_contact_name: string | null,
-    su_contact_possition: string | null,
     su_contact_address: string | null,
     su_contact_phone: string | null,
     su_contact_fax: string | null,
@@ -25,10 +26,10 @@ export const getSupplier = async (searchValue: string) => {
                 if (checkAnyField(supplier, searchValue)) {
                     dataArray.push({
                         su_id: key,
+                        su_tax_code: supplier.su_tax_code,
                         su_short_name: supplier.su_short_name,
                         su_name: supplier.su_name,
                         su_contact_name: supplier.su_contact_name,
-                        su_contact_possition: supplier.su_contact_possition,
                         su_contact_address: supplier.su_contact_address,
                         su_contact_phone: supplier.su_contact_phone,
                         su_contact_fax: supplier.su_contact_fax,
@@ -40,7 +41,8 @@ export const getSupplier = async (searchValue: string) => {
         }
         return dataArray;
     } catch (error) {
-        console.error("Error fetching supplier data:", error);
+        console.error("Error fetching data:", error);
+        message.error("Lỗi khi lấy dữ liệu!");
         throw error;
     }
 }
@@ -60,7 +62,10 @@ export const createSupplier = (data: SupplierDTO) => {
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
     database.ref("supplier/").push().set(filteredData, function (error) {
-        console.error("Error create supplier data:", error)
+        if (error) {
+            message.error('Lỗi khi thêm mới dữ liệu!');
+            console.error("Error create data:", error);
+        }
     });
 }
 
@@ -69,14 +74,20 @@ export const updateSupplier = (su_id: string, data: SupplierDTO) => {
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
     database.ref("supplier/" + su_id).set(filteredData, function (error) {
-        console.error("Error update supplier data:", error)
+        if (error) {
+            message.error('Lỗi khi cập nhật dữ liệu!');
+            console.error("Error update data:", error);
+        }
     });
 }
 
 export const deleteSupplier = (su_id: string[]) => {
     su_id.forEach(su_id => {
         database.ref("supplier/" + su_id).remove(function (error) {
-            console.error("Error delete supplier data:", error)
+            if (error) {
+                message.error('Lỗi khi xóa dữ liệu!');
+                console.error("Error delete data:", error);
+            }
         });
     })
 }

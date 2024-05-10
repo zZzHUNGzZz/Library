@@ -8,7 +8,7 @@ interface IProps {
     setMultiDataSelected?: (data: AuthorDTO[]) => void;
     datasource?: AuthorDTO[];
     isExportTable?: boolean;
-    columnImport?: (column: TableColumnsType<AuthorDTO>) => void;
+    columnImportExport?: (column: TableColumnsType<AuthorDTO>) => void;
 }
 export const TableAuthor: React.FC<IProps> = (props) => {
     const [multiSelectAuthor, setMultiSelectAuthor] = useState<AuthorDTO[]>([]);
@@ -21,9 +21,8 @@ export const TableAuthor: React.FC<IProps> = (props) => {
     }, [multiSelectAuthor, props.datasource, props.setMultiDataSelected]);
 
     useEffect(() => {
-        if (props.columnImport) {
-            props.columnImport!(columnData);
-            props.columnImport!(columnData);
+        if (props.columnImportExport) {
+            props.columnImportExport!(columnData);
         }
     }, []);
 

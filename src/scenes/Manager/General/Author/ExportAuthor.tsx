@@ -1,5 +1,5 @@
 import { Button, Modal } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import TableAuthor from "./TableAuthor";
 import * as XLSX from "xlsx";
 import { AuthorDTO } from "../../../../stores/AuthorStore";
@@ -12,9 +12,11 @@ interface IProps {
 }
 
 const ExportAuthor: React.FC<IProps> = (props) => {
-    const currentDate = moment().format('DD/MM/YYYY_HH_mm_ss');
-    const tittleColumn = ["STT", "Ảnh đại diện", "Mã tác giả", "Tên tác giả", "Ngày sinh", "Địa chỉ", "Email", "Học hàm", "Học vị", "Bút danh", "Thông tin thêm"];
+    const [column, setColumn] = useState<any[]>([]);
+
     const exportFile = () => {
+        const tittleColumn = column.map(item => item.title);
+        const currentDate = moment().format('DD/MM/YYYY_HH_mm_ss');
         const ws = XLSX.utils.aoa_to_sheet([tittleColumn, ...props.datasource.map(({au_id, ...obj}) => Object.values(obj))]);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
@@ -39,6 +41,7 @@ const ExportAuthor: React.FC<IProps> = (props) => {
             <TableAuthor
                 isExportTable={true}
                 datasource={props.datasource}
+                columnImportExport={async (value) => await setColumn(value!)}
             />
         </Modal>
     )

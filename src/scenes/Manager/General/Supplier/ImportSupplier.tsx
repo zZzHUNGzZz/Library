@@ -104,7 +104,7 @@ const ImportSupplier: React.FC<IProps> = (props) => {
                 </Col>
             </Row>
             <TableSupplier
-                columnImport={async (value) => await setColumn(value!)}
+                columnImportExport={async (value) => await setColumn(value!)}
                 datasource={datasource}
                 isExportTable={true}
             />

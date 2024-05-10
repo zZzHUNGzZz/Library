@@ -1,4 +1,4 @@
-import { Button, Col, Form, FormProps, Input, Row } from "antd"
+import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
 import { SupplierDTO, createSupplier, updateSupplier } from "../../../../stores/SupplierStore";
 import { useEffect } from "react";
 
@@ -25,9 +25,11 @@ export const CreateOrUpdateSupplier: React.FC<IProps> = (props) => {
     const onCreateOrUpdateData = async (value: SupplierDTO) => {
         if (!!props.supplierSelected) {
             await updateSupplier(props.supplierSelected.su_id, value);
+            message.success("Cập nhật dữ liệu thành công!");
         }
         else {
             await createSupplier(value);
+            message.success("Thêm mới dữ liệu thành công!");
         }
         props.onCreateOrUpdateSuccess();
     }
@@ -57,9 +59,15 @@ export const CreateOrUpdateSupplier: React.FC<IProps> = (props) => {
                     </Col>
                 </Row>
                 <Form.Item
+                    label="Mã số thuế"
+                    name="su_tax_code"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
                     label="Tên viết tắt"
                     name="su_short_name"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -71,25 +79,30 @@ export const CreateOrUpdateSupplier: React.FC<IProps> = (props) => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Tên liên hệ"
+                    label="Người liên hệ"
                     name="su_contact_name"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Địa chỉ"
-                    name="su_contact_possition"
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Địa chỉ"
-                    name="su_contact_address">
+                    name="su_contact_address"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                    >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Số điện thoại"
                     name="su_contact_phone"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Email"
+                    name="su_contact_email"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -99,12 +112,7 @@ export const CreateOrUpdateSupplier: React.FC<IProps> = (props) => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
-                    label="Email"
-                    name="su_contact_email"
-                >
-                    <Input />
-                </Form.Item>
+               
                 <Form.Item
                     label="Ghi chú"
                     name="su_contact_note"
