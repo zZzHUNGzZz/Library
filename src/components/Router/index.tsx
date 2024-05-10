@@ -42,6 +42,7 @@ const publicRouter: MenuItem[] = [
         getItem('Tác giả', '/author'),
         getItem('Danh mục', '/category'),
         getItem('Nhà cung cấp', '/supplier'),
+        getItem('Nhà xuất bản', '/publisher'),
     ]),
 ];
 
