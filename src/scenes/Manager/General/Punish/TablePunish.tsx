@@ -40,7 +40,7 @@ export const TablePunish: React.FC<IProps> = (props) => {
         },
     };
 
-    const columnData = columns.slice(0, 6);
+    const columnData = columns.slice(0, 7);
 
     return (
         <Table

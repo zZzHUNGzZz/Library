@@ -27,7 +27,7 @@ const App = () => {
                   borderRadius: 3,
                },
                Table: {
-                  headerBg: '#0958d9',
+                  headerBg: '#003eb3',
                   headerColor: '#ffffff',
                   headerBorderRadius: 0,
                   rowHoverBg: '#e6f4ff',

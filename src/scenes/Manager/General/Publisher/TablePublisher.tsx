@@ -52,7 +52,7 @@ export const TablePublisher: React.FC<IProps> = (props) => {
         },
     };
 
-    const columnData = columns.slice(0, 11);
+    const columnData = columns.slice(0, 8);
 
     return (
         <Table

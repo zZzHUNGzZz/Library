@@ -1,91 +1,97 @@
 import { message } from "antd";
 import database from "../firebase";
 
-export interface DocumentStore {
+export interface DocumentDTO {
     do_id: string,
     do_title: string | null,
-    author: string | null,
-    do_total: string | null,
+    do_author: string | null,
+    do_date_available: string | null,
+    do_total_book: string | null,
     do_date_publish: string | null,
     do_identifier: string | null,
     do_translator: string | null,
     do_publisher: string | null,
     do_language: string | null,
-    do_topic: string | null,
-    do_category: string | null,
+    do_status: string | null,
 }
 
-export const getDocument = async (searchKey: keyof DocumentStore = "do_id", searchValue: string | null = null) => {
+export const getDocument = async (searchValue: string) => {
     try {
         const snapshot = await database.ref("document").once("value");
         const dataObj = snapshot.val();
-        const dataArray: DocumentStore[] = [];
+        const dataArray: DocumentDTO[] = [];
 
         if (dataObj) {
             Object.keys(dataObj).forEach(key => {
                 const document = dataObj[key];
-                if (searchValue === null || document[searchKey] === searchValue) {
+                if (checkAnyField(document, searchValue)) {
                     dataArray.push({
                         do_id: key,
                         do_title: document.do_title,
-                        author: document.author,
-                        do_total: document.do_total,
+                        do_author: document.do_author,
+                        do_date_available: document.do_date_available,
+                        do_total_book: document.do_total_book,
                         do_date_publish: document.do_date_publish,
                         do_identifier: document.do_identifier,
                         do_translator: document.do_translator,
                         do_publisher: document.do_publisher,
+                        do_status: document.do_status,
                         do_language: document.do_language,
-                        do_topic: document.do_topic,
-                        do_category: document.do_category,
                     });
                 }
             });
         }
-
         return dataArray;
     } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu document:", error);
+        message.error("Lỗi khi lấy dữ liệu!");
+        console.error("Error fetching data:", error);
         throw error;
     }
 }
 
-export const createDocument = (data: DocumentStore) => {
+const checkAnyField = (document: DocumentDTO, searchValue: string): boolean => {
+    const documentValues = Object.values(document);
+    for (const value of documentValues) {
+        if (value && typeof value === 'string' && value.toLowerCase().includes(searchValue.toLowerCase())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export const createDocument = (data: DocumentDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
     database.ref("document/").push().set(filteredData, function (error) {
         if (error) {
-            message.error('Ghi dữ liệu bị lỗi!');
-        }
-        else {
-            message.success("Thêm mới thành công!");
+            console.error("Error create data:", error);
+            message.error('Lỗi khi thêm mới dữ liệu!');
         }
     });
 }
 
-export const updateDocument = (do_id: string, data: DocumentStore) => {
+export const updateDocument = (do_id: string, data: DocumentDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
     database.ref("document/" + do_id).set(filteredData, function (error) {
         if (error) {
-            message.error('Sửa dữ liệu bị lỗi!');
-        }
-        else {
-            message.success("Sửa dữ liệu thành công!");
+            console.error("Error update data:", error);
+            message.error('Lỗi khi cập nhật dữ liệu!');
         }
     });
 }
 
-export const deleteDocument = (do_id: string) => {
-    database.ref("document/" + do_id).remove(function (error) {
-        if (error) {
-            message.error('Xóa dữ liệu bị lỗi!');
-        }
-        else {
-            message.success("Xóa dữ liệu thành công!");
-        }
-    });
+export const deleteDocument = (do_id: string[]) => {
+    do_id.forEach(do_id => {
+        database.ref("document/" + do_id).remove(function (error) {
+            if (error) {
+                console.error("Error delete data:", error);
+                message.error('Lỗi khi xóa dữ liệu!');
+            }
+        });
+    })
 }
 
 

@@ -1,19 +1,19 @@
 import { Button, Card, Col, Input, Row, message } from "antd";
 import { useEffect, useState } from "react";
-import { LanguageDTO, deleteLanguage, getLanguage } from "../../../../stores/LanguageStore";
-import { cssResponsive } from "../../../../components/Manager/AppConst";
-import { CreateOrUpdateLanguage } from "./CreateUpdateLanguage";
-import TableLanguage from "./TableLanguage";
+import { DocumentDTO, deleteDocument, getDocument } from "../../../stores/DocumentStore";
+import { cssResponsive } from "../../../components/Manager/AppConst";
+import { CreateOrUpdateDocument } from "./CreateUpdateDocument";
+import TableDocument from "./TableDocument";
 import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import ExportLanguage from "./ExportLanguage";
-import ImportLanguage from "./ImportLanguage";
-import { showDeleteConfirm } from "../../../../utils/showDeleteConfirm";
+import ExportDocument from "./ExportDocument";
+import ImportDocument from "./ImportDocument";
+import { showDeleteConfirm } from "../../../utils/showDeleteConfirm";
 
-function Language() {
-    const [data, setData] = useState<LanguageDTO[]>([]);
-    const [multiDatarSelected, setMultiDataSelected] = useState<LanguageDTO[]>();
+function Document() {
+    const [data, setData] = useState<DocumentDTO[]>([]);
+    const [multiDatarSelected, setMultiDataSelected] = useState<DocumentDTO[]>();
     const [isLoadDone, setIsLoadDone] = useState(true);
-    const [languageSelected, setLanguageSelected] = useState<LanguageDTO>();
+    const [documentSelected, setDocumentSelected] = useState<DocumentDTO>();
     const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
     const [valueSearch, setValueSearch] = useState('');
     const [isModalExportOpen, setModalExportOpen] = useState(false);
@@ -22,13 +22,13 @@ function Language() {
     useEffect(() => { fetchData() }, []);
 
     const fetchData = async () => {
-        const infoArray = await getLanguage(valueSearch);
+        const infoArray = await getDocument(valueSearch);
         const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
         setData(dataWithIndex);
     };
 
-    const onCreateOrUpdateModalOpen = (value?: LanguageDTO) => {
-        if (!!value) setLanguageSelected(value)
+    const onCreateOrUpdateModalOpen = (value?: DocumentDTO) => {
+        if (!!value) setDocumentSelected(value)
         setCreateUpdateFormOpen(true);
     }
 
@@ -38,31 +38,31 @@ function Language() {
         setIsLoadDone(!isLoadDone);
     }
 
-    const onDeleteLanguage = async (id: string) => {
+    const onDeleteDocument = async (id: string) => {
         showDeleteConfirm(async () => {
-            await deleteLanguage([id]);
+            await deleteDocument([id]);
             await fetchData();
             message.success("Xóa dữ liệu thành công!");
         })
         setIsLoadDone(!isLoadDone);
     }
 
-    const onMultiDeleteLanguage = () => {
-        const listIdLanguage = multiDatarSelected?.map(item => item.la_id);
+    const onMultiDeleteDocument = () => {
+        const listIdDocument = multiDatarSelected?.map(item => item.do_id);
         showDeleteConfirm(async () => {
-            await deleteLanguage(listIdLanguage!);
+            await deleteDocument(listIdDocument!);
             await fetchData();
-            message.success("Xóa " + listIdLanguage?.length + " dữ liệu thành công!");
+            message.success("Xóa " + listIdDocument?.length + " dữ liệu thành công!");
         })
         setIsLoadDone(!isLoadDone);
     }
 
     const onCancel = () => {
-        setLanguageSelected(undefined)
+        setDocumentSelected(undefined)
         setCreateUpdateFormOpen(false);
     }
 
-    const setMultiLanguageSelect = (data: LanguageDTO[]) => {
+    const setMultiDocumentSelect = (data: DocumentDTO[]) => {
         setMultiDataSelected(data);
     }
 
@@ -72,7 +72,7 @@ function Language() {
     return (
         <Card>
             <Row gutter={[8, 8]}>
-                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Ngôn ngữ</h2></Col>
+                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Tài liệu</h2></Col>
                 <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
                     <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
                 </Col>
@@ -97,7 +97,7 @@ function Language() {
                         className="button-danger"
                         title="Xóa dữ liệu"
                         icon={<DeleteOutlined />}
-                        onClick={onMultiDeleteLanguage}
+                        onClick={onMultiDeleteDocument}
                     >
                         Xóa dữ liệu
                     </Button>
@@ -105,25 +105,25 @@ function Language() {
             </Row>
             <Row>
                 <Col {...leftCol}>
-                    <TableLanguage
+                    <TableDocument
                         datasource={data}
                         onUpdate={onCreateOrUpdateModalOpen}
-                        onDelete={onDeleteLanguage}
-                        setMultiDataSelected={setMultiLanguageSelect}
+                        onDelete={onDeleteDocument}
+                        setMultiDataSelected={setMultiDocumentSelect}
                     />
                 </Col>
                 <Col {...rightCol}>
-                    <CreateOrUpdateLanguage
-                        languageSelected={languageSelected}
+                    <CreateOrUpdateDocument
+                        documentSelected={documentSelected}
                         onCreateOrUpdateSuccess={onCreateOrUpdateSuccess}
                         onCancelData={onCancel}
                     />
                 </Col>
-                <ImportLanguage
+                <ImportDocument
                     openModalImport={isModalImportOpen}
                     setOpenModalImport={setModalImportOpen}
                 />
-                <ExportLanguage
+                <ExportDocument
                     openModalExport={isModalExportOpen}
                     setOpenModalExport={setModalExportOpen}
                     datasource={!!multiDatarSelected ? multiDatarSelected! : data}
@@ -133,4 +133,4 @@ function Language() {
     );
 }
 
-export default Language;
+export default Document;

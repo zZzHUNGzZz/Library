@@ -48,7 +48,7 @@ export const TableLanguage: React.FC<IProps> = (props) => {
         },
     };
 
-    const columnData = columns.slice(0, 11);
+    const columnData = columns.slice(0, 3);
 
     return (
         <Table

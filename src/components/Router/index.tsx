@@ -22,7 +22,6 @@ const publicRouter: MenuItem[] = [
     getItem('Quản lý sách báo tài liệu', '/1', <UserOutlined />, [
         getItem('Tài liệu', '/document'),
         getItem('Thông tin tài liệu', '/document-info'),
-        getItem('Trích dẫn', '/quote'),
     ]),
     getItem('Quản lý mượn trả', '/2', <UserOutlined />, [
         getItem('Độc giả mượn', '/member-borrow-returning'),

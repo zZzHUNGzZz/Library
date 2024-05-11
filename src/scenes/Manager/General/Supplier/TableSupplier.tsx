@@ -55,7 +55,7 @@ export const TableSupplier: React.FC<IProps> = (props) => {
         },
     };
 
-    const columnData = columns.slice(0, 11);
+    const columnData = columns.slice(0, 10);
 
     return (
         <Table

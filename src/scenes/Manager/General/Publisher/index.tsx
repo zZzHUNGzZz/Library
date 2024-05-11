@@ -72,7 +72,7 @@ function Publisher() {
     return (
         <Card>
             <Row gutter={[8, 8]}>
-                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Tác giả</h2></Col>
+                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Nhà xuất bản</h2></Col>
                 <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
                     <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
                 </Col>
