@@ -24,13 +24,13 @@ const publicRouter: MenuItem[] = [
         getItem('Thông tin tài liệu', '/document-info'),
     ]),
     getItem('Quản lý mượn trả', '/2', <UserOutlined />, [
-        getItem('Độc giả mượn', '/member-borrow-returning'),
-        getItem('Quản lý mượn trả', '/manage-borrow-returning'),
+        // getItem('Độc giả mượn', '/member-borrow-returning'),
+        getItem('Quản lý mượn trả', '/member-borrow-returning'),
     ]),
     getItem('Quản lý độc giả', '/3', <UserOutlined />, [
         getItem('Độc giả', '/member'),
         getItem('Thẻ độc giả', '/member-card'),
-        getItem('Lịch sử độc giả', '/member-history'),
+        // getItem('Lịch sử độc giả', '/member-history'),
     ]),
     getItem('Báo cáo thống kê', '/4', <UserOutlined />, [
         getItem('Báo cáo tài liệu', '/document-statistic'),

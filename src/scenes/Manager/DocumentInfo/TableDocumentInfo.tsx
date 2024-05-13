@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { DocumentInfoDTO } from "../../../stores/DocumentInfoStore";
 interface IProps {
     onUpdate?: (value: DocumentInfoDTO) => void;
-    onDelete?: (id: string) => void;
+    onDelete?: (data: DocumentInfoDTO[]) => void;
     setMultiDataSelected?: (data: DocumentInfoDTO[]) => void;
     datasource?: DocumentInfoDTO[];
     isExportTable?: boolean;
@@ -29,7 +29,7 @@ export const TableDocumentInfo: React.FC<IProps> = (props) => {
     const columns: TableColumnsType<DocumentInfoDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
         { title: 'Số ĐKCB', dataIndex: 'do_in_dkcb', key: 'do_in_dkcb' },
-        { title: 'Tên tài liệu', dataIndex: 'do_title', key: 'do_title' },
+        { title: 'Tên tài liệu', dataIndex: 'do_in_title', key: 'do_in_title' },
         { title: 'Trạng thái', dataIndex: 'do_in_status', key: 'do_in_status' },
         { title: 'Ghi chú', dataIndex: 'do_in_note', key: 'do_in_note' },
         {
@@ -37,7 +37,7 @@ export const TableDocumentInfo: React.FC<IProps> = (props) => {
             render: (text: any, record: DocumentInfoDTO) => (
                 <div className="align-center">
                     <EditTwoTone twoToneColor="#52c41a" onClick={() => props.onUpdate!(record)} />
-                    <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record.do_in_id)} />
+                    <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!([record])} />
                 </div>
             )
         }

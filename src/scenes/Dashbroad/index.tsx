@@ -12,7 +12,7 @@ function DashBroad() {
                     <Card style={{ backgroundColor: "#007bff" }}>
                         <Row>
                             <Col span={20}>
-                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0 }}>Tổng số sách hiện có</p>
+                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Tổng số sách hiện có</p>
                                 <span>2612</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
@@ -25,7 +25,7 @@ function DashBroad() {
                     <Card style={{ backgroundColor: "#333333" }}>
                         <Row>
                             <Col span={20}>
-                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0 }}>Sách sẵn sàng cho mượn</p>
+                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Sách sẵn sàng cho mượn</p>
                                 <span>2002</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
@@ -38,7 +38,7 @@ function DashBroad() {
                     <Card style={{ backgroundColor: "#FAAD14" }}>
                         <Row>
                             <Col span={20}>
-                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0 }}>Sách đang cho mượn</p>
+                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Sách đang cho mượn</p>
                                 <span>1226</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
@@ -51,7 +51,7 @@ function DashBroad() {
                     <Card style={{ backgroundColor: "#F5222D" }}>
                         <Row>
                             <Col span={20}>
-                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0 }}>Sách hỏng, mất, ...</p>
+                                <p style={{ fontSize: "18px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Sách hỏng, mất, ...</p>
                                 <span>38</span>
                             </Col>
                             <Col span={4} className="card-content-icon">

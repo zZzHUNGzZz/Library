@@ -1,43 +1,43 @@
 import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
-import { AuthorDTO, createAuthor, updateAuthor } from "../../../../stores/AuthorStore";
+import { MemberBorrowReturningDTO, createMemberBorrowReturning, updateMemberBorrowReturning } from "../../../../stores/MemberBorrowReturningStore";
 import { useEffect } from "react";
 
 interface IProps {
     onCancelData: () => void;
-    authorSelected: AuthorDTO | undefined;
+    memberBorrowReturningSelected: MemberBorrowReturningDTO | undefined;
     onCreateOrUpdateSuccess: () => void;
 }
 
-export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
+export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
 
     const onCancel = () => { props.onCancelData(); }
 
     useEffect(() => {
-        if (!!props.authorSelected) {
-            form.setFieldsValue(props.authorSelected);
+        if (!!props.memberBorrowReturningSelected) {
+            form.setFieldsValue(props.memberBorrowReturningSelected);
         }
         else {
             form.resetFields();
         }
     })
 
-    const onCreateOrUpdateData = async (value: AuthorDTO) => {
-        if (!!props.authorSelected) {
-            await updateAuthor(props.authorSelected.au_id, value);
+    const onCreateOrUpdateData = async (value: MemberBorrowReturningDTO) => {
+        if (!!props.memberBorrowReturningSelected) {
+            await updateMemberBorrowReturning(props.memberBorrowReturningSelected.br_re_id, value);
             message.success("Cập nhật dữ liệu thành công!");
         }
         else {
-            await createAuthor(value);
+            await createMemberBorrowReturning(value);
             message.success("Thêm mới dữ liệu thành công!");
         }
         props.onCreateOrUpdateSuccess();
     }
-    const onFinish: FormProps<AuthorDTO>['onFinish'] = (values) => {
+    const onFinish: FormProps<MemberBorrowReturningDTO>['onFinish'] = (values) => {
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<AuthorDTO>['onFinishFailed'] = (errorInfo) => {
+    const onFinishFailed: FormProps<MemberBorrowReturningDTO>['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
 
@@ -52,69 +52,53 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
                 onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>{!!props.authorSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
+                    <Col span={12}><h3>{!!props.memberBorrowReturningSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
                     <Col span={12} className="align-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
                     </Col>
                 </Row>
                 <Form.Item
-                    label="Mã tác giả"
-                    name="au_code"
+                    label="Mã phiếu mượn"
+                    name="br_re_code"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Tên tác giả"
-                    name="au_name"
+                    label="Người mượn"
+                    name="us_id_borrow"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Ngày sinh"
-                    name="au_date"
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Địa chỉ"
-                    name="au_address"
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Email"
-                    name="au_email"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-                >
-
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Học hàm"
-                    name="academic_rank"
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Học vị"
-                    name="au_degree"
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Bút danh"
-                    name="au_pen_name"
+                    label="Ngày mượn"
+                    name="br_re_start_at"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
 
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Thông tin thêm"
-                    name="au_infor"
+                    label="Ngày trả"
+                    name="br_re_end_at"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Số tài liệu"
+                    name="br_re_nr_document"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Mô tả"
+                    name="br_re_desc"
                 >
                     <Input />
                 </Form.Item>

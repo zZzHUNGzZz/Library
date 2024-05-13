@@ -36,9 +36,9 @@ function DocumentInfo() {
         setIsLoadDone(!isLoadDone);
     }
 
-    const onDeleteDocumentInfo = async (id: string) => {
+    const onDeleteDocumentInfo = async (data: DocumentInfoDTO[]) => {
         showDeleteConfirm(async () => {
-            await deleteDocumentInfo([id]);
+            await deleteDocumentInfo(data);
             await fetchData();
             message.success("Xóa dữ liệu thành công!");
         })
@@ -46,11 +46,10 @@ function DocumentInfo() {
     }
 
     const onMultiDeleteDocumentInfo = () => {
-        const listIdDocumentInfo = multiDatarSelected?.map(item => item.do_in_id);
         showDeleteConfirm(async () => {
-            await deleteDocumentInfo(listIdDocumentInfo!);
+            await deleteDocumentInfo(multiDatarSelected!);
             await fetchData();
-            message.success("Xóa " + listIdDocumentInfo?.length + " dữ liệu thành công!");
+            message.success("Xóa " + multiDatarSelected?.length + " dữ liệu thành công!");
         })
         setIsLoadDone(!isLoadDone);
     }

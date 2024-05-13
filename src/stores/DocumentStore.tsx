@@ -1,18 +1,34 @@
 import { message } from "antd";
 import database from "../firebase";
-
+import { createDocumentInfo } from "./DocumentInfoStore";
 export interface DocumentDTO {
     do_id: string,
     do_title: string | null,
     do_author: string | null,
     do_date_available: string | null,
-    do_total_book: string | null,
+    do_total_book: number | null,
     do_date_publish: string | null,
     do_identifier: string | null,
     do_translator: string | null,
     do_publisher: string | null,
     do_language: string | null,
     do_status: string | null,
+}
+
+export const createDocument = (data: DocumentDTO) => {
+    const filteredData = Object.fromEntries(
+        Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
+    );
+    const newDocumentRef = database.ref("document/").push()
+    newDocumentRef.set(filteredData, function (error) {
+        if (error) {
+            console.error("Error create data:", error);
+            message.error('Lỗi khi thêm mới dữ liệu!');
+        }
+        else {
+            createDocumentInfo(newDocumentRef.key!, data);
+        }
+    });
 }
 
 export const getDocument = async (searchValue: string) => {
@@ -59,17 +75,7 @@ const checkAnyField = (document: DocumentDTO, searchValue: string): boolean => {
     return false;
 }
 
-export const createDocument = (data: DocumentDTO) => {
-    const filteredData = Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
-    );
-    database.ref("document/").push().set(filteredData, function (error) {
-        if (error) {
-            console.error("Error create data:", error);
-            message.error('Lỗi khi thêm mới dữ liệu!');
-        }
-    });
-}
+
 
 export const updateDocument = (do_id: string, data: DocumentDTO) => {
     const filteredData = Object.fromEntries(
@@ -93,5 +99,25 @@ export const deleteDocument = (do_id: string[]) => {
         });
     })
 }
+
+export const updateTotalBook = (do_id: string, do_total_book: number) => {
+    const docRef = database.ref("document/" + do_id);
+    docRef.once('value').then((snapshot) => {
+        const currentData = snapshot.val();
+        if (currentData && currentData.do_total_book != null) {
+            const currentTotalBook = currentData.do_total_book;
+            const updatedTotalBook = currentTotalBook - do_total_book;
+            docRef.update({ do_total_book: updatedTotalBook }) 
+        } else {
+            console.error("Error: Invalid data or do_total_book is null.");
+            message.error('Dữ liệu không hợp lệ.');
+        }
+    }).catch((error) => {
+        console.error("Error fetching document data:", error);
+        message.error('Lỗi khi lấy dữ liệu tài liệu!');
+    });
+}
+
+
 
 

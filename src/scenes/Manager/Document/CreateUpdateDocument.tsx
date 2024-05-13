@@ -59,57 +59,70 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
                     </Col>
                 </Row>
                 <Form.Item
-                    label="Mã tác giả"
-                    name="au_code"
+                    label="Tên tài liệu"
+                    name="do_title"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Tên tác giả"
-                    name="au_name"
+                    label="Tác giả"
+                    name="do_author"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Ngày sinh"
-                    name="au_date"
+                    label="Ngày khai thác"
+                    name="do_date_available"
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Địa chỉ"
-                    name="au_address"
+                    label="Số lượng"
+                    name="do_total_book"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                >
+                    <InputNumber style={{width: "100%"}} min={0} max={999} disabled={!!props.documentSelected}/>
+                </Form.Item>
+                <Form.Item
+                    label="Năm xuất bản"
+                    name="do_date_publish"
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Email"
-                    name="au_email">
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Học hàm"
-                    name="academic_rank"
+                    label="Mã đầu sách"
+                    name="do_identifier"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Học vị"
-                    name="au_degree"
+                    label="Dịch giả"
+                    name="do_translator"
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Bút danh"
-                    name="au_pen_name"
+                    label="Nhà xuất bản"
+                    name="do_publisher"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Thông tin thêm"
-                    name="au_infor"
+                    label="Ngôn ngữ"
+                    name="do_language"
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Tình trạng"
+                    name="do_status"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
