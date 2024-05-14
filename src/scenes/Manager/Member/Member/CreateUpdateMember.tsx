@@ -52,7 +52,7 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                 onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>{!!props.memberSelected ? 'Sửa độc giả' : 'Thêm độc giả'}</h3></Col>
+                    <Col span={12}><h3>{!!props.memberSelected ? 'Sửa thẻ độc giả' : 'Thêm thẻ độc giả'}</h3></Col>
                     <Col span={12} className="align-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
@@ -67,42 +67,49 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                 <Form.Item
                     label="Mã độc giả"
                     name="me_code"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Tên độc giả"
                     name="me_name"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Số CCCD"
                     name="me_identify"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Ngày sinh"
                     name="me_birthday"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Giới tính"
                     name="me_sex"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Số điện thoại"
                     name="me_phone"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Địa chỉ"
                     name="me_address"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <Input />
                 </Form.Item>
