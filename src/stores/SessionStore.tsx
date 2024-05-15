@@ -35,3 +35,20 @@ export const getTotalDocument = async (): Promise<number> => {
         throw error;
     }
 }
+
+export const getTotalMember = async (): Promise<number> => {
+    try {
+        const snapshot = await database.ref("member").once("value");
+        const dataObj = snapshot.val();
+        let totalCount = 0;
+
+        if (dataObj) {
+            totalCount = Object.keys(dataObj).length;
+        }
+
+        return totalCount;
+    } catch (error) {
+        console.error("Error fetching total member count:", error);
+        throw error;
+    }
+}
