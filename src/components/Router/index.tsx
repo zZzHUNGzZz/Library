@@ -18,7 +18,7 @@ function getItem(
 }
 
 const publicRouter: MenuItem[] = [
-    getItem('Trang chủ', '/', <PieChartOutlined />),
+    getItem('Trang chủ', '/dashbroad', <PieChartOutlined />),
     getItem('Quản lý sách báo tài liệu', '/1', <UserOutlined />, [
         getItem('Tài liệu', '/document'),
         getItem('Thông tin tài liệu', '/document-info'),
@@ -35,7 +35,7 @@ const publicRouter: MenuItem[] = [
     getItem('Báo cáo thống kê', '/4', <UserOutlined />, [
         getItem('Báo cáo tài liệu', '/document-statistic'),
         getItem('Báo cáo độc giả', '/member-statistic'),
-        getItem('Báo cáo mượn trả', '/borrow-return-statistic'),
+        // getItem('Báo cáo mượn trả', '/borrow-return-statistic'),
     ]),
     getItem('Quản lý chung', '/5', <UserOutlined />, [
         getItem('Tác giả', '/author'),
@@ -43,7 +43,7 @@ const publicRouter: MenuItem[] = [
         getItem('Nhà cung cấp', '/supplier'),
         getItem('Nhà xuất bản', '/publisher'),
         getItem('Ngôn ngữ', '/language'),
-        getItem('Phạt', '/punish'),
+        // getItem('Phạt', '/punish'),
     ]),
 ];
 

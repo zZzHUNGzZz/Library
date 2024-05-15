@@ -1,7 +1,10 @@
 import { ConfigProvider } from "antd";
 import MainLayout from "./components/Layout";
+import Login from "./scenes/Login";
+import { useState } from "react";
 
 const App = () => {
+   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
    return (
       <ConfigProvider
          theme={{
@@ -41,7 +44,8 @@ const App = () => {
             },
          }}
       >
-         <MainLayout />
+         {<Login isLoginSuccess={async value => await setIsLoginSuccess(value)}/>}
+         {isLoginSuccess &&<MainLayout />}
       </ConfigProvider>
    );
 };

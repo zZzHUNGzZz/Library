@@ -16,10 +16,6 @@ const MainLayout = () => {
         token: { colorBgContainer },
     } = theme.useToken();
 
-    const setCollap = () => {
-        window.innerWidth < 768 ? setCollapsed(true) : setCollapsed(false);
-    }
-
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider breakpoint="lg" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={250}>

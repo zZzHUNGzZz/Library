@@ -22,7 +22,7 @@ const PageRouter = () => {
         <>
             <Routes>
                 <Route path='/login' element={<Login />}></Route>
-                <Route path='/' element={<DashBroad />}></Route>
+                <Route path='/dashbroad' element={<DashBroad />}></Route>
                 <Route path='/document' element={<Document />}></Route>
                 <Route path='/document-info' element={<DocumentInfo />}></Route>
                 <Route path='/manage-borrow-returning' element={<ManageBorrowReturning />}></Route>
