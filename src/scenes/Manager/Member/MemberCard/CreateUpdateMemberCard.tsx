@@ -61,30 +61,32 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
                 </Row>
                 <Form.Item
                     label="Tên độc giả"
-                    name="me_ca_name"
+                    name="me_id"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <Select allowClear />
+                    <Input allowClear />
                 </Form.Item>
                 <Form.Item
                     label="Thời gian có hiệu lực"
                     name="me_ca_start_valid"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <DatePicker
+                    {/* <DatePicker
                         style={{ width: '100%'}}
                         format={"DD/MM/YYYY"}
-                    />
+                    /> */}
+                    <Input allowClear />
                 </Form.Item>
                 <Form.Item
                     label="Thời gian hết hiệu lực"
                     name="me_ca_end_valid"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <DatePicker 
-                        style={{ width: '100%'}}
+                    <Input allowClear />
+                    {/* <DatePicker
+                        style={{ width: '100%' }}
                         format={"DD/MM/YYYY"}
-                    />
+                    /> */}
                 </Form.Item>
 
                 <Form.Item
@@ -92,7 +94,7 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
                     name="me_ca_money"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <InputNumber style={{ width: '100%'}} min={0} />
+                    <InputNumber style={{ width: '100%' }} min={0} />
                 </Form.Item>
             </Form>
         </div>

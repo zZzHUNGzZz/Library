@@ -26,10 +26,10 @@ export const TableMemberCard: React.FC<IProps> = (props) => {
             props.columnImportExport!(columnData);
         }
     }, []);
-
+    // render: (text: any, item: MemberCardDTO, index: number) => <>{getMemberNameById(item.me_id!)}</>
     const columns: TableColumnsType<MemberCardDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
-        { title: 'Độc giả', dataIndex: 'me_id', key: 'me_id', render: (text: any, item: MemberCardDTO, index: number) => <>{getMemberNameById(item.me_id!)}</> },
+        { title: 'Độc giả', dataIndex: 'me_id', key: 'me_id',  },
         { title: 'Số thẻ', dataIndex: 'me_ca_code', key: 'me_ca_code' },
         { title: 'Thời gian có hiệu lực', dataIndex: 'me_ca_start_valid', key: 'me_ca_start_valid' },
         { title: 'Thời gian hết hiệu lực', dataIndex: 'me_ca_end_valid', key: 'me_ca_end_valid' },
