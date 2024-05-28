@@ -1,10 +1,8 @@
 import { ConfigProvider } from "antd";
-import MainLayout from "./components/Layout";
-import Login from "./scenes/Login";
-import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import PageRouter from "./components/Router/router.config";
 
 const App = () => {
-   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
    return (
       <ConfigProvider
          theme={{
@@ -44,8 +42,9 @@ const App = () => {
             },
          }}
       >
-         {<Login isLoginSuccess={async value => await setIsLoginSuccess(value)}/>}
-         {isLoginSuccess &&<MainLayout />}
+         <Routes>
+            <Route path="/*" element={<PageRouter />} />
+         </Routes>
       </ConfigProvider>
    );
 };

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Col, Layout, Menu, Row, theme } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { FaRegCircleUser } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import publicRouter from '../Router';
 import PageRouter from '../Router/router.config';
 import './../../App.css'
@@ -46,7 +46,7 @@ const MainLayout = () => {
                     </Row>
                 </Header>
                 <Content style={{ margin: '20px 20px', backgroundColor: '#F0F0F0' }}>
-                    <PageRouter />
+                    <Outlet />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                     Design by <strong>Đào Đức Hưng</strong>

@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import './index.css';
+import { RoleProvider } from './components/context/RoleContext';
 
 const root = ReactDOM.createRoot(
    document.getElementById('root') as HTMLElement
@@ -12,9 +13,11 @@ const root = ReactDOM.createRoot(
 root.render(
    <BrowserRouter>
       <React.StrictMode>
-         <App />
-      </React.StrictMode>
-   </BrowserRouter>
+         <RoleProvider>
+            <App />
+         </RoleProvider>
+      </React.StrictMode >
+   </BrowserRouter >
 );
 
 reportWebVitals();
