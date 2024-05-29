@@ -17,7 +17,8 @@ import Member from "../../scenes/Manager/Member/Member";
 import MemberBorrowReturning from "../../scenes/Manager/Borrow/MemberBorrowReturning";
 import Login from "../../scenes/Login";
 import MainLayout from "../Layout";
-import RequireAuth from "../RequireAuth";
+import RequireAuth from "./RequireAuth";
+import Register from "../../scenes/Register";
 
 const ROLES = {
     'Unknown': 0,
@@ -30,6 +31,7 @@ const PageRouter = () => {
         <>
             <Routes>
                 <Route path='/login' element={<Login />}></Route>
+                <Route path='/register' element={<Register />}></Route>
                 <Route path='/account-info' element={<Login />}></Route>
                 <Route element={<RequireAuth allowedRoles={ROLES.Admin} />}>
                     <Route path='/' element={<MainLayout />}>

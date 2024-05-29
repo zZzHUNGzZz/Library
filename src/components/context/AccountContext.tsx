@@ -6,12 +6,10 @@ interface IProps {
     children?: ReactNode;
 }
 
-
 interface IAccountContext {
     account: AccountDTO | null;
     setAccount: Dispatch<SetStateAction<AccountDTO | null>>;
 }
-
 
 export const AccountContext = createContext<IAccountContext>({
     account: null,
