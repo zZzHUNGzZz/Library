@@ -4,31 +4,30 @@ import database from "../firebase";
 
 export interface AccountDTO {
     ac_id: string,
-    ac_user_name: string | null,
-    ac_password: string | null,
-    ac_role: number,
+    ac_user_name: string,
+    ac_password: string,
+    ac_role: number | null,
 }
 
-export const getAccount = async (searchValue: string) => {
+export const getAccount = async (username: string, password: string) => {
     try {
         const snapshot = await database.ref("account").once("value");
         const dataObj = snapshot.val();
-        const dataArray: AccountDTO[] = [];
 
         if (dataObj) {
-            Object.keys(dataObj).forEach(key => {
+            for (const key of Object.keys(dataObj)) {
                 const account = dataObj[key];
-                if (checkAnyField(account, searchValue)) {
-                    dataArray.push({
+                if (account.ac_user_name === username && account.ac_password === password) {
+                    return {
                         ac_id: key,
                         ac_user_name: account.ac_user_name,
                         ac_password: account.ac_password,
                         ac_role: account.ac_role,
-                    });
+                    } as AccountDTO;
                 }
-            });
+            }
         }
-        return dataArray;
+        return null; 
     } catch (error) {
         message.error("Lỗi khi lấy dữ liệu!");
         console.error("Error fetching data:", error);
@@ -36,17 +35,7 @@ export const getAccount = async (searchValue: string) => {
     }
 }
 
-const checkAnyField = (account: AccountDTO, searchValue: string): boolean => {
-    const accountValues = Object.values(account);
-    for (const value of accountValues) {
-        if (value && typeof value === 'string' && value.toLowerCase().includes(searchValue.toLowerCase())) {
-            return true;
-        }
-    }
-    return false;
-}
-
-export const createAuthor = (data: AccountDTO) => {
+export const createAccount = (data: AccountDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );

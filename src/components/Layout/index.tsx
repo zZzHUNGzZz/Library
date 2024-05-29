@@ -4,7 +4,6 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { FaRegCircleUser } from "react-icons/fa6";
 import { Outlet, useNavigate } from 'react-router-dom';
 import publicRouter from '../Router';
-import PageRouter from '../Router/router.config';
 import './../../App.css'
 
 const { Header, Content, Footer, Sider } = Layout;

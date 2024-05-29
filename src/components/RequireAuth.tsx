@@ -1,15 +1,17 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import React from "react";
+import { useContext } from "react";
+import { AccountContext } from "./context/AccountContext";
 
 interface Props {
     allowedRoles: number
 }
 
-const RequireAuth: React.FC<Props> = ({ allowedRoles }) => {
+const RequireAuth = ({ allowedRoles }: Props) => {
+    const accountContext = useContext(AccountContext)
     const location = useLocation();
 
     return (
-        allowedRoles > 0
+        accountContext.account?.ac_role === allowedRoles
             ? <Outlet />
             : <Navigate to="/login" state={{ from: location }} replace />
     );

@@ -18,22 +18,20 @@ import MemberBorrowReturning from "../../scenes/Manager/Borrow/MemberBorrowRetur
 import Login from "../../scenes/Login";
 import MainLayout from "../Layout";
 import RequireAuth from "../RequireAuth";
-import { useContext } from "react";
-import { RoleContext } from "../context/RoleContext";
 
 const ROLES = {
     'Unknown': 0,
-    'User': 1,
-    'Admin': 2,
+    'Admin': 1,
+    'User': 2,
 }
 
 const PageRouter = () => {
-    const numberRole = useContext(RoleContext)
     return (
         <>
             <Routes>
                 <Route path='/login' element={<Login />}></Route>
-                <Route element={<RequireAuth allowedRoles={ 1 === ROLES.Admin ? 1 : 0} />}>
+                <Route path='/account-info' element={<Login />}></Route>
+                <Route element={<RequireAuth allowedRoles={ROLES.Admin} />}>
                     <Route path='/' element={<MainLayout />}>
                         <Route path='/dashbroad' element={<DashBroad />}></Route>
                         <Route path='/document' element={<Document />}></Route>
@@ -58,8 +56,8 @@ const PageRouter = () => {
 
                     </Route>
                     {/* other */}
-                    <Route path='*' element={<div>Page Not Found!</div>}></Route>
                 </Route>
+                <Route path='*' element={<div>Page Not Found!</div>}></Route>
             </Routes>
         </>
     )

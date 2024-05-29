@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import './index.css';
-import { RoleProvider } from './components/context/RoleContext';
+import { AccountProvider } from './components/context/AccountContext';
 
 const root = ReactDOM.createRoot(
    document.getElementById('root') as HTMLElement
@@ -13,9 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
    <BrowserRouter>
       <React.StrictMode>
-         <RoleProvider>
+         <AccountProvider>
             <App />
-         </RoleProvider>
+         </AccountProvider>
       </React.StrictMode >
    </BrowserRouter >
 );
