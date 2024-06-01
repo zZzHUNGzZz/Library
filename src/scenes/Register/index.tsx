@@ -1,15 +1,24 @@
 import type { FormProps } from 'antd';
 import { Button, Form, Input, message } from 'antd';
-import { AccountDTO, createAccount } from '../../stores/AccountStore';
-import { useNavigate } from 'react-router-dom';
+import { createAccount } from '../../stores/AccountStore';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
-function Register() {
-    const navigate = useNavigate()
+interface IProps {
+    setIsSignIn?: (isSignIn: boolean) => void,
+}
+
+function Register({ setIsSignIn }: IProps) {
     const onFinish: FormProps['onFinish'] = async (values) => {
-        const {confirm, ...newAccount} = values;
-        await createAccount({ ac_role: 1, ...newAccount})
-        message.success('Tạo tài khoản mới thành công')
+        const { confirm, ...newAccount } = values;
+        await createAccount(
+            { ac_role: 1, ...newAccount },
+            (isSuccess) => {
+                if (isSuccess) {
+                    message.success('Tạo tài khoản mới thành công!');
+                    setIsSignIn!(true);
+                }
+            }
+        )
     };
 
     return (

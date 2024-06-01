@@ -70,7 +70,7 @@ function Login() {
                             </Form>
                         </div>
                         :
-                        <Register />
+                        <Register setIsSignIn= {setIsSignIn}/>
                     }
                 </Col>
                 <Col {...cssResponsive(24, 24, 24, 15, 15, 15)} className='register-banner'>

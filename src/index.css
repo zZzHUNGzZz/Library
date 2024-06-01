@@ -144,3 +144,9 @@ p {
     margin-left: 5px;
     font-weight: 600;
 }
+
+.button-log-out {
+    color: #0958d9;
+    font-weight: 600;
+    cursor: pointer;
+}

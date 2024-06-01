@@ -1,5 +1,5 @@
 import { message } from "antd";
-import database from "../firebase";
+import { database } from "../firebase";
 
 export interface SupplierDTO {
     su_id: string,

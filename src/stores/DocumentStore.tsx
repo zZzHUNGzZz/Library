@@ -1,5 +1,5 @@
 import { message } from "antd";
-import database from "../firebase";
+import { database } from "../firebase";
 import { createDocumentInfo } from "./DocumentInfoStore";
 export interface DocumentDTO {
     do_id: string,

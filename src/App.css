@@ -11,7 +11,15 @@
 .header-col-right-user {
     display: flex;
     justify-content: right;
+    align-items: center
+}
+
+.user-info {
+    height: 30px;
+    margin-right: 21px;
+    display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .button-collapsed {
@@ -19,6 +27,12 @@
     height: 64px;
 }
 
+.ant-tooltip-inner{
+    display: none !important;
+}
 
+.ant-tooltip-arrow {
+    display: none !important;
+}
 
 

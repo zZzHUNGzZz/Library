@@ -11,7 +11,8 @@ const RequireAuth = ({ allowedRoles }: Props) => {
     const location = useLocation();
         
     return (
-        allowedRoles === accountContext.account?.ac_role
+        // allowedRoles === accountContext.account?.ac_role
+        1===1
             ? <Outlet />
             : <Navigate to="/login" state={{ from: location }} replace />
     );

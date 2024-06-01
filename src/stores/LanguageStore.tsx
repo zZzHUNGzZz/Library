@@ -1,5 +1,5 @@
 import { message } from "antd";
-import database from "../firebase";
+import { database } from "../firebase";
 
 export interface LanguageDTO {
     la_id: string,

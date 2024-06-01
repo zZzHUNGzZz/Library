@@ -1,16 +1,37 @@
-import { Button, Card, Col, Input, Row, message } from "antd";
-import { useEffect, useState } from "react";
-import { cssResponsive } from "../../components/Manager/AppConst";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { useContext, useState } from "react";
+import { AccountContext } from "../../components/context/AccountContext";
+import { Popover } from "antd";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import ModalAccountInfo from "./ModalAccountInfo";
 
-function Author() {
+function AccountInfo() {
+    const [visibleAccountInfo, setVisibleAccountInfo] = useState(false);
+    const account = useContext(AccountContext);
 
-    const leftCol = cssResponsive(24, 24, 14, 14, 14, 14) 
-    const rightCol = cssResponsive(24, 24, 10, 10, 10, 10)
+    const content = (
+        <>
+            <p onClick={async () => await setVisibleAccountInfo(true)}><UserOutlined /> Thông tin tài khoản</p>
+            <div className="line-space"></div>
+            <p className="button-log-out" onClick={() => window.location.reload()}><LogoutOutlined /> Đăng xuất</p>
+        </>
+    );
     return (
-        <Card>
+        <>
+            <Popover placement="bottomRight" content={content} >
+                <div className='user-info'>
+                    <FaRegCircleUser style={{ width: 20, height: 20, marginRight: 8 }} />
+                    <span>{account.account?.me_name}</span>
+                </div>
+            </Popover>
 
-        </Card>
+            <ModalAccountInfo
+                isVisible={visibleAccountInfo}
+                setVisibleAccountInfo={setVisibleAccountInfo}
+            />
+
+        </>
     );
 }
 
-export default Author;
+export default AccountInfo;

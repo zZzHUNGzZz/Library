@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button, Col, Layout, Menu, Row, theme } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { FaRegCircleUser } from "react-icons/fa6";
 import { Outlet, useNavigate } from 'react-router-dom';
 import publicRouter from '../Router';
 import './../../App.css'
+import AccountInfo from '../../scenes/AccountInfo';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -39,8 +39,7 @@ const MainLayout = () => {
                             />
                         </Col>
                         <Col span={20} className='header-col-right-user'>
-                            <FaRegCircleUser style={{ width: 20, height: 20, marginRight: 8 }} />
-                            <span style={{ marginRight: 16 }}>Đào Đức Hưng</span>
+                            <AccountInfo />
                         </Col>
                     </Row>
                 </Header>

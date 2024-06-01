@@ -1,5 +1,5 @@
 import { message } from "antd";
-import database from "../firebase";
+import { database } from "../firebase";
 
 export interface MemberDTO {
     me_id: string,

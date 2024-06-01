@@ -38,6 +38,9 @@ const App = () => {
 
                },
                Form: {
+               },
+               Upload: {
+                  colorError:  '#d9d9d9',
                }
             },
          }}
