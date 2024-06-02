@@ -5,7 +5,7 @@ import type { GetProp, UploadFile, UploadProps } from 'antd';
 import UploadAccountImage from "../../storage/UploadAccountImage";
 import ImgCrop from 'antd-img-crop';
 import { cssResponsive } from "../../components/Manager/AppConst";
-import { updateAccount } from "../../stores/AccountStore";
+import { AccountDTO, updateAccount } from "../../stores/AccountStore";
 import { AccountContext } from "../../components/context/AccountContext";
 
 interface IProps {
@@ -30,18 +30,24 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-    let urlImage = undefined;
+    let urlImage: AccountDTO;
     const account = useContext(AccountContext);
+
     useEffect(() => {
-        form.setFieldValue(form, account);
+        form.setFieldsValue(account.account);
+        if (!!account.account?.me_avatar) {
+            setPreviewImage(account.account?.me_avatar);
+        }
     }, [])
+
     const onFinish = async (values: any) => {
         if (fileList.length > 0) {
-            urlImage = await UploadAccountImage(fileList[0].originFileObj);
+            urlImage = await UploadAccountImage(fileList[0].originFileObj) as any;
         }
 
-        const { confirm, ac_username, ...newInfo} = values
-        // updateAccount(ac_username, newInfo);
+        const { confirm, username, ...newInfo } = values
+        const data = { ...newInfo, me_avatar: !!urlImage!.toString() ? urlImage!.toString() : '' }
+        updateAccount(username, data);
     };
 
     const handlePreview = async (file: UploadFile) => {
@@ -183,7 +189,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                     <h3 style={{ marginBottom: 10 }}><strong>Thông tin tài khoản</strong></h3>
                                     <Form.Item
                                         label="Tên tài khoản"
-                                        name="ac_username"
+                                        name="username"
                                     // rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                     >
                                         <Input
@@ -194,7 +200,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                     </Form.Item>
                                     <Form.Item
                                         label="Mật khẩu"
-                                        name="ac_password"
+                                        name="password"
                                         rules={[{ required: true, message: 'Vui lòng nhập Mật khẩu!' }]}
                                     >
                                         <Input.Password
@@ -213,7 +219,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             },
                                             ({ getFieldValue }) => ({
                                                 validator(_, value) {
-                                                    if (!value || getFieldValue('ac_password') === value) {
+                                                    if (!value || getFieldValue('password') === value) {
                                                         return Promise.resolve();
                                                     }
                                                     return Promise.reject(new Error('Mật khẩu mới không trùng khớp!'));

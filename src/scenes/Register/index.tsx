@@ -10,8 +10,7 @@ interface IProps {
 function Register({ setIsSignIn }: IProps) {
     const onFinish: FormProps['onFinish'] = async (values) => {
         const { confirm, ...newAccount } = values;
-        await createAccount(
-            { ac_role: 1, ...newAccount },
+        await createAccount(newAccount,
             (isSuccess) => {
                 if (isSuccess) {
                     message.success('Tạo tài khoản mới thành công!');
@@ -39,7 +38,7 @@ function Register({ setIsSignIn }: IProps) {
 
                 <label className='register-label'>Tên tài khoản</label>
                 <Form.Item
-                    name="ac_username"
+                    name="username"
                     rules={[{ required: true, message: 'Vui lòng nhập Tên tài khoản!' }]}
                 >
                     <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tên tài khoản" />
@@ -65,7 +64,7 @@ function Register({ setIsSignIn }: IProps) {
 
                 <label className='register-label'>Mật khẩu</label>
                 <Form.Item
-                    name="ac_password"
+                    name="password"
                     rules={[{ required: true, message: 'Vui lòng nhập Mật khẩu!' }]}
                 >
                     <Input.Password
@@ -85,7 +84,7 @@ function Register({ setIsSignIn }: IProps) {
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
-                                if (!value || getFieldValue('ac_password') === value) {
+                                if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
                                 }
                                 return Promise.reject(new Error('Mật khẩu mới không trùng khớp!'));

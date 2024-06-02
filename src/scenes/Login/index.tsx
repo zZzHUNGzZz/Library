@@ -13,7 +13,7 @@ function Login() {
     const accountContext = useContext(AccountContext)
     const navigate = useNavigate()
     const onFinish: FormProps<AccountDTO>['onFinish'] = async (values) => {
-        const account = await getAccount(values.ac_username, values.ac_password);
+        const account = await getAccount(values.username, values.password);
 
         if (!!account) {
             await accountContext.setAccount(account)
@@ -40,14 +40,14 @@ function Login() {
                             >
                                 <label className='register-label'>Tên tài khoản</label>
                                 <Form.Item
-                                    name="ac_username"
+                                    name="username"
                                     rules={[{ required: true, message: 'Vui lòng nhập Tên tài khoản!' }]}
                                 >
                                     <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                                 </Form.Item>
                                 <label className='register-label'>Mật khẩu</label>
                                 <Form.Item
-                                    name="ac_password"
+                                    name="password"
                                     rules={[{ required: true, message: 'Vui lòng nhập Mật khẩu!' }]}
                                 >
                                     <Input.Password
