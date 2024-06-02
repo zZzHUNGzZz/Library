@@ -2,7 +2,7 @@ import { storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const UploadAccountImage = (file: any) => {
-    if (!file) return new Promise((resolve, reject) => reject("File is empty"));
+    if (!file) return new Promise((resolve, reject) => reject("Không có ảnh"));
     
     const storageRef = ref(storage, `avatar_account/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);

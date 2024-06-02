@@ -1,9 +1,12 @@
-import { Col, Form, Input, Modal, Row, Upload, Image, message } from "antd";
-import { useEffect, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { Col, Form, Input, Modal, Row, Upload, Image, message, Button } from "antd";
+import { useContext, useEffect, useState } from "react";
+import { LockOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import UploadAccountImage from "../../storage/UploadAccountImage";
 import ImgCrop from 'antd-img-crop';
+import { cssResponsive } from "../../components/Manager/AppConst";
+import { updateAccount } from "../../stores/AccountStore";
+import { AccountContext } from "../../components/context/AccountContext";
 
 interface IProps {
     isVisible: boolean
@@ -27,6 +30,20 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+    let urlImage = undefined;
+    const account = useContext(AccountContext);
+    useEffect(() => {
+        form.setFieldValue(form, account);
+    }, [])
+    const onFinish = async (values: any) => {
+        if (fileList.length > 0) {
+            urlImage = await UploadAccountImage(fileList[0].originFileObj);
+        }
+
+        const { confirm, ac_username, ...newInfo} = values
+        // updateAccount(ac_username, newInfo);
+    };
+
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj as FileType);
@@ -37,12 +54,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
     };
 
     const handleChange: UploadProps['onChange'] = async ({ fileList: newFileList }) => {
-        if (!!newFileList[0]) {
-            await getBase64(newFileList[0].originFileObj as FileType);
-        }
-        // const url = await UploadAccountImage(newFileList[0].originFileObj);
         await setFileList(newFileList);
-
     }
 
     const beforeUpload = (file: FileType) => {
@@ -53,6 +65,11 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
         }
         return true;
     };
+
+    const onCancel = () => {
+
+        props.setVisibleAccountInfo(false)
+    }
 
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
@@ -66,10 +83,11 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
             closeIcon={null}
             open={props.isVisible}
             width={'80vw'}
-            onCancel={() => props.setVisibleAccountInfo(false)}
+            footer={null}
         >
             <Row>
-                <Col span={8}>
+                <Col {...cssResponsive(24, 24, 24, 6, 6, 6)}>
+                    <h3 style={{ margin: "15px 0 10px 0" }}><strong>Ảnh đại diện</strong></h3>
                     <ImgCrop rotationSlider>
                         <Upload
                             listType="picture-circle"
@@ -77,7 +95,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                             onPreview={handlePreview}
                             onChange={handleChange}
                             beforeUpload={beforeUpload}
-                            style={{ width: 100 }}
                         >
                             {fileList.length == 1 ? null : uploadButton}
                         </Upload>
@@ -94,18 +111,18 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                         />
                     )}
                 </Col>
-                <Col span={16}>
+                <Col {...cssResponsive(24, 24, 24, 18, 18, 18)}>
                     <div className="div-form-data">
                         <Form
                             form={form}
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 16 }}
+                            labelCol={{ span: 9 }}
+                            wrapperCol={{ span: 15 }}
                             initialValues={{ remember: true }}
-                            // onFinish={onFinish}
-
+                            onFinish={onFinish}
                         >
                             <Row>
-                                <Col span={12}>
+                                <Col span={11}>
+                                    <h3 style={{ marginBottom: 10 }}><strong>Thông tin cá nhân</strong></h3>
                                     <Form.Item
                                         label="Tên"
                                         name="me_name"
@@ -123,26 +140,18 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                     <Form.Item
                                         label="Ngày sinh"
                                         name="me_birthday"
-                                        rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
                                     >
                                         <Input />
                                     </Form.Item>
                                     <Form.Item
                                         label="Giới tính"
                                         name="me_sex"
-                                        rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
                                     >
                                         <Input />
                                     </Form.Item>
-                                </Col>
-                                <Col span={12}>
                                     <Form.Item
                                         label="Địa chỉ"
                                         name="me_address"
-                                        rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
                                     >
                                         <Input />
                                     </Form.Item>
@@ -155,21 +164,77 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                     <Form.Item
                                         label="Email"
                                         name="me_email"
+                                        rules={[
+                                            {
+                                                type: 'email',
+                                                message: 'Email không hợp lệ!',
+                                            },
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập Email!',
+                                            },
+                                        ]}
                                     >
-                                        <Input />
+                                        <Input placeholder="Email" />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={2}></Col>
+                                <Col span={11}>
+                                    <h3 style={{ marginBottom: 10 }}><strong>Thông tin tài khoản</strong></h3>
+                                    <Form.Item
+                                        label="Tên tài khoản"
+                                        name="ac_username"
+                                    // rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                                    >
+                                        <Input
+                                            disabled
+                                            prefix={<UserOutlined className="site-form-item-icon" />}
+                                            placeholder="Tên tài khoản"
+                                        />
                                     </Form.Item>
                                     <Form.Item
-                                        label="Số điện thoại"
-                                        name="me_note"
+                                        label="Mật khẩu"
+                                        name="ac_password"
+                                        rules={[{ required: true, message: 'Vui lòng nhập Mật khẩu!' }]}
                                     >
-                                        <Input />
+                                        <Input.Password
+                                            prefix={<LockOutlined className="site-form-item-icon" />}
+                                            placeholder="Mật khẩu"
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Xác nhận Mật khẩu"
+                                        name="confirm"
+                                        dependencies={['password']}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng xác nhận Mật khẩu!',
+                                            },
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    if (!value || getFieldValue('ac_password') === value) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(new Error('Mật khẩu mới không trùng khớp!'));
+                                                },
+                                            }),
+                                        ]}
+                                    >
+                                        <Input.Password
+                                            prefix={<LockOutlined className="site-form-item-icon" />}
+                                            placeholder="Mật khẩu"
+                                        />
                                     </Form.Item>
                                 </Col>
                             </Row>
+                            <Col span={24} className="align-right">
+                                <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
+                                <Button type="primary" htmlType="submit">Lưu</Button>
+                            </Col>
                         </Form>
                     </div>
                 </Col>
-
             </Row>
         </Modal >
     )

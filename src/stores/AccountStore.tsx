@@ -75,6 +75,14 @@ export const createAccount = (data: AccountDTO, isSuccess: (isSuccess: boolean) 
     });
 };
 
+export const updateAccount = (username: string, data: AccountDTO) => {
+    database.ref(username + "/").set(data, function (error) {
+        if (error) {
+            console.error("Error update data:", error);
+            message.error('Lỗi khi cập nhật dữ liệu!');
+        }
+    });
+}
 
 
 
