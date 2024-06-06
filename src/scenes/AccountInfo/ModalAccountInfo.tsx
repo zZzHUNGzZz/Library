@@ -1,12 +1,15 @@
-import { Col, Form, Input, Modal, Row, Upload, Image, message, Button } from "antd";
-import { useContext, useEffect, useState } from "react";
-import { LockOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { Col, Form, Input, Modal, Row, Upload, Image, message, Button, Space, Select } from "antd";
+import { useContext, useEffect, useRef, useState } from "react";
+import { CalendarOutlined, DownOutlined, LockOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import UploadAccountImage from "../../storage/UploadAccountImage";
 import ImgCrop from 'antd-img-crop';
-import { cssResponsive } from "../../components/Manager/AppConst";
-import { AccountDTO, updateAccount } from "../../stores/AccountStore";
+import { AccountDTO, changePassword, getAccount, getAccountWithNoPassword, updateAccountInfo, } from "../../stores/AccountStore";
 import { AccountContext } from "../../components/context/AccountContext";
+import { getFileNameFromUrl } from "../../utils/getFileNameFromUrl";
+import moment from "moment";
+import { DatePicker } from "../../antd";
+import { cssResponsive } from "../../components/Manager/Responsive";
 
 interface IProps {
     isVisible: boolean
@@ -24,31 +27,51 @@ const getBase64 = (file: FileType): Promise<string> =>
     });
 
 const ModalAccountInfo: React.FC<IProps> = (props) => {
-    const [form] = Form.useForm();
-
+    const [data, setData] = useState<AccountDTO>();
+    const [accountFormRef] = Form.useForm();
+    const [accountInfoFormRef] = Form.useForm();
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [isUpload, setIsUpload] = useState(false);
+    const [isChangeAccountInfo, setIsChangeAccountInfo] = useState(false);
+    const [isChangePassword, setIsChangePassword] = useState(false);
 
-    let urlImage: AccountDTO;
+    let urlImage: string = '';
     const account = useContext(AccountContext);
 
+    useEffect(() => { fetchData(); }, [data])
+
     useEffect(() => {
-        form.setFieldsValue(account.account);
+        accountFormRef.setFieldsValue(data);
+        accountInfoFormRef.setFieldsValue(data);
+
         if (!!account.account?.me_avatar) {
-            setPreviewImage(account.account?.me_avatar);
+            urlImage = account.account?.me_avatar!;
+            const fileName = getFileNameFromUrl(urlImage);
+            setFileList([{ uid: '-1', name: fileName, status: 'done', url: urlImage }]);
         }
-    }, [])
+    }, [props.isVisible])
 
-    const onFinish = async (values: any) => {
-        if (fileList.length > 0) {
-            urlImage = await UploadAccountImage(fileList[0].originFileObj) as any;
+    const fetchData = async () => {
+        const data = await getAccountWithNoPassword(account?.account?.username!);
+        await setData(data);
+    }
+
+    const onAccountFormFinish = async (value: any) => {
+        const hasAccount = await getAccount(value.username, value.password);
+        if (!!hasAccount) {
+            await changePassword(value.username, value.newPassword);
+            setIsChangePassword(false);
+        } else {
+            message.error("Mật khẩu không chính xác!");
         }
-
-        const { confirm, username, ...newInfo } = values
-        const data = { ...newInfo, me_avatar: !!urlImage!.toString() ? urlImage!.toString() : '' }
-        updateAccount(username, data);
     };
+    const onAccountFormInfoFinish = async (value: any) => {
+        console.log(value.me_sex);
+        await updateAccountInfo(account.account?.username!, value);
+        setIsChangeAccountInfo(false);
+    }
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -61,6 +84,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
 
     const handleChange: UploadProps['onChange'] = async ({ fileList: newFileList }) => {
         await setFileList(newFileList);
+        setIsUpload(true);
     }
 
     const beforeUpload = (file: FileType) => {
@@ -73,7 +97,11 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
     };
 
     const onCancel = () => {
-
+        accountFormRef.resetFields();
+        accountInfoFormRef.resetFields();
+        setFileList([]);
+        setIsChangeAccountInfo(false);
+        setIsChangePassword(false);
         props.setVisibleAccountInfo(false)
     }
 
@@ -84,6 +112,17 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
         </button>
     );
 
+    const onSubmit = () => {
+        if (isChangeAccountInfo) {
+            accountInfoFormRef.submit();
+        }
+        if (isChangePassword) {
+            accountFormRef.submit();
+        }
+    }
+
+    const isChangeInfo = isChangeAccountInfo ? 'outlined' : 'borderless';
+
     return (
         <Modal
             closeIcon={null}
@@ -91,81 +130,113 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
             width={'80vw'}
             footer={null}
         >
-            <Row>
-                <Col {...cssResponsive(24, 24, 24, 6, 6, 6)}>
-                    <h3 style={{ margin: "15px 0 10px 0" }}><strong>Ảnh đại diện</strong></h3>
-                    <ImgCrop rotationSlider>
-                        <Upload
-                            listType="picture-circle"
-                            fileList={fileList}
-                            onPreview={handlePreview}
-                            onChange={handleChange}
-                            beforeUpload={beforeUpload}
-                        >
-                            {fileList.length == 1 ? null : uploadButton}
-                        </Upload>
-                    </ImgCrop>
-                    {previewImage && (
-                        <Image
-                            wrapperStyle={{ display: 'none' }}
-                            preview={{
-                                visible: previewOpen,
-                                onVisibleChange: (visible) => setPreviewOpen(visible),
-                                afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                            }}
-                            src={previewImage}
-                        />
-                    )}
+            <Row gutter={[16, 16]}>
+                <Col {...cssResponsive(24, 24, 24, 6, 6, 6)} className="account-info-left-col">
+                    <Col {...cssResponsive(12, 12, 12, 24, 24, 24)}>
+                        <h3 className="title-h3"><strong>Ảnh đại diện</strong></h3>
+                        <ImgCrop rotationSlider>
+                            <Upload
+                                listType="picture-circle"
+                                fileList={fileList}
+                                onPreview={handlePreview}
+                                onChange={handleChange}
+                                beforeUpload={beforeUpload}
+                            >
+                                {fileList.length == 1 ? null : uploadButton}
+                            </Upload>
+                        </ImgCrop>
+                        {!!previewImage &&
+                            <Image
+                                wrapperStyle={{ display: 'none' }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        }
+                    </Col>
+                    <Col {...cssResponsive(12, 12, 12, 24, 24, 24)}>
+                        <div className="action-account-info-div">
+                            <h3 className="title-h3"><strong>Chức năng</strong></h3>
+                            <Space wrap>
+                                <Button onClick={() => setIsChangeAccountInfo(true)}>Cập nhật thông tin</Button>
+                                <Button onClick={() => setIsChangePassword(true)}>Đổi mật khẩu</Button>
+                            </Space>
+                        </div>
+                    </Col>
                 </Col>
                 <Col {...cssResponsive(24, 24, 24, 18, 18, 18)}>
                     <div className="div-form-data">
-                        <Form
-                            form={form}
-                            labelCol={{ span: 9 }}
-                            wrapperCol={{ span: 15 }}
-                            initialValues={{ remember: true }}
-                            onFinish={onFinish}
-                        >
-                            <Row>
-                                <Col span={11}>
-                                    <h3 style={{ marginBottom: 10 }}><strong>Thông tin cá nhân</strong></h3>
+                        <Row>
+                            <Col {...cssResponsive(24, 24, 11, 11, 11, 11)}>
+                                <Form
+                                    form={accountInfoFormRef}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
+                                    initialValues={{ remember: true }}
+                                    onFinish={onAccountFormInfoFinish}
+                                >
+                                    <h3 className="title-h3"><strong>Thông tin cá nhân</strong></h3>
                                     <Form.Item
-                                        label="Tên"
+                                        label="Họ và tên"
                                         name="me_name"
                                         rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                     >
-                                        <Input />
+                                        <Input
+                                            variant={isChangeInfo}
+                                            placeholder="Nhập tên của bạn"
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         label="Số CCCD"
                                         name="me_identify"
                                         rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                     >
-                                        <Input />
+                                        <Input
+                                            variant={isChangeInfo}
+                                            placeholder="Nhập số CCCD"
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         label="Ngày sinh"
                                         name="me_birthday"
                                     >
-                                        <Input />
+                                        <DatePicker
+                                            suffixIcon={isChangeAccountInfo && <CalendarOutlined />}
+                                            variant={isChangeInfo}
+                                            style={{ width: '100%' }}
+                                            format={'DD/MM/YYYY'}
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         label="Giới tính"
                                         name="me_sex"
                                     >
-                                        <Input />
+                                        <Select
+                                            suffixIcon={isChangeAccountInfo && <DownOutlined />}
+                                            variant={isChangeInfo}
+                                            allowClear
+                                            options={[
+                                                { value: '0', label: 'Nam' },
+                                                { value: '1', label: 'Nữ' },
+                                                { value: '2', label: 'Khác' },
+                                            ]}
+                                            style={{ width: '100%' }}
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         label="Địa chỉ"
                                         name="me_address"
                                     >
-                                        <Input />
+                                        <Input variant={isChangeInfo} />
                                     </Form.Item>
                                     <Form.Item
                                         label="Số điện thoại"
                                         name="me_phone"
                                     >
-                                        <Input />
+                                        <Input variant={isChangeInfo} />
                                     </Form.Item>
                                     <Form.Item
                                         label="Email"
@@ -181,67 +252,85 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             },
                                         ]}
                                     >
-                                        <Input placeholder="Email" />
+                                        <Input
+                                            variant={isChangeInfo}
+                                            placeholder="Email"
+                                        />
                                     </Form.Item>
-                                </Col>
-                                <Col span={2}></Col>
-                                <Col span={11}>
-                                    <h3 style={{ marginBottom: 10 }}><strong>Thông tin tài khoản</strong></h3>
+                                </Form>
+                            </Col>
+                            <Col {...cssResponsive(0, 0, 2, 2, 2, 2)}></Col>
+                            <Col {...cssResponsive(24, 24, 11, 11, 11, 11)}>
+                                <Form
+                                    form={accountFormRef}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
+                                    initialValues={{ remember: true }}
+                                    onFinish={onAccountFormFinish}
+                                >
+                                    <h3 className="title-h3"><strong>Thông tin tài khoản</strong></h3>
                                     <Form.Item
                                         label="Tên tài khoản"
                                         name="username"
-                                    // rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                     >
                                         <Input
+                                            className="font-weight-bold"
                                             disabled
-                                            prefix={<UserOutlined className="site-form-item-icon" />}
+                                            variant="borderless"
                                             placeholder="Tên tài khoản"
                                         />
                                     </Form.Item>
-                                    <Form.Item
-                                        label="Mật khẩu"
-                                        name="password"
-                                        rules={[{ required: true, message: 'Vui lòng nhập Mật khẩu!' }]}
-                                    >
-                                        <Input.Password
-                                            prefix={<LockOutlined className="site-form-item-icon" />}
-                                            placeholder="Mật khẩu"
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Xác nhận Mật khẩu"
-                                        name="confirm"
-                                        dependencies={['password']}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Vui lòng xác nhận Mật khẩu!',
-                                            },
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                    if (!value || getFieldValue('password') === value) {
-                                                        return Promise.resolve();
-                                                    }
-                                                    return Promise.reject(new Error('Mật khẩu mới không trùng khớp!'));
-                                                },
-                                            }),
-                                        ]}
-                                    >
-                                        <Input.Password
-                                            prefix={<LockOutlined className="site-form-item-icon" />}
-                                            placeholder="Mật khẩu"
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Col span={24} className="align-right">
-                                <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
-                                <Button type="primary" htmlType="submit">Lưu</Button>
+                                    {isChangePassword && <>
+                                        <Form.Item
+                                            label="Mật khẩu hiện tại"
+                                            name="password"
+                                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                                        >
+                                            <Input.Password
+                                                placeholder="Mật khẩu hiện tại"
+                                            />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Mật khẩu mới"
+                                            name="newPassword"
+                                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                                        >
+                                            <Input.Password
+                                                placeholder="Mật khẩu mới"
+                                            />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Xác nhận Mật khẩu"
+                                            name="confirm"
+                                            dependencies={['newPassword']}
+                                            rules={[
+                                                ({ getFieldValue }) => ({
+                                                    required: true,
+                                                    message: 'Vui lòng xác nhận Mật khẩu!',
+                                                    validator(_, value) {
+                                                        if (!value || getFieldValue('newPassword') === value) {
+                                                            return Promise.resolve();
+                                                        }
+                                                        return Promise.reject(new Error('Mật khẩu mới không trùng khớp!'));
+                                                    },
+                                                }),
+                                            ]}
+                                        >
+                                            <Input.Password
+                                                placeholder="Xác nhận mật khẩu"
+                                            />
+                                        </Form.Item>
+                                    </>}
+                                </Form>
                             </Col>
-                        </Form>
+                            <Col span={24} className="align-content-right">
+                                <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
+                                <Button type="primary" onClick={onSubmit}>Lưu</Button>
+                            </Col>
+                        </Row>
                     </div>
-                </Col>
-            </Row>
+                </Col >
+            </Row >
         </Modal >
     )
 }

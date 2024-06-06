@@ -1,30 +1,35 @@
-.demo-logo-vertical {
-    height: 64px;
-    font-size: 20px;
-    font-weight: 500;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Css antd */
+
+/* -------------------- css thành phần mặc định của antd mà không dùng được design token -------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    color: #000000;
 }
 
-.header-col-right-user {
-    display: flex;
-    justify-content: right;
-    align-items: center
+.div-form-data {
+    padding: 15px;
+    border: solid #d9d9d9 1px;
+    border-radius: 5px;
 }
 
-.user-info {
-    height: 30px;
-    margin-right: 21px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+.p-title-search {
+    font-weight: 600;
 }
 
-.button-collapsed {
-    width: 64px !important;
-    height: 64px;
+.button-danger:hover {
+    color: #ffffff !important;
+    background-color: #ff4d4f !important;
+}
+
+.button-danger:active {
+    color: #ffffff !important;
+    background-color: #f5222d !important;
 }
 
 .ant-tooltip-inner{

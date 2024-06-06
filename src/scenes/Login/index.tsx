@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { AccountDTO, getAccount } from '../../stores/AccountStore';
 import { useNavigate } from 'react-router-dom';
 import { AccountContext } from '../../components/context/AccountContext';
-import { cssResponsive } from '../../components/Manager/AppConst';
+import { cssResponsive } from '../../components/Manager/Responsive';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import Register from '../Register';
 
@@ -43,7 +43,7 @@ function Login() {
                                     name="username"
                                     rules={[{ required: true, message: 'Vui lòng nhập Tên tài khoản!' }]}
                                 >
-                                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                                    <Input autoFocus prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tên tài khoản" />
                                 </Form.Item>
                                 <label className='register-label'>Mật khẩu</label>
                                 <Form.Item

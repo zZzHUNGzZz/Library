@@ -1,6 +1,7 @@
 
 import { message } from "antd";
 import { database } from "../firebase";
+import moment, { Moment } from "moment";
 
 export interface AccountDTO {
     username: string,
@@ -9,7 +10,7 @@ export interface AccountDTO {
     me_avatar: string | null,
     me_name: string | null,
     me_identify: string | null,
-    me_birthday: string | null,
+    me_birthday: Moment | null,
     me_sex: 0 | null,
     me_address: string | null,
     me_phone: string | null,
@@ -32,7 +33,7 @@ export const getAccount = async (username: string, password: string) => {
                         me_avatar: account.me_avatar,
                         me_name: account.me_name,
                         me_identify: account.me_identify,
-                        me_birthday: account.me_birthday,
+                        me_birthday: !!account.me_birthday ? moment(account.me_birthday) : null,
                         me_sex: account.me_sex,
                         me_address: account.me_address,
                         me_phone: account.me_phone,
@@ -42,6 +43,35 @@ export const getAccount = async (username: string, password: string) => {
             }
         }
         return null;
+    } catch (error) {
+        message.error("Lỗi khi lấy dữ liệu!");
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+}
+
+export const getAccountWithNoPassword = async (username: string) => {
+    try {
+        const snapshot = await database.ref(`account/${username}`).once("value");
+        const account = snapshot.val();
+
+        if (account) {
+            return {
+                username: username,
+                password: account.password,
+                ac_role: account.ac_role,
+                me_avatar: account.me_avatar,
+                me_name: account.me_name,
+                me_identify: account.me_identify,
+                me_birthday: !!account.me_birthday ? moment(account.me_birthday) : null,
+                me_sex: account.me_sex,
+                me_address: account.me_address,
+                me_phone: account.me_phone,
+                me_email: account.me_email,
+            } as AccountDTO;
+        } else {
+            return undefined;
+        }
     } catch (error) {
         message.error("Lỗi khi lấy dữ liệu!");
         console.error("Error fetching data:", error);
@@ -77,20 +107,6 @@ export const createAccount = (data: AccountDTO, isSuccess: (isSuccess: boolean) 
     });
 };
 
-export const updateAccount = (username: string, data: AccountDTO) => {
-    data.ac_role = Number(getRole(username));
-
-    const filteredData = Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
-    );
-    database.ref("account/" + username).set(filteredData, function (error) {
-        if (error) {
-            console.error("Error update data:", error);
-            message.error('Lỗi khi cập nhật dữ liệu!');
-        }
-    });
-}
-
 export const getRole = async (username: string) => {
     try {
         const snapshot = await database.ref(`account/${username}/ac_role`).once("value");
@@ -104,6 +120,39 @@ export const getRole = async (username: string) => {
         message.error("Lỗi khi lấy dữ liệu!");
         console.error("Error fetching data:", error);
         throw error;
+    }
+}
+
+export const changePassword = async (username: string, newPassword: string) => {
+    try {
+        const accountRef = database.ref(`account/${username}`);
+        const snapshot = await accountRef.once('value');
+        const existingData = snapshot.val();
+        existingData.password = newPassword;
+        await accountRef.set(existingData);
+        message.success("Đổi mật khẩu thành công!");
+    } catch (error) {
+        console.error("Error updating password:", error);
+        message.error('Lỗi khi thay đổi mật khẩu!');
+    }
+};
+
+export const updateAccountInfo = async (key: string, data: AccountDTO) => {
+    try {
+        const accountRef = database.ref(`account/${key}`);
+        const snapshot = await accountRef.once('value');
+        const existingData = snapshot.val();
+
+        const filteredData = Object.fromEntries(
+            Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
+        );
+        const { username, password, ac_role, me_birthday, ...newData } = filteredData;
+        const newAccountInfo = { ...existingData, ...newData, 'me_birthday': !!me_birthday && me_birthday.toISOString() };
+        await accountRef.set(newAccountInfo);
+        message.success("Cập nhật thông tin cá nhân thành công!");
+    } catch (error) {
+        console.error("Error updating account information:", error);
+        message.error('Lỗi khi thay đổi dữ liệu!');
     }
 }
 
