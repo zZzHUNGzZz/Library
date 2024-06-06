@@ -1,7 +1,7 @@
 import { Button, Card, Col, Input, Row, message } from "antd";
 import { useEffect, useState } from "react";
 import { MemberCardDTO, deleteMemberCard, getMemberCard } from "../../../../stores/MemberCardStore";
-import { cssResponsive } from "../../../../components/Manager/AppConst";
+import { cssResponsive } from "../../../../components/Manager/Responsive";
 import { CreateOrUpdateMemberCard } from "./CreateUpdateMemberCard";
 import TableMemberCard from "./TableMemberCard";
 import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
@@ -76,7 +76,7 @@ function MemberCard() {
                 <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
                     <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
                 </Col>
-                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-right">
+                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-content-right">
                     <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />} onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
                     <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} onClick={() => setModalImportOpen(true)}>Nhập dữ liệu</Button>
                     <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} onClick={() => setModalExportOpen(true)}>Xuất dữ liệu</Button>

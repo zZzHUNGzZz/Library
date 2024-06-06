@@ -2,7 +2,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Row, Upload } from "antd";
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-import { cssResponsive } from "../../../../components/Manager/AppConst";
+import { cssResponsive } from "../../../../components/Manager/Responsive";
 import TablePublisher from "./TablePublisher";
 import { PublisherDTO, createPublisher } from "../../../../stores/PublisherStore";
 

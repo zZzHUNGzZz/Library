@@ -48,7 +48,7 @@ function DocumentStatistic() {
     return (
         <Card>
             <Row gutter={[8, 8]}>
-                <Col span={24}><h1 className="align-center">Báo cáo độc giả mới</h1></Col>
+                <Col span={24}><h1 className="align-content-center">Báo cáo độc giả mới</h1></Col>
             </Row>
             <Table
                 bordered

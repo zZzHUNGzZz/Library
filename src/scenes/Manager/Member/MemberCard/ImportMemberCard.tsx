@@ -2,9 +2,9 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Row, Upload } from "antd";
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-import { cssResponsive } from "../../../../components/Manager/AppConst";
 import TableMemberCard from "./TableMemberCard";
 import { MemberCardDTO, createMemberCard } from "../../../../stores/MemberCardStore";
+import { cssResponsive } from "../../../../components/Manager/Responsive";
 
 interface IProps {
     openModalImport: boolean;

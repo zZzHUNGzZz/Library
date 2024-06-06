@@ -1,7 +1,7 @@
 import { Button, Card, Col, Input, Row } from "antd";
 import { useEffect, useState } from "react";
 import { PunishDTO, getPunish } from "../../../../stores/PunishStore";
-import { cssResponsive } from "../../../../components/Manager/AppConst";
+import { cssResponsive } from "../../../../components/Manager/Responsive";
 import { ExportOutlined, SearchOutlined } from "@ant-design/icons";
 import ExportPunish from "./ExportPunish";
 import TablePunish from "./TablePunish";
@@ -28,7 +28,7 @@ function Punish() {
         <Card>
             <Row gutter={[8, 8]}>
                 <Col span={12}><h2>Phạt</h2></Col>
-                <Col span={12} className="align-right">
+                <Col span={12} className="align-content-right">
                     <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} onClick={() => setModalExportOpen(true)}>Xuất dữ liệu</Button>
                 </Col>
             </Row>

@@ -54,11 +54,11 @@ function DocumentStatistic() {
     return (
         <Card>
             <Row gutter={[8, 8]}>
-                {/* <Col span={24} className="align-right">
+                {/* <Col span={24} className="align-content-right">
                     <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} >Nhập dữ liệu</Button>
                     <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />}>Xuất dữ liệu</Button>
                 </Col> */}
-                <Col span={24}><h1 className="align-center">Báo cáo tài liệu</h1></Col>
+                <Col span={24}><h1 className="align-content-center">Báo cáo tài liệu</h1></Col>
             </Row>
             <Table
                 bordered

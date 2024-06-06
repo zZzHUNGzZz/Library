@@ -34,7 +34,7 @@ export const TableLanguage: React.FC<IProps> = (props) => {
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
             render: (text: any, record: LanguageDTO) => (
-                <div className="align-center">
+                <div className="align-content-center">
                     <EditTwoTone twoToneColor="#52c41a" onClick={() => props.onUpdate!(record)} />
                     <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record.la_id)} />
                 </div>

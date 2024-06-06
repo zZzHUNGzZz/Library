@@ -54,7 +54,7 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>{!!props.memberCardSelected ? 'Sửa thẻ độc giả' : 'Thêm thẻ độc giả'}</h3></Col>
-                    <Col span={12} className="align-right">
+                    <Col span={12} className="align-content-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
                     </Col>
