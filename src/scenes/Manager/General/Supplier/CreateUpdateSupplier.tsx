@@ -37,10 +37,6 @@ export const CreateOrUpdateSupplier: React.FC<IProps> = (props) => {
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<SupplierDTO>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div className="div-form-data">
             <Form
@@ -49,7 +45,6 @@ export const CreateOrUpdateSupplier: React.FC<IProps> = (props) => {
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>{!!props.supplierSelected ? 'Sửa nhà cung cấp' : 'Thêm nhà cung cấp'}</h3></Col>

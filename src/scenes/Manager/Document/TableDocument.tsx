@@ -30,14 +30,13 @@ export const TableDocument: React.FC<IProps> = (props) => {
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
         { title: 'Tên tài liệu', dataIndex: 'do_title', key: 'do_title' },
         { title: 'Tác giả', dataIndex: 'do_author', key: 'do_author' },
-        { title: 'Ngày khai thác', dataIndex: 'do_date_available', key: 'do_date_available' },
         { title: 'Số lượng', dataIndex: 'do_total_book', key: 'do_total_book' },
-        { title: 'Năm xuất bản', dataIndex: 'do_date_publish', key: 'do_date_publish' },
+        { title: 'Ngày khai thác', dataIndex: 'do_date_available', key: 'do_date_available', render: (text, record) => <>{record.do_date_available?.format('DD/MM/YYYY')}</>, },
+        { title: 'Ngày xuất bản', dataIndex: 'do_date_publish', key: 'do_date_publish', render: (text, record) => <>{record.do_date_publish?.format('DD/MM/YYYY')}</>, },
         { title: 'Mã đầu sách', dataIndex: 'do_identifier', key: 'do_identifier' },
         { title: 'Dịch giả', dataIndex: 'do_translator', key: 'do_translator' },
         { title: 'Nhà xuất bản', dataIndex: 'do_publisher', key: 'do_publisher' },
         { title: 'Ngôn ngữ', dataIndex: 'do_language', key: 'do_language' },
-        { title: 'Tình trạng', dataIndex: 'do_status', key: 'do_status' },
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
             render: (text: any, record: DocumentDTO) => (

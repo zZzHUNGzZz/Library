@@ -1,4 +1,4 @@
-import { Button, Col, Form, FormProps, Input, InputNumber, Row, message } from "antd"
+import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
 import { MemberDTO, createMember, updateMember } from "../../../../stores/MemberStore";
 import { useEffect } from "react";
 
@@ -37,10 +37,6 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<MemberDTO>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div className="div-form-data">
             <Form
@@ -49,7 +45,6 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>{!!props.memberSelected ? 'Sửa thẻ độc giả' : 'Thêm thẻ độc giả'}</h3></Col>

@@ -1,6 +1,8 @@
-import { Button, Col, Form, FormProps, Input, InputNumber, Row, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, message } from "antd"
 import { DocumentDTO, createDocument, updateDocument } from "../../../stores/DocumentStore";
 import { useEffect } from "react";
+import moment from "moment";
+import SelectedLanguage from "../../../components/Manager/SelectedLanguage";
 
 interface IProps {
     onCancelData: () => void;
@@ -10,7 +12,6 @@ interface IProps {
 
 export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
-
     const onCancel = () => { props.onCancelData(); }
 
     useEffect(() => {
@@ -37,10 +38,6 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<DocumentDTO>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div className="div-form-data">
             <Form
@@ -49,7 +46,6 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>{!!props.documentSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
@@ -73,29 +69,38 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Ngày khai thác"
-                    name="do_date_available"
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
                     label="Số lượng"
                     name="do_total_book"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <InputNumber style={{width: "100%"}} min={0} max={999} disabled={!!props.documentSelected}/>
+                    <InputNumber className="disable-text" style={{ width: "100%" }} min={0} max={999} disabled={!!props.documentSelected} />
                 </Form.Item>
                 <Form.Item
-                    label="Năm xuất bản"
+                    label="Ngày khai thác"
+                    name="do_date_available"
+                >
+                    <DatePicker
+                        style={{ width: '100%' }}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current > moment()}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Ngày xuất bản"
                     name="do_date_publish"
                 >
-                    <Input />
+                    <DatePicker
+                        style={{ width: '100%' }}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current > moment()}
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Mã đầu sách"
                     name="do_identifier"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
                 >
                     <Input />
                 </Form.Item>
@@ -117,14 +122,7 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
                     label="Ngôn ngữ"
                     name="do_language"
                 >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Tình trạng"
-                    name="do_status"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-                >
-                    <Input />
+                    <SelectedLanguage />
                 </Form.Item>
             </Form>
         </div>

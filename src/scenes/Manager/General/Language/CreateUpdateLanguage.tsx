@@ -37,10 +37,6 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<LanguageDTO>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div className="div-form-data">
             <Form
@@ -49,7 +45,6 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>{!!props.languageSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>

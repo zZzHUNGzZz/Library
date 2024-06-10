@@ -37,10 +37,6 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
         onCreateOrUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<MemberBorrowReturningDTO>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div className="div-form-data">
             <Form
@@ -49,7 +45,6 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>{!!props.memberBorrowReturningSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>

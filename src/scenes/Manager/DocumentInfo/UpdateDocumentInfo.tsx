@@ -1,5 +1,5 @@
 import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
-import { DocumentInfoDTO, createDocumentInfo, updateDocumentInfo } from "../../../stores/DocumentInfoStore";
+import { DocumentInfoDTO, updateDocumentInfo } from "../../../stores/DocumentInfoStore";
 import { useEffect } from "react";
 
 interface IProps {
@@ -31,10 +31,6 @@ export const UpdateDocumentInfo: React.FC<IProps> = (props) => {
         onUpdateData(values)
     };
 
-    const onFinishFailed: FormProps<DocumentInfoDTO>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div className="div-form-data">
             <Form
@@ -43,7 +39,6 @@ export const UpdateDocumentInfo: React.FC<IProps> = (props) => {
                 wrapperCol={{ span: 16 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
             >
                 <Row style={{ marginBottom: 15 }}>
                     <Col span={12}><h3>Sửa tài liệu</h3></Col>

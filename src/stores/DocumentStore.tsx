@@ -1,18 +1,18 @@
 import { message } from "antd";
 import { database } from "../firebase";
 import { createDocumentInfo } from "./DocumentInfoStore";
+import moment, { Moment } from "moment";
 export interface DocumentDTO {
     do_id: string,
     do_title: string | null,
     do_author: string | null,
-    do_date_available: string | null,
+    do_date_available: Moment | null,
     do_total_book: number | null,
-    do_date_publish: string | null,
+    do_date_publish: Moment | null,
     do_identifier: string | null,
     do_translator: string | null,
     do_publisher: string | null,
     do_language: string | null,
-    do_status: string | null,
 }
 
 export const createDocument = (data: DocumentDTO) => {
@@ -45,13 +45,12 @@ export const getDocument = async (searchValue: string) => {
                         do_id: key,
                         do_title: document.do_title,
                         do_author: document.do_author,
-                        do_date_available: document.do_date_available,
+                        do_date_available: !!document.do_date_available ? moment(document.do_date_available) : null,
                         do_total_book: document.do_total_book,
-                        do_date_publish: document.do_date_publish,
+                        do_date_publish: !!document.do_date_publish ? moment(document.do_date_publish) : null,
                         do_identifier: document.do_identifier,
                         do_translator: document.do_translator,
                         do_publisher: document.do_publisher,
-                        do_status: document.do_status,
                         do_language: document.do_language,
                     });
                 }
@@ -75,13 +74,17 @@ const checkAnyField = (document: DocumentDTO, searchValue: string): boolean => {
     return false;
 }
 
-
-
 export const updateDocument = (do_id: string, data: DocumentDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
-    );
-    database.ref("document/" + do_id).set(filteredData, function (error) {
+    );    
+    const {do_date_publish, do_date_available,...spreadData} = filteredData
+    const newDocumentInfo = { 
+        ...spreadData, 
+        'do_date_publish': !!do_date_publish ? do_date_publish.toISOString() : null, 
+        'do_date_available' : !!do_date_available ? do_date_available.toISOString() : null,
+    };    
+    database.ref("document/" + do_id).set(newDocumentInfo, function (error) {
         if (error) {
             console.error("Error update data:", error);
             message.error('Lỗi khi cập nhật dữ liệu!');
