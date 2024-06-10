@@ -40,4 +40,8 @@ p {
     display: none !important;
 }
 
+.ant-select-selection-item {
+    color: #000000;
+}
+
 

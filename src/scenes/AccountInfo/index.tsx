@@ -1,7 +1,7 @@
 import { FaRegCircleUser } from "react-icons/fa6";
 import { useContext, useState } from "react";
 import { AccountContext } from "../../components/context/AccountContext";
-import { Popover } from "antd";
+import { Avatar, Popover } from "antd";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import ModalAccountInfo from "./ModalAccountInfo";
 
@@ -16,11 +16,24 @@ function AccountInfo() {
             <p className="button-log-out" onClick={() => window.location.reload()}><LogoutOutlined /> Đăng xuất</p>
         </>
     );
+
+    const avatar = (
+        <>
+            {
+                !!account.account?.me_avatar
+                    ?
+                    <Avatar src={account.account?.me_avatar} size={25} style={{ marginRight: 8 }} />
+                    :
+                    <FaRegCircleUser size={25} style={{ marginRight: 8 }} />
+            }
+        </>
+    );
+
     return (
         <>
             <Popover placement="bottomRight" content={content} >
                 <div className='user-info'>
-                    <FaRegCircleUser style={{ width: 20, height: 20, marginRight: 8 }} />
+                    <span>{avatar}</span>
                     <span>{account.account?.me_name}</span>
                 </div>
             </Popover>

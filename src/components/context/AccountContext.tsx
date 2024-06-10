@@ -1,4 +1,3 @@
-// import { ReactNode, createContext, useState } from 'react'
 import { ReactNode, createContext, useState, Dispatch, SetStateAction } from 'react';
 import { AccountDTO } from '../../stores/AccountStore';
 
@@ -7,17 +6,17 @@ interface IProps {
 }
 
 interface IAccountContext {
-    account: AccountDTO | null;
-    setAccount: Dispatch<SetStateAction<AccountDTO | null>>;
+    account: AccountDTO | undefined;
+    setAccount: Dispatch<SetStateAction<AccountDTO | undefined>>;
 }
 
 export const AccountContext = createContext<IAccountContext>({
-    account: null,
+    account: undefined,
     setAccount: () => {},
 });
 
 export const AccountProvider = ({ children }: IProps) => {
-    const [account, setAccount] = useState<AccountDTO | null>(null);
+    const [account, setAccount] = useState<AccountDTO | undefined>(undefined);
 
     return (
         <AccountContext.Provider value={{ account, setAccount }}>

@@ -142,7 +142,6 @@ export const updateAccountInfo = async (key: string, data: AccountDTO) => {
         const accountRef = database.ref(`account/${key}`);
         const snapshot = await accountRef.once('value');
         const existingData = snapshot.val();
-
         const filteredData = Object.fromEntries(
             Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
         );
@@ -156,5 +155,19 @@ export const updateAccountInfo = async (key: string, data: AccountDTO) => {
     }
 }
 
+export const changeAccountAvatar = async (username: string, url: string) => {
+    try {
+        const accountRef = database.ref(`account/${username}`);
+        const snapshot = await accountRef.once('value');
+        const accountData: AccountDTO = snapshot.val();
 
+        accountData.me_avatar = !!url ? url : null;
+        await accountRef.set(accountData);
+
+        message.success('Đã thay đổi ảnh đại diện thành công!');
+    } catch (error) {
+        console.error("Error updating avatar:", error);
+        message.error('Lỗi khi thay đổi ảnh đại diện!');
+    }
+};
 

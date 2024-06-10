@@ -1,33 +1,26 @@
 import { Col, Form, Input, Modal, Row, Upload, Image, message, Button, Space, Select } from "antd";
-import { useContext, useEffect, useRef, useState } from "react";
-import { CalendarOutlined, DownOutlined, LockOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import { useContext, useEffect, useState } from "react";
+import { CalendarOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
+import type { UploadFile } from 'antd';
 import UploadAccountImage from "../../storage/UploadAccountImage";
 import ImgCrop from 'antd-img-crop';
-import { AccountDTO, changePassword, getAccount, getAccountWithNoPassword, updateAccountInfo, } from "../../stores/AccountStore";
+import { AccountDTO, changeAccountAvatar, changePassword, getAccount, getAccountWithNoPassword, updateAccountInfo, } from "../../stores/AccountStore";
 import { AccountContext } from "../../components/context/AccountContext";
 import { getFileNameFromUrl } from "../../utils/getFileNameFromUrl";
-import moment from "moment";
 import { DatePicker } from "../../antd";
 import { cssResponsive } from "../../components/Manager/Responsive";
+import { getBase64 } from "../../utils/getBase64";
+import { UploadChangeParam } from "antd/es/upload";
+import { validateImageSize } from "../../utils/validateImageSize";
 
 interface IProps {
     isVisible: boolean
     setVisibleAccountInfo: (isVisible: boolean) => void;
 }
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-    });
-
 const ModalAccountInfo: React.FC<IProps> = (props) => {
     const [data, setData] = useState<AccountDTO>();
+    const [isRefreshData, setIsRefreshData] = useState(false);
     const [accountFormRef] = Form.useForm();
     const [accountInfoFormRef] = Form.useForm();
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -40,68 +33,61 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
     let urlImage: string = '';
     const account = useContext(AccountContext);
 
-    useEffect(() => { fetchData(); }, [data])
+    useEffect(() => { fetchData(); }, [data, isRefreshData])
 
     useEffect(() => {
         accountFormRef.setFieldsValue(data);
         accountInfoFormRef.setFieldsValue(data);
 
-        if (!!account.account?.me_avatar) {
-            urlImage = account.account?.me_avatar!;
+        if (!!data?.me_avatar) {
+            urlImage = data?.me_avatar;
             const fileName = getFileNameFromUrl(urlImage);
             setFileList([{ uid: '-1', name: fileName, status: 'done', url: urlImage }]);
         }
-    }, [props.isVisible])
+    }, [props.isVisible, isRefreshData])
 
     const fetchData = async () => {
         const data = await getAccountWithNoPassword(account?.account?.username!);
         await setData(data);
+        await account.setAccount(data);
     }
 
     const onAccountFormFinish = async (value: any) => {
         const hasAccount = await getAccount(value.username, value.password);
         if (!!hasAccount) {
             await changePassword(value.username, value.newPassword);
-            setIsChangePassword(false);
+            onCancel();
         } else {
             message.error("Mật khẩu không chính xác!");
         }
     };
+
     const onAccountFormInfoFinish = async (value: any) => {
-        console.log(value.me_sex);
         await updateAccountInfo(account.account?.username!, value);
-        setIsChangeAccountInfo(false);
+        onCancel();
     }
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj as FileType);
+            file.preview = await getBase64(file.originFileObj!);
         }
-
         setPreviewImage(file.url || (file.preview as string));
         setPreviewOpen(true);
     };
 
-    const handleChange: UploadProps['onChange'] = async ({ fileList: newFileList }) => {
-        await setFileList(newFileList);
+    const handleChange = async (file: UploadChangeParam<UploadFile<any>>) => {
+        await setFileList(validateImageSize(file.file) ? file.fileList : []);
         setIsUpload(true);
     }
 
-    const beforeUpload = (file: FileType) => {
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Ảnh phải nhỏ hơn 2MB!');
-            return !!isLt2M;
-        }
-        return true;
-    };
-
     const onCancel = () => {
-        accountFormRef.resetFields();
-        accountInfoFormRef.resetFields();
-        setFileList([]);
+        setIsRefreshData(!isRefreshData);
+        setIsUpload(false);
         setIsChangeAccountInfo(false);
         setIsChangePassword(false);
+    }
+
+    const onExit = () => {
         props.setVisibleAccountInfo(false)
     }
 
@@ -112,12 +98,22 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
         </button>
     );
 
-    const onSubmit = () => {
+    const onSave = async () => {
         if (isChangeAccountInfo) {
             accountInfoFormRef.submit();
         }
         if (isChangePassword) {
             accountFormRef.submit();
+        }
+        if (isUpload) {
+            if (fileList.length > 0) {
+                urlImage = await UploadAccountImage(fileList[0].originFileObj);
+            }
+            else {
+                urlImage = ''
+            }
+            await changeAccountAvatar(account.account?.username!, urlImage);
+            onCancel();
         }
     }
 
@@ -127,12 +123,12 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
         <Modal
             closeIcon={null}
             open={props.isVisible}
-            width={'80vw'}
+            width={window.innerWidth < 992 ? '100vw' : '80vw'}
             footer={null}
         >
-            <Row gutter={[16, 16]}>
+            <Row gutter={[15, 15]}>
                 <Col {...cssResponsive(24, 24, 24, 6, 6, 6)} className="account-info-left-col">
-                    <Col {...cssResponsive(12, 12, 12, 24, 24, 24)}>
+                    <Col {...cssResponsive(0, 0, 0, 24, 24, 24)} className="avatar-account-info-div">
                         <h3 className="title-h3"><strong>Ảnh đại diện</strong></h3>
                         <ImgCrop rotationSlider>
                             <Upload
@@ -140,9 +136,8 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                 fileList={fileList}
                                 onPreview={handlePreview}
                                 onChange={handleChange}
-                                beforeUpload={beforeUpload}
                             >
-                                {fileList.length == 1 ? null : uploadButton}
+                                {fileList.length === 1 ? null : uploadButton}
                             </Upload>
                         </ImgCrop>
                         {!!previewImage &&
@@ -157,14 +152,12 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                             />
                         }
                     </Col>
-                    <Col {...cssResponsive(12, 12, 12, 24, 24, 24)}>
-                        <div className="action-account-info-div">
-                            <h3 className="title-h3"><strong>Chức năng</strong></h3>
-                            <Space wrap>
-                                <Button onClick={() => setIsChangeAccountInfo(true)}>Cập nhật thông tin</Button>
-                                <Button onClick={() => setIsChangePassword(true)}>Đổi mật khẩu</Button>
-                            </Space>
-                        </div>
+                    <Col {...cssResponsive(0, 0, 0, 24, 24, 24)} className="action-account-info-div">
+                        <h3 className="title-h3"><strong>Chức năng</strong></h3>
+                        <Space wrap direction="vertical">
+                            <Button type={isChangeAccountInfo ? 'primary' : 'default'} onClick={() => setIsChangeAccountInfo(true)}>Cập nhật thông tin</Button>
+                            <Button type={isChangePassword ? 'primary' : 'default'} onClick={() => setIsChangePassword(true)}>Đổi mật khẩu</Button>
+                        </Space>
                     </Col>
                 </Col>
                 <Col {...cssResponsive(24, 24, 24, 18, 18, 18)}>
@@ -185,6 +178,8 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                         rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                     >
                                         <Input
+                                            disabled={!isChangeAccountInfo}
+                                            className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
                                             placeholder="Nhập tên của bạn"
                                         />
@@ -195,6 +190,8 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                         rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                     >
                                         <Input
+                                            disabled={!isChangeAccountInfo}
+                                            className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
                                             placeholder="Nhập số CCCD"
                                         />
@@ -204,10 +201,12 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                         name="me_birthday"
                                     >
                                         <DatePicker
+                                            disabled={!isChangeAccountInfo}
                                             suffixIcon={isChangeAccountInfo && <CalendarOutlined />}
                                             variant={isChangeInfo}
                                             style={{ width: '100%' }}
                                             format={'DD/MM/YYYY'}
+                                            placeholder="Chọn ngày sinh"
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -215,6 +214,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                         name="me_sex"
                                     >
                                         <Select
+                                            disabled={!isChangeAccountInfo}
                                             suffixIcon={isChangeAccountInfo && <DownOutlined />}
                                             variant={isChangeInfo}
                                             allowClear
@@ -224,19 +224,30 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                                 { value: '2', label: 'Khác' },
                                             ]}
                                             style={{ width: '100%' }}
+                                            placeholder="Chọn giới tính"
                                         />
                                     </Form.Item>
                                     <Form.Item
                                         label="Địa chỉ"
                                         name="me_address"
                                     >
-                                        <Input variant={isChangeInfo} />
+                                        <Input
+                                            disabled={!isChangeAccountInfo}
+                                            className={isChangeAccountInfo ? '' : 'disable-text'}
+                                            variant={isChangeInfo}
+                                            placeholder="Nhập địa chỉ"
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         label="Số điện thoại"
                                         name="me_phone"
                                     >
-                                        <Input variant={isChangeInfo} />
+                                        <Input
+                                            disabled={!isChangeAccountInfo}
+                                            className={isChangeAccountInfo ? '' : 'disable-text'}
+                                            variant={isChangeInfo}
+                                            placeholder="Nhập số điện thoại"
+                                        />
                                     </Form.Item>
                                     <Form.Item
                                         label="Email"
@@ -253,8 +264,10 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                         ]}
                                     >
                                         <Input
+                                            disabled={!isChangeAccountInfo}
+                                            className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
-                                            placeholder="Email"
+                                            placeholder="Nhập email"
                                         />
                                     </Form.Item>
                                 </Form>
@@ -324,8 +337,14 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                 </Form>
                             </Col>
                             <Col span={24} className="align-content-right">
-                                <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
-                                <Button type="primary" onClick={onSubmit}>Lưu</Button>
+                                {isChangeAccountInfo || isChangePassword || isUpload ?
+                                    <>
+                                        <Button className="button-danger" type="primary" danger onClick={onCancel}>Hủy</Button>
+                                        <Button type="primary" onClick={onSave}>Lưu</Button>
+                                    </>
+                                    :
+                                    <Button className="button-danger" danger onClick={onExit}>Thoát</Button>
+                                }
                             </Col>
                         </Row>
                     </div>

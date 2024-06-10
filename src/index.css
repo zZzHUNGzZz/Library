@@ -41,6 +41,11 @@ code {
 }
 
 /* -------------------- css căn chỉnh kiểu chữ mẫu - chỉ việc gọi sử dụng -------------------- */
+.disable-text {
+    color: #000000 !important;
+    cursor: default !important;
+}
+
 .font-weight-bold {
     color: #000000 !important;
     font-weight: bold;
@@ -157,14 +162,37 @@ code {
     display: flex;
     flex-wrap: wrap;
     align-content: space-between;
-    padding-left: 0px !important;
+    justify-content: space-between;
+}
+
+.avatar-account-info-div {
+    height: calc(50% - 7.5px);
+    padding: 15px !important;
+    border: solid #d9d9d9 1px;
+    border-radius: 5px;
 }
 
 .action-account-info-div {
-    height: 160px;
-    padding: 15px;
+    height: calc(50% - 7.5px);
+    padding: 15px !important;
     border: solid #d9d9d9 1px;
     border-radius: 5px;
+}
+
+@media screen and (max-width: 992px) {
+    .account-info-left-col {}
+
+    .avatar-account-info-div {
+        display: block;
+        height: 100%;
+        width: calc(50% - 7.5px) !important;
+    }
+
+    .action-account-info-div {
+        display: block;
+        height: 100%;
+        width: calc(50% - 7.5px) !important;
+    }
 }
 
 .account-info-form {
@@ -177,5 +205,9 @@ code {
     padding-left: 10px
 }
 
+/* datepicker khi disable */
+#me_birthday {
+    color: #000000 !important;
+}
 
 /* end account info */

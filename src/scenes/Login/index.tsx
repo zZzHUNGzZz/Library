@@ -16,7 +16,7 @@ function Login() {
         const account = await getAccount(values.username, values.password);
 
         if (!!account) {
-            await accountContext.setAccount(account)
+            await accountContext.setAccount(account);
             navigate("/dashbroad")
         } else {
             message.error('Sai tài khoản hoặc mật khẩu !');
