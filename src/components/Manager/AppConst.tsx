@@ -4,3 +4,4 @@ export const GENDER = [
     {value: 1, label: 'Nữ'},
     {value: 2, label: 'Khác'},
 ]
+

@@ -1,29 +1,9 @@
-import { Select } from "antd";
-import { getLanguage } from "../../stores/LanguageStore"
-import { useEffect, useState } from "react";
+import { getLanguage } from "../../stores/LanguageStore";
 
-const SelectedLanguage = () => {
-    const [languageOptions, setLanguageOptions] = useState([{}]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getLanguage('');
-            const options = data.map(value => ({
-                value: value.la_title,
-                label: value.la_title
-            }));
-            setLanguageOptions(options);
-        };
-        fetchData();
-    }, []);
-
-    return (
-        <Select
-            style={{ width: '100%' }}
-            allowClear
-            options={languageOptions}
-        />
-    )
+export const SelectedLanguage = async () => {
+    const language = await getLanguage('');
+    return language.map(value => ({
+        value: value.la_title,
+        label: value.la_title
+    }));
 }
-
-export default SelectedLanguage;

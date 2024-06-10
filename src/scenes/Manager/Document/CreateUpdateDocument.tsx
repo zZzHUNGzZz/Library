@@ -1,8 +1,9 @@
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select, message } from "antd";
 import { DocumentDTO, createDocument, updateDocument } from "../../../stores/DocumentStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
-import SelectedLanguage from "../../../components/Manager/SelectedLanguage";
+import { SelectedLanguage } from "../../../components/Manager/SelectedLanguage";
+import { SelectedPublisher } from "../../../components/Manager/SelectedPublisher";
 
 interface IProps {
     onCancelData: () => void;
@@ -12,7 +13,21 @@ interface IProps {
 
 export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
-    const onCancel = () => { props.onCancelData(); }
+    const [languageOption, setLanguageOption] = useState([{}]);
+    const [publisherOption, setPublisherOption] = useState([{}]);
+
+    useEffect(() => {
+        const fetchLanguage = async () => {
+            const data = await SelectedLanguage();
+            setLanguageOption(data);
+        }
+        const fetchPublisher = async () => {
+            const data = await SelectedPublisher();
+            setPublisherOption(data);
+        }
+        fetchLanguage();
+        fetchPublisher();
+    }, []);
 
     useEffect(() => {
         if (!!props.documentSelected) {
@@ -21,7 +36,7 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
         else {
             form.resetFields();
         }
-    })
+    });
 
     const onCreateOrUpdateData = async (value: DocumentDTO) => {
         if (!!props.documentSelected) {
@@ -37,6 +52,8 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
     const onFinish: FormProps<DocumentDTO>['onFinish'] = (values) => {
         onCreateOrUpdateData(values)
     };
+
+    const onCancel = () => { props.onCancelData(); }
 
     return (
         <div className="div-form-data">
@@ -114,15 +131,22 @@ export const CreateOrUpdateDocument: React.FC<IProps> = (props) => {
                     label="Nhà xuất bản"
                     name="do_publisher"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
                 >
-                    <Input />
+                    <Select
+                        style={{ width: '100%' }}
+                        allowClear
+                        options={publisherOption}
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Ngôn ngữ"
                     name="do_language"
                 >
-                    <SelectedLanguage />
+                    <Select
+                        style={{ width: '100%' }}
+                        allowClear
+                        options={languageOption}
+                    />
                 </Form.Item>
             </Form>
         </div>
