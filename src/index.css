@@ -180,8 +180,6 @@ code {
 }
 
 @media screen and (max-width: 992px) {
-    .account-info-left-col {}
-
     .avatar-account-info-div {
         display: block;
         height: 100%;

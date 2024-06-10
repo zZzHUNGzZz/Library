@@ -1,7 +1,9 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Table, TableColumnsType } from "antd";
+import { Avatar, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import { MemberDTO } from "../../../../stores/MemberStore";
+import { getColorFromChar } from "../../../../utils/getColorFromChar";
+import { getFirstCharOfLastName } from "../../../../utils/getFirstCharOfLastName";
 interface IProps {
     onUpdate?: (value: MemberDTO) => void;
     onDelete?: (id: string) => void;
@@ -28,7 +30,17 @@ export const TableMember: React.FC<IProps> = (props) => {
 
     const columns: TableColumnsType<MemberDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
-        { title: 'Ảnh đại diện', dataIndex: 'me_avatar', key: 'me_avatar' },
+        {
+            title: 'Ảnh đại diện', dataIndex: 'me_avatar', key: 'me_avatar', render: (text, record) => <div className="align-content-center">
+                {
+                    !!record.me_avatar
+                        ?
+                        <Avatar size={45} src={record.me_avatar} />
+                        :
+                        <Avatar size={45} style={{ backgroundColor: getColorFromChar(getFirstCharOfLastName(record.me_name!)) }}>{getFirstCharOfLastName(record.me_name!)}</Avatar>
+                }
+            </div>
+        },
         { title: 'Mã độc giả', dataIndex: 'me_code', key: 'me_code' },
         { title: 'Tên độc giả', dataIndex: 'me_name', key: 'me_name' },
         { title: 'CCCD', dataIndex: 'me_identify', key: 'me_identify' },

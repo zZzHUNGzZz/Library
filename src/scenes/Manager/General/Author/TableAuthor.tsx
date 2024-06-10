@@ -1,7 +1,9 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Table, TableColumnsType } from "antd";
+import { Avatar, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import { AuthorDTO } from "../../../../stores/AuthorStore";
+import { getColorFromChar } from "../../../../utils/getColorFromChar";
+import { getFirstCharOfLastName } from "../../../../utils/getFirstCharOfLastName";
 interface IProps {
     onUpdate?: (value: AuthorDTO) => void;
     onDelete?: (id: string) => void;
@@ -28,7 +30,17 @@ export const TableAuthor: React.FC<IProps> = (props) => {
 
     const columns: TableColumnsType<AuthorDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
-        { title: 'Ảnh đại diện', dataIndex: 'au_avatar', key: 'au_avatar' },
+        {
+            title: 'Ảnh đại diện', dataIndex: 'au_avatar', key: 'au_avatar', render: (text, record) => <div className="align-content-center">
+                {
+                    !!record.au_avatar
+                        ?
+                        <Avatar size={45} src={record.au_avatar} />
+                        :
+                        <Avatar size={45} style={{ backgroundColor: getColorFromChar(getFirstCharOfLastName(record.au_name!)) }}>{getFirstCharOfLastName(record.au_name!)}</Avatar>
+                }
+            </div>
+        },
         { title: 'Mã tác giả', dataIndex: 'au_code', key: 'au_code' },
         { title: 'Tên tác giả', dataIndex: 'au_name', key: 'au_name' },
         { title: 'Ngày sinh', dataIndex: 'au_date', key: 'au_date' },
