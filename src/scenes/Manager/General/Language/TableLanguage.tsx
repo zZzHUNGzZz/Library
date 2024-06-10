@@ -1,5 +1,5 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Table, TableColumnsType } from "antd";
+import { Image, Space, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import { LanguageDTO } from "../../../../stores/LanguageStore";
 
@@ -30,14 +30,24 @@ export const TableLanguage: React.FC<IProps> = (props) => {
     const columns: TableColumnsType<LanguageDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
         { title: 'Ngôn ngữ', dataIndex: 'la_title', key: 'la_title' },
-        { title: 'Ảnh', dataIndex: 'la_flag', key: 'la_flag' },
+        {
+            title: 'Ảnh', dataIndex: 'la_flag', key: 'la_flag', render: (text, record) => <>
+                {
+                    !!record.la_flag
+                        ?
+                        <Image style={{width: 200}} src={record.la_flag!} preview={false} />
+                        :
+                        'Chưa có ảnh'
+                }
+            </>
+        },
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
             render: (text: any, record: LanguageDTO) => (
-                <div className="align-content-center">
+                <Space>
                     <EditTwoTone twoToneColor="#52c41a" onClick={() => props.onUpdate!(record)} />
                     <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record.la_id)} />
-                </div>
+                </Space>
             )
         }
     ];
@@ -52,6 +62,7 @@ export const TableLanguage: React.FC<IProps> = (props) => {
 
     return (
         <Table
+            className="center-table"
             bordered
             columns={props.isExportTable ? columnData : columns}
             dataSource={props.datasource}

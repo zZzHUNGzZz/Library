@@ -40,7 +40,6 @@ const App = () => {
                },
                Upload: {
                   colorError: '#d9d9d9',
-                  controlHeightLG: 60
                },
                DatePicker: {
                   borderRadius: 3,

@@ -1,6 +1,12 @@
-import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
+import { Button, Col, Form, FormProps, Image, Input, Row, Upload, UploadFile, message } from "antd"
 import { LanguageDTO, createLanguage, updateLanguage } from "../../../../stores/LanguageStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { UploadChangeParam } from "antd/es/upload";
+import { validateImageSize } from "../../../../utils/validateImageSize";
+import { getBase64 } from "../../../../utils/getBase64";
+import { PlusOutlined } from "@ant-design/icons";
+import ImgCrop from "antd-img-crop";
+import UploadLanguageImage from "../../../../storage/UploadLanguageImage";
 
 interface IProps {
     onCancelData: () => void;
@@ -10,9 +16,13 @@ interface IProps {
 
 export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
-
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [isUpload, setIsUpload] = useState(false);
     const onCancel = () => { props.onCancelData(); }
 
+    let urlImage: string = '';
     useEffect(() => {
         if (!!props.languageSelected) {
             form.setFieldsValue(props.languageSelected);
@@ -33,9 +43,39 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
         }
         props.onCreateOrUpdateSuccess();
     }
-    const onFinish: FormProps<LanguageDTO>['onFinish'] = (values) => {
-        onCreateOrUpdateData(values)
+
+    const onFinish: FormProps<LanguageDTO>['onFinish'] = async (values) => {
+        if (isUpload) {
+            if (fileList.length > 0) {
+                urlImage = await UploadLanguageImage(fileList[0].originFileObj);
+            }
+            else {
+                urlImage = ''
+            }
+        }
+        const data = { ...values, la_flag: urlImage }
+        onCreateOrUpdateData(data)
     };
+
+    const handlePreview = async (file: UploadFile) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj!);
+        }
+        setPreviewImage(file.url || (file.preview as string));
+        setPreviewOpen(true);
+    };
+
+    const handleChange = async (file: UploadChangeParam<UploadFile<any>>) => {
+        await setFileList(validateImageSize(file.file) ? file.fileList : []);
+        setIsUpload(true);
+    }
+
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none' }} type="button">
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Tải lên</div>
+        </button>
+    );
 
     return (
         <div className="div-form-data">
@@ -65,7 +105,27 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
                     name="la_flag"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <Input />
+                    <ImgCrop rotationSlider aspect={16 / 9}>
+                        <Upload
+                            listType="picture-card"
+                            fileList={fileList}
+                            onPreview={handlePreview}
+                            onChange={handleChange}
+                        >
+                            {fileList.length === 1 ? null : uploadButton}
+                        </Upload>
+                    </ImgCrop>
+                    {!!previewImage &&
+                        <Image
+                            wrapperStyle={{ display: 'none' }}
+                            preview={{
+                                visible: previewOpen,
+                                onVisibleChange: (visible) => setPreviewOpen(visible),
+                                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                            }}
+                            src={previewImage}
+                        />
+                    }
                 </Form.Item>
             </Form>
         </div>
