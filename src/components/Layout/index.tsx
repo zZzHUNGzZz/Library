@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Button, Col, Layout, Menu, Row, theme } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UpOutlined } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
 import publicRouter from '../Router';
 import './../../App.css'
 import AccountInfo from '../../scenes/AccountInfo';
+import ScrollToTop from 'react-scroll-to-top';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -50,6 +51,12 @@ const MainLayout = () => {
                     Design by <strong>Đào Đức Hưng</strong>
                 </Footer>
             </Layout>
+            <ScrollToTop
+                style={{ borderRadius: '50%', border: '2px solid #0958d9' }}
+                smooth
+                top={200}
+                component={<UpOutlined style={{ fontSize: 18, color: '#0958d9' }} title='Chuyển đến đầu trang'/>}
+            />
         </Layout>
     );
 };
