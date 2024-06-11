@@ -1,8 +1,8 @@
 import { storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
-const UploadLanguageImage = (file: any): Promise<string> => {    
-    const storageRef = ref(storage, `flag_language/${file.name}`);
+const UploadMemberImage = (file: any): Promise<string> => {    
+    const storageRef = ref(storage, `avatar_member/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     return new Promise((resolve, reject) => {
@@ -21,4 +21,4 @@ const UploadLanguageImage = (file: any): Promise<string> => {
     });
 }
 
-export default UploadLanguageImage;
+export default UploadMemberImage;

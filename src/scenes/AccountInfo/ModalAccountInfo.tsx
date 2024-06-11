@@ -12,6 +12,7 @@ import { cssResponsive } from "../../components/Manager/Responsive";
 import { getBase64 } from "../../utils/getBase64";
 import { UploadChangeParam } from "antd/es/upload";
 import { validateImageSize } from "../../utils/validateImageSize";
+import { GENDER } from "../../components/Manager/AppConst";
 
 interface IProps {
     isVisible: boolean
@@ -181,7 +182,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             disabled={!isChangeAccountInfo}
                                             className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
-                                            placeholder="Nhập tên của bạn"
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -193,7 +193,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             disabled={!isChangeAccountInfo}
                                             className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
-                                            placeholder="Nhập số CCCD"
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -206,7 +205,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             variant={isChangeInfo}
                                             style={{ width: '100%' }}
                                             format={'DD/MM/YYYY'}
-                                            placeholder="Chọn ngày sinh"
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -218,13 +216,9 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             suffixIcon={isChangeAccountInfo && <DownOutlined />}
                                             variant={isChangeInfo}
                                             allowClear
-                                            options={[
-                                                { value: '0', label: 'Nam' },
-                                                { value: '1', label: 'Nữ' },
-                                                { value: '2', label: 'Khác' },
-                                            ]}
+                                            options={GENDER}
                                             style={{ width: '100%' }}
-                                            placeholder="Chọn giới tính"
+                                            placeholder=""
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -235,7 +229,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             disabled={!isChangeAccountInfo}
                                             className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
-                                            placeholder="Nhập địa chỉ"
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -246,7 +239,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             disabled={!isChangeAccountInfo}
                                             className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
-                                            placeholder="Nhập số điện thoại"
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -267,7 +259,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             disabled={!isChangeAccountInfo}
                                             className={isChangeAccountInfo ? '' : 'disable-text'}
                                             variant={isChangeInfo}
-                                            placeholder="Nhập email"
                                         />
                                     </Form.Item>
                                 </Form>
@@ -290,7 +281,6 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             className="font-weight-bold"
                                             disabled
                                             variant="borderless"
-                                            placeholder="Tên tài khoản"
                                         />
                                     </Form.Item>
                                     {isChangePassword && <>
@@ -299,18 +289,14 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                             name="password"
                                             rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                         >
-                                            <Input.Password
-                                                placeholder="Mật khẩu hiện tại"
-                                            />
+                                            <Input.Password />
                                         </Form.Item>
                                         <Form.Item
                                             label="Mật khẩu mới"
                                             name="newPassword"
                                             rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                                         >
-                                            <Input.Password
-                                                placeholder="Mật khẩu mới"
-                                            />
+                                            <Input.Password />
                                         </Form.Item>
                                         <Form.Item
                                             label="Xác nhận Mật khẩu"
@@ -329,9 +315,7 @@ const ModalAccountInfo: React.FC<IProps> = (props) => {
                                                 }),
                                             ]}
                                         >
-                                            <Input.Password
-                                                placeholder="Xác nhận mật khẩu"
-                                            />
+                                            <Input.Password />
                                         </Form.Item>
                                     </>}
                                 </Form>

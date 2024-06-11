@@ -1,5 +1,5 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Avatar, Table, TableColumnsType } from "antd";
+import { Avatar, Space, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import { MemberDTO } from "../../../../stores/MemberStore";
 import { getColorFromChar } from "../../../../utils/getColorFromChar";
@@ -31,7 +31,7 @@ export const TableMember: React.FC<IProps> = (props) => {
     const columns: TableColumnsType<MemberDTO> = [
         { title: 'STT', dataIndex: 'stt', key: 'stt', fixed: 'left', width: 60, render: (index: number) => index + 1 },
         {
-            title: 'Ảnh đại diện', dataIndex: 'me_avatar', key: 'me_avatar', render: (text, record) => <div className="align-content-center">
+            title: 'Ảnh đại diện', dataIndex: 'me_avatar', key: 'me_avatar', render: (text, record) => <>
                 {
                     !!record.me_avatar
                         ?
@@ -39,7 +39,7 @@ export const TableMember: React.FC<IProps> = (props) => {
                         :
                         <Avatar size={45} style={{ backgroundColor: getColorFromChar(getFirstCharOfLastName(record.me_name!)) }}>{getFirstCharOfLastName(record.me_name!)}</Avatar>
                 }
-            </div>
+            </>
         },
         { title: 'Mã độc giả', dataIndex: 'me_code', key: 'me_code' },
         { title: 'Tên độc giả', dataIndex: 'me_name', key: 'me_name' },
@@ -49,10 +49,10 @@ export const TableMember: React.FC<IProps> = (props) => {
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
             render: (text: any, record: MemberDTO) => (
-                <div className="align-content-center">
+                <Space>
                     <EditTwoTone twoToneColor="#52c41a" onClick={() => props.onUpdate!(record)} />
                     <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record.me_id)} />
-                </div>
+                </Space>
             )
         }
     ];
@@ -67,6 +67,7 @@ export const TableMember: React.FC<IProps> = (props) => {
 
     return (
         <Table
+            className="center-table"
             bordered
             columns={props.isExportTable ? columnData : columns}
             dataSource={props.datasource}

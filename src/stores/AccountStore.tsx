@@ -11,7 +11,7 @@ export interface AccountDTO {
     me_name: string | null,
     me_identify: string | null,
     me_birthday: Moment | null,
-    me_sex: 0 | null,
+    me_sex: string | null,
     me_address: string | null,
     me_phone: string | null,
     me_email: string | null
