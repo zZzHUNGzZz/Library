@@ -100,7 +100,7 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                 onFinish={onFinish}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>{!!props.memberSelected ? 'Sửa thẻ độc giả' : 'Thêm thẻ độc giả'}</h3></Col>
+                    <Col span={12}><h3>{!!props.memberSelected ? 'Sửa độc giả' : 'Thêm độc giả'}</h3></Col>
                     <Col span={12} className="align-content-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>

@@ -1,6 +1,7 @@
-import { Button, Col, Form, FormProps, Input, InputNumber, Row, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, message } from "antd"
 import { MemberCardDTO, createMemberCard, updateMemberCard } from "../../../../stores/MemberCardStore";
 import { useEffect } from "react";
+import moment from "moment";
 
 interface IProps {
     onCancelData: () => void;
@@ -65,31 +66,46 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
                     name="me_ca_start_valid"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    {/* <DatePicker
-                        style={{ width: '100%'}}
-                        format={"DD/MM/YYYY"}
-                    /> */}
-                    <Input allowClear />
+                     <DatePicker
+                        style={{ width: '100%' }}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current < moment().subtract(1, 'day')}
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Thời gian hết hiệu lực"
                     name="me_ca_end_valid"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <Input allowClear />
-                    {/* <DatePicker
+                    <DatePicker
                         style={{ width: '100%' }}
-                        format={"DD/MM/YYYY"}
-                    /> */}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current < moment().subtract(1, 'day')}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Thời gian nhận thẻ"
+                    name="me_ca_has_card"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                >
+                    <DatePicker
+                        style={{ width: '100%' }}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current < moment().add(6, 'day')}
+                    />
                 </Form.Item>
 
-                <Form.Item
+
+                {/* <Form.Item
                     label="Số tiền"
                     name="me_ca_money"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <InputNumber style={{ width: '100%' }} min={0} />
-                </Form.Item>
+                </Form.Item> */}
             </Form>
         </div>
     )

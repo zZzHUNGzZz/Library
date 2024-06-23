@@ -11,9 +11,9 @@ function AccountInfo() {
 
     const content = (
         <>
-            <p onClick={async () => await setVisibleAccountInfo(true)}><UserOutlined /> Thông tin tài khoản</p>
+            <p className="button-account-info" onClick={async () => await setVisibleAccountInfo(true)}><UserOutlined /> Thông tin tài khoản</p>
             <div className="line-space"></div>
-            <p className="button-log-out" onClick={() => window.location.reload()}><LogoutOutlined /> Đăng xuất</p>
+            <p className="button-logout" onClick={() => window.location.reload()}><LogoutOutlined /> Đăng xuất</p>
         </>
     );
 

@@ -14,6 +14,10 @@ const App = () => {
          locale={locale}
          theme={{
             components: {
+               Menu: {
+                  itemBorderRadius: 0,
+                  darkItemSelectedBg: '#0958d9',
+               },
                Button: {
                   controlHeight: 35,
                   borderRadius: 4,

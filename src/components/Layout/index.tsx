@@ -18,12 +18,26 @@ const MainLayout = () => {
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider breakpoint="lg" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={250}>
-                <div className="demo-logo-vertical">Library</div>
+            <Sider
+                breakpoint="lg"
+                collapsible
+                collapsed={collapsed}
+                onCollapse={(value) => setCollapsed(value)}
+                width={250}
+            // style={{ background: colorBgContainer }}
+            >
+                <div className="demo-logo-vertical">
+                    {
+                        collapsed ?
+                            <img className="logo" src="/image/eaut_logo_2.png" alt="eaut_logo" />
+                            :
+                            <img className="logo" src="/image/eaut_logo.png" alt="eaut_logo" />
+                    }
+                </div>
                 <Menu
+                    mode="inline"
                     theme="dark"
                     defaultSelectedKeys={['1']}
-                    mode="inline"
                     items={publicRouter}
                     onClick={({ key }) => navigate(key)}
                 />
@@ -55,7 +69,7 @@ const MainLayout = () => {
                 style={{ borderRadius: '50%', border: '2px solid #0958d9' }}
                 smooth
                 top={200}
-                component={<UpOutlined style={{ fontSize: 18, color: '#0958d9' }} title='Chuyển đến đầu trang'/>}
+                component={<UpOutlined style={{ fontSize: 18, color: '#0958d9' }} title='Chuyển đến đầu trang' />}
             />
         </Layout>
     );

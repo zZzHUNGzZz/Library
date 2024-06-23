@@ -19,6 +19,7 @@ import Login from "../../scenes/Login";
 import MainLayout from "../Layout";
 import RequireAuth from "./RequireAuth";
 import Register from "../../scenes/Register";
+import PageNotFound from "../../scenes/ResultPage/PageNotFound";
 
 const ROLES = {
     'Unknown': 0,
@@ -59,7 +60,7 @@ const PageRouter = () => {
                     </Route>
                     {/* other */}
                 </Route>
-                <Route path='*' element={<div>Page Not Found!</div>}></Route>
+                <Route path='*' element={<PageNotFound />}></Route>
             </Routes>
         </>
     )

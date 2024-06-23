@@ -1,17 +1,3 @@
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
-}
-
 /* -------------------- css căn chỉnh phần tử mẫu - chỉ việc gọi sử dụng -------------------- */
 .align-content {
     display: flex;
@@ -116,7 +102,11 @@ code {
     font-weight: 600;
 }
 
-.button-log-out {
+.button-account-info {
+    cursor: pointer;
+}
+
+.button-logout {
     color: #0958d9;
     font-weight: 600;
     cursor: pointer;
@@ -124,16 +114,18 @@ code {
 
 /* end login, register*/
 
-
 /* begin layout */
 .demo-logo-vertical {
     height: 64px;
-    font-size: 20px;
-    font-weight: 500;
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: solid #FFFFFFA6 0.5px;
+}
+
+.logo {
+    height: 85%;
+    width: auto;
 }
 
 .header-col-right-user {
