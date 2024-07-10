@@ -66,69 +66,71 @@ function MemberBorrowReturning() {
         setMultiDataSelected(data);
     }
 
-    const leftCol = isCreateUpdate ? cssResponsive(24, 24, 14, 14, 14, 14) : cssResponsive(24, 24, 24, 24, 24, 24);
-    const rightCol = isCreateUpdate ? cssResponsive(24, 24, 10, 10, 10, 10) : cssResponsive(0, 0, 0, 0, 0, 0);
-
     return (
         <Card>
-            <Row gutter={[8, 8]}>
-                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Độc giả mượn</h2></Col>
-                <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
-                    <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
-                </Col>
-                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-content-right">
-                    <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />} onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
-                    <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} onClick={() => setModalImportOpen(true)}>Nhập dữ liệu</Button>
-                    <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} onClick={() => setModalExportOpen(true)}>Xuất dữ liệu</Button>
-                </Col>
-            </Row>
-
-            <Row gutter={[0, 8]} style={{ margin: "20px 0 10px 0" }}>
-                <Col className="align-content">
-                    <Button
-                        title="Tìm kiếm"
-                        icon={<SearchOutlined />}
-                        onClick={async () => await fetchData()}
-                    >
-                        Tìm kiếm
-                    </Button>
-                    <Button
-                        danger
-                        className="button-danger"
-                        title="Xóa dữ liệu"
-                        icon={<DeleteOutlined />}
-                        onClick={onMultiDeleteMemberBorrowReturning}
-                    >
-                        Xóa dữ liệu
-                    </Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col {...leftCol}>
-                    <TableMemberBorrowReturning
-                        datasource={data}
-                        onUpdate={onCreateOrUpdateModalOpen}
-                        onDelete={onDeleteMemberBorrowReturning}
-                        setMultiDataSelected={setMultiMemberBorrowReturningSelect}
-                    />
-                </Col>
-                <Col {...rightCol}>
-                    <CreateOrUpdateMemberBorrowReturning
-                        memberBorrowReturningSelected={memberBorrowReturningSelected}
-                        onCreateOrUpdateSuccess={onCreateOrUpdateSuccess}
-                        onCancelData={onCancel}
-                    />
-                </Col>
-                <ImportMemberBorrowReturning
-                    openModalImport={isModalImportOpen}
-                    setOpenModalImport={setModalImportOpen}
-                />
-                <ExportMemberBorrowReturning
-                    openModalExport={isModalExportOpen}
-                    setOpenModalExport={setModalExportOpen}
-                    datasource={!!multiDatarSelected ? multiDatarSelected! : data}
-                />
-            </Row>
+            {!isCreateUpdate &&
+                <>
+                    <Row gutter={[8, 8]}>
+                        <Col {...cssResponsive(24, 24, 5, 5, 5, 5)}><h2>Độc giả mượn</h2></Col>
+                        <Col {...cssResponsive(24, 24, 19, 19, 19, 19)} className="align-content-right">
+                            <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />} onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
+                            <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} onClick={() => setModalImportOpen(true)}>Nhập dữ liệu</Button>
+                            <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} onClick={() => setModalExportOpen(true)}>Xuất dữ liệu</Button>
+                        </Col>
+                    </Row>
+                    <Row gutter={[8, 8]} style={{ margin: "10px 0 10px 0" }}>
+                        <Col {...cssResponsive(24, 24, 8, 6, 6, 6)}>
+                            <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
+                        </Col>
+                        <Col {...cssResponsive(24, 24, 8, 6, 6, 6)}>
+                            <Button
+                                title="Tìm kiếm"
+                                icon={<SearchOutlined />}
+                                onClick={async () => await fetchData()}
+                            >
+                                Tìm kiếm
+                            </Button>
+                        </Col>
+                        <Col {...cssResponsive(12, 12, 8, 12, 12, 12)} style={{ textAlign: 'right' }}>
+                            <Button
+                                danger
+                                type="primary"
+                                className="button-danger"
+                                title="Xóa dữ liệu"
+                                icon={<DeleteOutlined />}
+                                onClick={onMultiDeleteMemberBorrowReturning}
+                            >
+                                Xóa dữ liệu
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={24}>
+                            <TableMemberBorrowReturning
+                                datasource={data}
+                                onUpdate={onCreateOrUpdateModalOpen}
+                                onDelete={onDeleteMemberBorrowReturning}
+                                setMultiDataSelected={setMultiMemberBorrowReturningSelect}
+                            />
+                        </Col>
+                        <ImportMemberBorrowReturning
+                            openModalImport={isModalImportOpen}
+                            setOpenModalImport={setModalImportOpen}
+                        />
+                        <ExportMemberBorrowReturning
+                            openModalExport={isModalExportOpen}
+                            setOpenModalExport={setModalExportOpen}
+                            datasource={multiDatarSelected?.length! > 0 ? multiDatarSelected! : data}
+                        />
+                    </Row>
+                </>
+            }
+            {isCreateUpdate &&
+                <CreateOrUpdateMemberBorrowReturning
+                    memberBorrowReturningSelected={memberBorrowReturningSelected}
+                    onCreateOrUpdateSuccess={onCreateOrUpdateSuccess}
+                    onCancelData={onCancel}
+                />}
         </Card>
     );
 }

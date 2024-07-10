@@ -9,14 +9,14 @@ interface IProps {
     datasource?: DocumentInfoDTO[];
     isExportTable?: boolean;
     columnImportExport?: (column: TableColumnsType<DocumentInfoDTO>) => void;
+    isBorrowReturning?: boolean;
 }
 export const TableDocumentInfo: React.FC<IProps> = (props) => {
     const [multiSelectDocumentInfo, setMultiSelectDocumentInfo] = useState<DocumentInfoDTO[]>([]);
 
     useEffect(() => {
         if (props.setMultiDataSelected) {
-            const multiDataSelected = multiSelectDocumentInfo.length > 0 ? multiSelectDocumentInfo : props.datasource!;
-            props.setMultiDataSelected(multiDataSelected);
+            props.setMultiDataSelected(multiSelectDocumentInfo);
         }
     }, [multiSelectDocumentInfo, props.datasource, props.setMultiDataSelected]);
 
@@ -66,23 +66,23 @@ export const TableDocumentInfo: React.FC<IProps> = (props) => {
 
     const rowSelection = {
         onChange: (selectedRowKeys: React.Key[], selectedRows: DocumentInfoDTO[]) => {
-            setMultiSelectDocumentInfo(selectedRows)
+            setMultiSelectDocumentInfo(selectedRows);
+            return;
         },
     };
 
-    const columnData = columns.slice(0, 11);
-
+    const columnData = props.isBorrowReturning ? columns.slice(0, 3) : (props.isExportTable ? columns.slice(0, 5) : columns)
     return (
         <Table
             bordered
-            columns={props.isExportTable ? columnData : columns}
+            columns={columnData}
             dataSource={props.datasource}
             key={'stt'}
             rowKey="stt"
             scroll={{ x: 700 }}
             onRow={(record) => {
                 return {
-                    onDoubleClick: () => props.onUpdate!(record)
+                    onDoubleClick: () => (props.isExportTable || props.isBorrowReturning ) ? undefined : props.onUpdate!(record)
                 };
             }}
             rowSelection={props.isExportTable ? undefined : { ...rowSelection }}

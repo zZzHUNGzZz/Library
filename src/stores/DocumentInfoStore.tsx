@@ -9,6 +9,7 @@ export interface DocumentInfoDTO {
     do_in_title: string | null,
     do_in_status: number | null,
     do_in_note: string | null,
+    do_in_me_name: string | null,
 }
 
 
@@ -29,6 +30,7 @@ export const getDocumentInfo = async (searchValue: string) => {
                         do_in_title: documentInfo.do_in_title,
                         do_in_status: documentInfo.do_in_status,
                         do_in_note: documentInfo.do_in_note,
+                        do_in_me_name: documentInfo.do_in_me_name,
                     });
                 }
             });
@@ -60,6 +62,7 @@ export const createDocumentInfo = async (do_id: string, document: DocumentDTO) =
             do_in_title: document.do_title,
             do_in_status: 1,
             do_in_note: null,
+            do_in_me_name: null,
         };
 
         const newDocumentInfoRef = database.ref("documentInfo/").push();

@@ -10,7 +10,7 @@ import { UpdateDocumentInfo } from "./UpdateDocumentInfo";
 
 function DocumentInfo() {
     const [data, setData] = useState<DocumentInfoDTO[]>([]);
-    const [multiDatarSelected, setMultiDataSelected] = useState<DocumentInfoDTO[]>();
+    const [multiDatarSelected, setMultiDataSelected] = useState<DocumentInfoDTO[]>([]);
     const [isLoadDone, setIsLoadDone] = useState(true);
     const [documentInfoSelected, setDocumentInfoSelected] = useState<DocumentInfoDTO>();
     const [isCreateUpdate, setCreateUpdateFormOpen] = useState(false);
@@ -119,7 +119,7 @@ function DocumentInfo() {
                 <ExportDocumentInfo
                     openModalExport={isModalExportOpen}
                     setOpenModalExport={setModalExportOpen}
-                    datasource={!!multiDatarSelected ? multiDatarSelected! : data}
+                    datasource={multiDatarSelected.length > 0 ? multiDatarSelected! : data}
                 />
             </Row>
         </Card>

@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { database } from "../firebase";
+const dayjs = require('dayjs');
 
 export interface MemberBorrowReturningDTO {
     br_re_id: string,
@@ -7,7 +8,8 @@ export interface MemberBorrowReturningDTO {
     us_id_borrow: string | null,
     br_re_start_at: string | null,
     br_re_end_at: string | null,
-    br_re_nr_document: string | null,
+    br_re_document: string | null,
+    br_re_number_document: string | null,
     br_re_desc: string | null,
 }
 
@@ -25,9 +27,10 @@ export const getMemberBorrowReturning = async (searchValue: string) => {
                         br_re_id: key,
                         br_re_code: memberBorrowReturning.br_re_code,
                         us_id_borrow: memberBorrowReturning.us_id_borrow,
-                        br_re_start_at: memberBorrowReturning.br_re_start_at,
-                        br_re_end_at: memberBorrowReturning.br_re_end_at,
-                        br_re_nr_document: memberBorrowReturning.br_re_nr_document,
+                        br_re_start_at: !!memberBorrowReturning.br_re_start_at ? dayjs(memberBorrowReturning.br_re_start_at) : null,
+                        br_re_end_at: !!memberBorrowReturning.br_re_end_at ? dayjs(memberBorrowReturning.br_re_end_at) : null,
+                        br_re_document: memberBorrowReturning.br_re_document,
+                        br_re_number_document: memberBorrowReturning.br_re_number_document,
                         br_re_desc: memberBorrowReturning.br_re_desc,
                     });
                 }
@@ -55,7 +58,13 @@ export const createMemberBorrowReturning = (data: MemberBorrowReturningDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("memberBorrowReturning/").push().set(filteredData, function (error) {
+    const { br_re_start_at, br_re_end_at, ...spreadData } = filteredData
+    const newDMemberBorrowReturning = {
+        ...spreadData,
+        'br_re_start_at': !!br_re_start_at ? br_re_start_at.toISOString() : null,
+        'br_re_end_at': !!br_re_end_at ? br_re_end_at.toISOString() : null,
+    };
+    database.ref("memberBorrowReturning/").push().set(newDMemberBorrowReturning, function (error) {
         if (error) {
             console.error("Error create data:", error);
             message.error('Lỗi khi thêm mới dữ liệu!');
@@ -67,7 +76,13 @@ export const updateMemberBorrowReturning = (br_re_id: string, data: MemberBorrow
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("memberBorrowReturning/" + br_re_id).set(filteredData, function (error) {
+    const { br_re_start_at, br_re_end_at, ...spreadData } = filteredData
+    const newDMemberBorrowReturning = {
+        ...spreadData,
+        'br_re_start_at': !!br_re_start_at ? br_re_start_at.toISOString() : null,
+        'br_re_end_at': !!br_re_end_at ? br_re_end_at.toISOString() : null,
+    };
+    database.ref("memberBorrowReturning/" + br_re_id).set(newDMemberBorrowReturning, function (error) {
         if (error) {
             console.error("Error update data:", error);
             message.error('Lỗi khi cập nhật dữ liệu!');

@@ -1,6 +1,12 @@
-import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select, Table, message } from "antd"
 import { MemberBorrowReturningDTO, createMemberBorrowReturning, updateMemberBorrowReturning } from "../../../../stores/MemberBorrowReturningStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import { SelectedMember } from "../../../../components/Manager/SelectedMember";
+import TableDocumentInfo from "../../DocumentInfo/TableDocumentInfo";
+import { cssResponsive } from "../../../../components/Manager/Responsive";
+import { DocumentInfoDTO, getDocumentInfo, updateDocumentInfo } from "../../../../stores/DocumentInfoStore";
+import { getMemberNameById } from "../../../../stores/SessionStore";
 
 interface IProps {
     onCancelData: () => void;
@@ -10,8 +16,25 @@ interface IProps {
 
 export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
+    const [documentInfoData, setDocumentInfoData] = useState<DocumentInfoDTO[]>([]);
+    const [memberOption, setLMemberOption] = useState([{}]);
+    const [multiDocumentBorrowSelected, setMultiDocumentBorrowSelected] = useState<DocumentInfoDTO[]>([]);
 
-    const onCancel = () => { props.onCancelData(); }
+    useEffect(() => {
+        const fetchMember = async () => {
+            const data = await SelectedMember();
+            setLMemberOption(data);
+        }
+
+        const fetchDocumentInfo = async () => {
+            const infoArray = await getDocumentInfo('');
+            const dataWithIndex = infoArray.filter(item => item.do_in_status == 1).map((item, index) => ({ stt: index, ...item }));
+            setDocumentInfoData(dataWithIndex);
+        };
+
+        fetchMember();
+        fetchDocumentInfo();
+    }, []);
 
     useEffect(() => {
         if (!!props.memberBorrowReturningSelected) {
@@ -23,6 +46,10 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
     })
 
     const onCreateOrUpdateData = async (value: MemberBorrowReturningDTO) => {
+        multiDocumentBorrowSelected.map(async item => {
+            const newDocumentInfo = { ...item, do_in_status: 2, do_in_me_name: value.us_id_borrow };
+            await updateDocumentInfo(newDocumentInfo.do_in_id, newDocumentInfo);
+        })
         if (!!props.memberBorrowReturningSelected) {
             await updateMemberBorrowReturning(props.memberBorrowReturningSelected.br_re_id, value);
             message.success("Cập nhật dữ liệu thành công!");
@@ -33,12 +60,23 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
         }
         props.onCreateOrUpdateSuccess();
     }
+
+    const setMultiDocumentSelect = async (data: DocumentInfoDTO[]) => {
+        await setMultiDocumentBorrowSelected(data);
+    }
+
+    const onCancel = () => { props.onCancelData(); }
+
     const onFinish: FormProps<MemberBorrowReturningDTO>['onFinish'] = (values) => {
-        onCreateOrUpdateData(values)
+        if (multiDocumentBorrowSelected?.length! < 1) {
+            message.warning('Hãy chọn tôi thiểu 1 tài liệu!!');
+            return;
+        }
+        onCreateOrUpdateData(values);
     };
 
     return (
-        <div className="div-form-data">
+        <>
             <Form
                 form={form}
                 labelCol={{ span: 8 }}
@@ -47,57 +85,79 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                 onFinish={onFinish}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>{!!props.memberBorrowReturningSelected ? 'Sửa tài liệu' : 'Thêm tài liệu'}</h3></Col>
+                    <Col span={12}><h3>{!!props.memberBorrowReturningSelected ? 'Sửa phiếu mượn' : 'Thêm phiếu mượn'}</h3></Col>
                     <Col span={12} className="align-content-right">
                         <Button type="primary" htmlType="submit">Lưu</Button>
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
                     </Col>
                 </Row>
-                <Form.Item
-                    label="Mã phiếu mượn"
-                    name="br_re_code"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Người mượn"
-                    name="us_id_borrow"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Ngày mượn"
-                    name="br_re_start_at"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Ngày trả"
-                    name="br_re_end_at"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Số tài liệu"
-                    name="br_re_nr_document"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Mô tả"
-                    name="br_re_desc"
-                >
-                    <Input />
-                </Form.Item>
+                <Row>
+                    <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>
+                        <Form.Item
+                            label="Mã phiếu mượn"
+                            name="br_re_code"
+                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>
+                        <Form.Item
+                            label="Ngày mượn"
+                            name="br_re_start_at"
+                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                        >
+                            <DatePicker
+                                style={{ width: '100%' }}
+                                format={'DD/MM/YYYY'}
+                                placeholder=""
+                                disabledDate={(current) => current < moment().subtract(1, 'day')}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>
+                        <Form.Item
+                            label="Người mượn"
+                            name="us_id_borrow"
+                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                        >
+                            <Select
+                                style={{ width: '100%' }}
+                                allowClear
+                                options={memberOption}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>
+                        <Form.Item
+                            label="Ngày trả"
+                            name="br_re_end_at"
+                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                        >
+                            <DatePicker
+                                style={{ width: '100%' }}
+                                format={'DD/MM/YYYY'}
+                                placeholder=""
+                                disabledDate={(current) => current < moment().subtract(1, 'day')}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>
+                        <Form.Item
+                            label="Mô tả"
+                            name="br_re_desc"
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Form>
-        </div>
+
+            <TableDocumentInfo
+                isBorrowReturning={true}
+                datasource={documentInfoData}
+                setMultiDataSelected={setMultiDocumentSelect}
+            />
+        </>
     )
 }
