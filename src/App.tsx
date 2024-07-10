@@ -19,7 +19,7 @@ const App = () => {
                   darkItemSelectedBg: '#0958d9',
                },
                Button: {
-                  controlHeight: 35,
+                  controlHeight: 32,
                   borderRadius: 4,
                   defaultBorderColor: '#1677ff',
                   defaultColor: '#1677ff',

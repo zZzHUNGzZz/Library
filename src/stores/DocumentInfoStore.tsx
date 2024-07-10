@@ -7,7 +7,7 @@ export interface DocumentInfoDTO {
     do_id: string | null,
     do_in_dkcb: string | null,
     do_in_title: string | null,
-    do_in_status: string | null,
+    do_in_status: number | null,
     do_in_note: string | null,
 }
 
@@ -58,7 +58,7 @@ export const createDocumentInfo = async (do_id: string, document: DocumentDTO) =
             do_id: do_id,
             do_in_dkcb: 'DKCB' + String(next_dkcb + i + 1).padStart(5, '0'),
             do_in_title: document.do_title,
-            do_in_status: null,
+            do_in_status: 1,
             do_in_note: null,
         };
 

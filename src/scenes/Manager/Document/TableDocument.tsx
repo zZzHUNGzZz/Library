@@ -2,6 +2,7 @@ import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import { DocumentDTO } from "../../../stores/DocumentStore";
+import moment from "moment";
 interface IProps {
     onUpdate?: (value: DocumentDTO) => void;
     onDelete?: (id: string) => void;
@@ -10,6 +11,9 @@ interface IProps {
     isExportTable?: boolean;
     columnImportExport?: (column: TableColumnsType<DocumentDTO>) => void;
 }
+
+const dayjs = require('dayjs');
+
 export const TableDocument: React.FC<IProps> = (props) => {
     const [multiSelectDocument, setMultiSelectDocument] = useState<DocumentDTO[]>([]);
 
@@ -31,8 +35,8 @@ export const TableDocument: React.FC<IProps> = (props) => {
         { title: 'Tên tài liệu', dataIndex: 'do_title', key: 'do_title' },
         { title: 'Tác giả', dataIndex: 'do_author', key: 'do_author' },
         { title: 'Số lượng', dataIndex: 'do_total_book', key: 'do_total_book' },
-        { title: 'Ngày khai thác', dataIndex: 'do_date_available', key: 'do_date_available', render: (text, record) => <>{record.do_date_available?.format('DD/MM/YYYY')}</>, },
-        { title: 'Ngày xuất bản', dataIndex: 'do_date_publish', key: 'do_date_publish', render: (text, record) => <>{record.do_date_publish?.format('DD/MM/YYYY')}</>, },
+        { title: 'Ngày khai thác', dataIndex: 'do_date_available', key: 'do_date_available', render: (text, record) => <>{!!record.do_date_available && dayjs(record.do_date_available)?.format('DD/MM/YYYY')}</>, },
+        { title: 'Ngày xuất bản', dataIndex: 'do_date_publish', key: 'do_date_publish', render: (text, record) => <>{!!record.do_date_publish && dayjs(record.do_date_publish)?.format('DD/MM/YYYY')}</>, },
         { title: 'Mã đầu sách', dataIndex: 'do_identifier', key: 'do_identifier' },
         { title: 'Dịch giả', dataIndex: 'do_translator', key: 'do_translator' },
         { title: 'Nhà xuất bản', dataIndex: 'do_publisher', key: 'do_publisher' },

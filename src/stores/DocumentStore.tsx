@@ -1,14 +1,16 @@
 import { message } from "antd";
 import { database } from "../firebase";
 import { createDocumentInfo } from "./DocumentInfoStore";
-import moment, { Moment } from "moment";
+
+const dayjs = require('dayjs');
+
 export interface DocumentDTO {
     do_id: string,
     do_title: string | null,
     do_author: string | null,
-    do_date_available: Moment | null,
+    do_date_available: Date | null,
     do_total_book: number | null,
-    do_date_publish: Moment | null,
+    do_date_publish: Date | null,
     do_identifier: string | null,
     do_translator: string | null,
     do_publisher: string | null,
@@ -19,8 +21,14 @@ export const createDocument = (data: DocumentDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
+    const { do_date_publish, do_date_available, ...spreadData } = filteredData
+    const newDocumentInfo = {
+        ...spreadData,
+        'do_date_publish': !!do_date_publish ? do_date_publish.toISOString() : null,
+        'do_date_available': !!do_date_available ? do_date_available.toISOString() : null,
+    };
     const newDocumentRef = database.ref("document/").push()
-    newDocumentRef.set(filteredData, function (error) {
+    newDocumentRef.set(newDocumentInfo, function (error) {
         if (error) {
             console.error("Error create data:", error);
             message.error('Lỗi khi thêm mới dữ liệu!');
@@ -45,9 +53,9 @@ export const getDocument = async (searchValue: string) => {
                         do_id: key,
                         do_title: document.do_title,
                         do_author: document.do_author,
-                        do_date_available: !!document.do_date_available ? moment(document.do_date_available) : null,
+                        do_date_available: !!document.do_date_available ? dayjs(document.do_date_available) : null,
                         do_total_book: document.do_total_book,
-                        do_date_publish: !!document.do_date_publish ? moment(document.do_date_publish) : null,
+                        do_date_publish: !!document.do_date_publish ? dayjs(document.do_date_publish) : null,
                         do_identifier: document.do_identifier,
                         do_translator: document.do_translator,
                         do_publisher: document.do_publisher,
@@ -77,13 +85,13 @@ const checkAnyField = (document: DocumentDTO, searchValue: string): boolean => {
 export const updateDocument = (do_id: string, data: DocumentDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
-    );    
-    const {do_date_publish, do_date_available,...spreadData} = filteredData
-    const newDocumentInfo = { 
-        ...spreadData, 
-        'do_date_publish': !!do_date_publish ? do_date_publish.toISOString() : null, 
-        'do_date_available' : !!do_date_available ? do_date_available.toISOString() : null,
-    };    
+    );
+    const { do_date_publish, do_date_available, ...spreadData } = filteredData
+    const newDocumentInfo = {
+        ...spreadData,
+        'do_date_publish': !!do_date_publish ? do_date_publish.toISOString() : null,
+        'do_date_available': !!do_date_available ? do_date_available.toISOString() : null,
+    };
     database.ref("document/" + do_id).set(newDocumentInfo, function (error) {
         if (error) {
             console.error("Error update data:", error);
@@ -110,7 +118,7 @@ export const updateTotalBook = (do_id: string, do_total_book: number) => {
         if (currentData && currentData.do_total_book != null) {
             const currentTotalBook = currentData.do_total_book;
             const updatedTotalBook = currentTotalBook - do_total_book;
-            docRef.update({ do_total_book: updatedTotalBook }) 
+            docRef.update({ do_total_book: updatedTotalBook })
         } else {
             console.error("Error: Invalid data or do_total_book is null.");
             message.error('Dữ liệu không hợp lệ.');
