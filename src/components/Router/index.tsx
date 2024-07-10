@@ -39,7 +39,7 @@ const publicRouter: MenuItem[] = [
     ]),
     getItem('Quản lý chung', '/5', <UserOutlined />, [
         getItem('Tác giả', '/author'),
-        getItem('Danh mục', '/category'),
+        // getItem('Danh mục', '/category'),
         getItem('Nhà cung cấp', '/supplier'),
         getItem('Nhà xuất bản', '/publisher'),
         getItem('Ngôn ngữ', '/language'),

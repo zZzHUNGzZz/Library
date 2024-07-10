@@ -5,12 +5,13 @@ import { LuFileBarChart } from "react-icons/lu";
 import { LuFileCheck } from "react-icons/lu";
 import './style.css';
 import BarChart from "./Chart/BarChart";
+import { cssResponsive } from "../../components/Manager/Responsive";
 
 function DashBroad() {
     return (
         <>
-            <Row gutter={16}>
-                <Col span={6}>
+            <Row gutter={[16, 8]}>
+                <Col {...cssResponsive(24, 24, 12, 12, 6, 6)}>
                     <Card style={{ backgroundColor: "#52C41A" }}>
                         <Row>
                             <Col span={20}>
@@ -23,7 +24,7 @@ function DashBroad() {
                         </Row>
                     </Card>
                 </Col>
-                <Col span={6}>
+                <Col {...cssResponsive(24, 24, 12, 12, 6, 6)}>
                     <Card style={{ backgroundColor: "#1890FF" }}>
                         <Row>
                             <Col span={20}>
@@ -36,7 +37,7 @@ function DashBroad() {
                         </Row>
                     </Card>
                 </Col>
-                <Col span={6}>
+                <Col {...cssResponsive(24, 24, 12, 12, 6, 6)}>
                     <Card style={{ backgroundColor: "#FAAD14" }}>
                         <Row>
                             <Col span={20}>
@@ -49,7 +50,7 @@ function DashBroad() {
                         </Row>
                     </Card>
                 </Col>
-                <Col span={6}>
+                <Col {...cssResponsive(24, 24, 12, 12, 6, 6)}>
                     <Card style={{ backgroundColor: "#FF4D4F" }}>
                         <Row>
                             <Col span={20}>
