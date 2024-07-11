@@ -18,6 +18,8 @@ function MemberBorrowReturning() {
     const [valueSearch, setValueSearch] = useState('');
     const [isModalExportOpen, setModalExportOpen] = useState(false);
     const [isModalImportOpen, setModalImportOpen] = useState(false);
+    const [isViewDocumentBorrowed, setIsViewDocumentBorrowed] = useState(false);
+    const [isReturnDocumentBorrowed, setIsReturnDocumentBorrowed] = useState(false);
 
     useEffect(() => { fetchData() }, []);
 
@@ -57,9 +59,23 @@ function MemberBorrowReturning() {
         setIsLoadDone(!isLoadDone);
     }
 
+    const onViewDocumentBorrowed = (value?: MemberBorrowReturningDTO) => {
+        if (!!value) setMemberBorrowReturningSelected(value);
+        setIsViewDocumentBorrowed(true);
+        setCreateUpdateFormOpen(true);
+    }
+
+    const onReturnDocumentBorrowed = (value?: MemberBorrowReturningDTO) => {
+        if (!!value) setMemberBorrowReturningSelected(value);
+        setIsReturnDocumentBorrowed(true);
+        setCreateUpdateFormOpen(true);
+    }
+
     const onCancel = () => {
         setMemberBorrowReturningSelected(undefined)
+        setIsViewDocumentBorrowed(false);
         setCreateUpdateFormOpen(false);
+        setIsReturnDocumentBorrowed(false);
     }
 
     const setMultiMemberBorrowReturningSelect = (data: MemberBorrowReturningDTO[]) => {
@@ -74,7 +90,7 @@ function MemberBorrowReturning() {
                         <Col {...cssResponsive(24, 24, 5, 5, 5, 5)}><h2>Độc giả mượn</h2></Col>
                         <Col {...cssResponsive(24, 24, 19, 19, 19, 19)} className="align-content-right">
                             <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />} onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
-                            <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} onClick={() => setModalImportOpen(true)}>Nhập dữ liệu</Button>
+                            {/* <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} onClick={() => setModalImportOpen(true)}>Nhập dữ liệu</Button> */}
                             <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} onClick={() => setModalExportOpen(true)}>Xuất dữ liệu</Button>
                         </Col>
                     </Row>
@@ -108,6 +124,8 @@ function MemberBorrowReturning() {
                         <Col span={24}>
                             <TableMemberBorrowReturning
                                 datasource={data}
+                                onView={onViewDocumentBorrowed}
+                                onReturn={onReturnDocumentBorrowed}
                                 onUpdate={onCreateOrUpdateModalOpen}
                                 onDelete={onDeleteMemberBorrowReturning}
                                 setMultiDataSelected={setMultiMemberBorrowReturningSelect}
@@ -127,6 +145,8 @@ function MemberBorrowReturning() {
             }
             {isCreateUpdate &&
                 <CreateOrUpdateMemberBorrowReturning
+                    isViewDocumentBorrowed={isViewDocumentBorrowed}
+                    isReturnDocumentBorrowed={isReturnDocumentBorrowed}
                     memberBorrowReturningSelected={memberBorrowReturningSelected}
                     onCreateOrUpdateSuccess={onCreateOrUpdateSuccess}
                     onCancelData={onCancel}

@@ -12,6 +12,8 @@ interface IProps {
     onCancelData: () => void;
     memberBorrowReturningSelected: MemberBorrowReturningDTO | undefined;
     onCreateOrUpdateSuccess: () => void;
+    isViewDocumentBorrowed: boolean;
+    isReturnDocumentBorrowed: boolean;
 }
 
 export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => {
@@ -28,8 +30,14 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
 
         const fetchDocumentInfo = async () => {
             const infoArray = await getDocumentInfo('');
-            const dataWithIndex = infoArray.filter(item => item.do_in_status == 1).map((item, index) => ({ stt: index, ...item }));
-            setDocumentInfoData(dataWithIndex);
+            if (props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed) {
+                const dataWithIndex = infoArray.filter(item => (item.do_in_status == 2 && item.do_in_me_name == props.memberBorrowReturningSelected?.us_id_borrow)).map((item, index) => ({ stt: index, ...item }));
+                setDocumentInfoData(dataWithIndex);
+            }
+            else {
+                const dataWithIndex = infoArray.filter(item => item.do_in_status == 1).map((item, index) => ({ stt: index, ...item }));
+                setDocumentInfoData(dataWithIndex);
+            }
         };
 
         fetchMember();
@@ -46,10 +54,18 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
     })
 
     const onCreateOrUpdateData = async (value: MemberBorrowReturningDTO) => {
-        multiDocumentBorrowSelected.map(async item => {
-            const newDocumentInfo = { ...item, do_in_status: 2, do_in_me_name: value.us_id_borrow };
-            await updateDocumentInfo(newDocumentInfo.do_in_id, newDocumentInfo);
-        })
+        if (props.isReturnDocumentBorrowed) {
+            multiDocumentBorrowSelected.map(async item => {
+                const newDocumentInfo = { ...item, do_in_status: 1, do_in_me_name: null };
+                await updateDocumentInfo(newDocumentInfo.do_in_id, newDocumentInfo);
+            })
+        }
+        else {
+            multiDocumentBorrowSelected.map(async item => {
+                const newDocumentInfo = { ...item, do_in_status: 2, do_in_me_name: value.us_id_borrow };
+                await updateDocumentInfo(newDocumentInfo.do_in_id, newDocumentInfo);
+            })
+        }
         if (!!props.memberBorrowReturningSelected) {
             await updateMemberBorrowReturning(props.memberBorrowReturningSelected.br_re_id, value);
             message.success("Cập nhật dữ liệu thành công!");
@@ -75,6 +91,21 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
         onCreateOrUpdateData(values);
     };
 
+    const titleForm = () => {
+        if (props.isViewDocumentBorrowed) {
+            return <h3>Thông tin phiếu mượn</h3>
+        }
+        else if (props.isReturnDocumentBorrowed) {
+            return <h3>Trả tài liệu</h3>
+        }
+        else if (!!props.memberBorrowReturningSelected) {
+            return <h3>Mượn thêm tài liệu</h3>
+        }
+        else {
+            return <h3>Thêm phiếu mượn</h3>
+        }
+    }
+
     return (
         <>
             <Form
@@ -85,9 +116,10 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                 onFinish={onFinish}
             >
                 <Row style={{ marginBottom: 15 }}>
-                    <Col span={12}><h3>{!!props.memberBorrowReturningSelected ? 'Sửa phiếu mượn' : 'Thêm phiếu mượn'}</h3></Col>
+                    <Col span={12}><h3>{titleForm()}</h3></Col>
                     <Col span={12} className="align-content-right">
-                        <Button type="primary" htmlType="submit">Lưu</Button>
+                        {props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed || <Button type="primary" htmlType="submit">Lưu</Button>}
+                        {props.isReturnDocumentBorrowed && <Button type="primary" htmlType="submit">Trả tài liệu </Button>}
                         <Button className="button-danger" danger onClick={onCancel}>Hủy</Button>
                     </Col>
                 </Row>
@@ -98,7 +130,7 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                             name="br_re_code"
                             rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                         >
-                            <Input />
+                            <Input disabled={props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed} />
                         </Form.Item>
                     </Col>
                     <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>
@@ -109,6 +141,7 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                         >
                             <DatePicker
                                 style={{ width: '100%' }}
+                                disabled={props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed}
                                 format={'DD/MM/YYYY'}
                                 placeholder=""
                                 disabledDate={(current) => current < moment().subtract(1, 'day')}
@@ -123,6 +156,7 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                         >
                             <Select
                                 style={{ width: '100%' }}
+                                disabled={props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed}
                                 allowClear
                                 options={memberOption}
                             />
@@ -136,6 +170,7 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                         >
                             <DatePicker
                                 style={{ width: '100%' }}
+                                disabled={props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed}
                                 format={'DD/MM/YYYY'}
                                 placeholder=""
                                 disabledDate={(current) => current < moment().subtract(1, 'day')}
@@ -147,7 +182,7 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                             label="Mô tả"
                             name="br_re_desc"
                         >
-                            <Input />
+                            <Input disabled={props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed} />
                         </Form.Item>
                     </Col>
                 </Row>
