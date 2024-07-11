@@ -1,4 +1,4 @@
-import { Button, Col, Form, FormProps, Image, Input, Row, Select, Upload, UploadFile, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Image, Input, Row, Select, Upload, UploadFile, message } from "antd"
 import { MemberDTO, createMember, updateMember } from "../../../../stores/MemberStore";
 import { useEffect, useState } from "react";
 import ImgCrop from "antd-img-crop";
@@ -9,6 +9,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import UploadMemberImage from "../../../../storage/UploadMemberImage";
 import { GENDER } from "../../../../components/Manager/AppConst";
 import { getFileNameFromUrl } from "../../../../utils/getFileNameFromUrl";
+import moment from "moment";
 
 interface IProps {
     onCancelData: () => void;
@@ -22,6 +23,7 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isUpload, setIsUpload] = useState(false);
+    
     let urlImage: string = '';
 
     useEffect(() => {
@@ -118,7 +120,7 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                             onChange={handleChange}
                         >
                             {fileList.length === 1 ? null : uploadButton}
-                        </Upload>
+                        </Upload>   
                     </ImgCrop>
                     {!!previewImage &&
                         <Image
@@ -158,7 +160,12 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                     name="me_birthday"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <Input />
+                    <DatePicker
+                        style={{ width: '100%' }}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current > moment().subtract(18, 'year')}
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Giới tính"

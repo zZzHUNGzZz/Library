@@ -19,13 +19,13 @@ interface IProps {
 export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
     const [documentInfoData, setDocumentInfoData] = useState<DocumentInfoDTO[]>([]);
-    const [memberOption, setLMemberOption] = useState([{}]);
+    const [memberOption, setMemberOption] = useState([{}]);
     const [multiDocumentBorrowSelected, setMultiDocumentBorrowSelected] = useState<DocumentInfoDTO[]>([]);
 
     useEffect(() => {
         const fetchMember = async () => {
             const data = await SelectedMember();
-            setLMemberOption(data);
+            setMemberOption(data);
         }
 
         const fetchDocumentInfo = async () => {

@@ -1,6 +1,8 @@
 import { message } from "antd";
 import { database } from "../firebase";
 
+const dayjs = require('dayjs');
+
 export interface MemberDTO {
     me_id: string,
     me_avatar: string | null,
@@ -35,7 +37,7 @@ export const getMember = async (searchValue: string) => {
                         me_code: member.me_code,
                         me_name: member.me_name,
                         me_identify: member.me_identify,
-                        me_birthday: member.me_birthday,
+                        me_birthday: !!member.me_birthday ? dayjs(member.me_birthday) : null,
                         me_sex: member.me_sex,
                         me_address: member.me_address,
                         me_more_infor: member.me_more_infor,
@@ -71,7 +73,12 @@ export const createMember = (data: MemberDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("member/").push().set(filteredData, function (error) {
+    const { me_birthday, ...spreadData } = filteredData
+    const newMember = {
+        ...spreadData,
+        'me_birthday': !!me_birthday ? me_birthday.toISOString() : null,
+    };
+    database.ref("member/").push().set(newMember, function (error) {
         if (error) {
             console.error("Error create data:", error);
             message.error('Lỗi khi thêm mới dữ liệu!');
@@ -83,7 +90,12 @@ export const updateMember = (me_id: string, data: MemberDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("member/" + me_id).set(filteredData, function (error) {
+    const { me_birthday, ...spreadData } = filteredData
+    const newMember = {
+        ...spreadData,
+        'me_birthday': !!me_birthday ? me_birthday.toISOString() : null,
+    };
+    database.ref("member/" + me_id).set(newMember, function (error) {
         if (error) {
             console.error("Error update data:", error);
             message.error('Lỗi khi cập nhật dữ liệu!');

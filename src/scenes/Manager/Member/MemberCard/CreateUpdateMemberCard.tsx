@@ -1,7 +1,8 @@
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select, message } from "antd"
 import { MemberCardDTO, createMemberCard, updateMemberCard } from "../../../../stores/MemberCardStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
+import { SelectedMember } from "../../../../components/Manager/SelectedMember";
 
 interface IProps {
     onCancelData: () => void;
@@ -11,6 +12,16 @@ interface IProps {
 
 export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
     const [form] = Form.useForm();
+    const [memberOption, setMemberOption] = useState([{}]);
+
+    useEffect(() => {
+        const fetchMember = async () => {
+            const data = await SelectedMember();
+            setMemberOption(data);
+        }
+
+        fetchMember();
+    }, []);
 
     const onCancel = () => { props.onCancelData(); }
 
@@ -59,14 +70,18 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
                     name="me_id"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <Input allowClear />
+                    <Select
+                        style={{ width: '100%' }}
+                        allowClear
+                        options={memberOption}
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Thời gian có hiệu lực"
                     name="me_ca_start_valid"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                     <DatePicker
+                    <DatePicker
                         style={{ width: '100%' }}
                         format={'DD/MM/YYYY'}
                         placeholder=""
@@ -87,7 +102,7 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
                 </Form.Item>
                 <Form.Item
                     label="Thời gian nhận thẻ"
-                    name="me_ca_has_card"
+                    name="me_ca_get_card"
                     rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <DatePicker

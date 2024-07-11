@@ -72,19 +72,19 @@ function Member() {
     return (
         <Card>
             <Row gutter={[8, 8]}>
-                <Col {...cssResponsive(24, 8, 4, 5, 5, 5)}><h2>Độc giả</h2></Col>
-                <Col {...cssResponsive(24, 16, 8, 7, 7, 7)}>
-                    <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
-                </Col>
-                <Col {...cssResponsive(24, 24, 12, 12, 12, 12)} className="align-content-right">
+                <Col {...cssResponsive(24, 24, 4, 4, 4, 4)}><h2>Độc giả</h2></Col>
+                <Col {...cssResponsive(24, 24, 20, 20, 20, 20)} className="align-content-right">
                     <Button type="primary" title="Thêm dữ liệu" icon={<PlusOutlined />} onClick={() => onCreateOrUpdateModalOpen(undefined)}>Thêm dữ liệu</Button>
                     <Button type="primary" title="Nhập dữ liệu" icon={<ImportOutlined />} onClick={() => setModalImportOpen(true)}>Nhập dữ liệu</Button>
                     <Button type="primary" title="Xuất dữ liệu" icon={<ExportOutlined />} onClick={() => setModalExportOpen(true)}>Xuất dữ liệu</Button>
                 </Col>
             </Row>
 
-            <Row gutter={[0, 8]} style={{ margin: "20px 0 10px 0" }}>
-                <Col className="align-content">
+            <Row gutter={[8, 8]} style={{ margin: "10px 0 10px 0" }}>
+                <Col {...cssResponsive(24, 24, 8, 6, 6, 6)}>
+                    <Input allowClear placeholder="Nhập tìm kiếm" onChange={(e) => setValueSearch(e.target.value)}></Input>
+                </Col>
+                <Col {...cssResponsive(24, 24, 8, 6, 6, 6)}>
                     <Button
                         title="Tìm kiếm"
                         icon={<SearchOutlined />}
@@ -92,8 +92,11 @@ function Member() {
                     >
                         Tìm kiếm
                     </Button>
+                </Col>
+                <Col {...cssResponsive(12, 12, 8, 12, 12, 12)} style={{ textAlign: 'right' }}>
                     <Button
                         danger
+                        type="primary"
                         className="button-danger"
                         title="Xóa dữ liệu"
                         icon={<DeleteOutlined />}

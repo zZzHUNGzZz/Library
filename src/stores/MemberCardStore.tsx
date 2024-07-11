@@ -1,6 +1,8 @@
 import { message } from "antd";
 import { database } from "../firebase";
 
+const dayjs = require('dayjs');
+
 export interface MemberCardDTO {
     me_ca_id: string,
     me_id: string | null,
@@ -8,6 +10,7 @@ export interface MemberCardDTO {
     me_ca_identify: string | null,
     me_ca_start_valid: string | null,
     me_ca_end_valid: string | null,
+    me_ca_get_card: string | null,
     me_ca_money: number | null,
 }
 
@@ -26,8 +29,9 @@ export const getMemberCard = async (searchValue: string) => {
                         me_id: memberCard.me_id,
                         me_ca_code: memberCard.me_ca_code,
                         me_ca_identify: memberCard.me_ca_identify,
-                        me_ca_start_valid: memberCard.me_ca_start_valid,
-                        me_ca_end_valid: memberCard.me_ca_end_valid,
+                        me_ca_start_valid: !!memberCard.me_ca_start_valid ? dayjs(memberCard.me_ca_start_valid) : null,
+                        me_ca_end_valid: !!memberCard.me_ca_end_valid ? dayjs(memberCard.me_ca_end_valid) : null,
+                        me_ca_get_card: !!memberCard.me_ca_get_card ? dayjs(memberCard.me_ca_get_card) : null,
                         me_ca_money: memberCard.me_ca_money,
                     });
                 }
@@ -55,7 +59,14 @@ export const createMemberCard = (data: MemberCardDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("memberCard/").push().set(filteredData, function (error) {
+    const { me_ca_start_valid, me_ca_end_valid, me_ca_get_card, ...spreadData } = filteredData
+    const newMemberCard = {
+        ...spreadData,
+        'me_ca_start_valid': !!me_ca_start_valid ? me_ca_start_valid.toISOString() : null,
+        'me_ca_end_valid': !!me_ca_end_valid ? me_ca_end_valid.toISOString() : null,
+        'me_ca_get_card': !!me_ca_get_card ? me_ca_get_card.toISOString() : null,
+    };
+    database.ref("memberCard/").push().set(newMemberCard, function (error) {
         if (error) {
             console.error("Error create data:", error);
             message.error('Lỗi khi thêm mới dữ liệu!');
@@ -67,7 +78,14 @@ export const updateMemberCard = (me_ca_id: string, data: MemberCardDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("memberCard/" + me_ca_id).set(filteredData, function (error) {
+    const { me_ca_start_valid, me_ca_end_valid, me_ca_get_card, ...spreadData } = filteredData
+    const newMemberCard = {
+        ...spreadData,
+        'me_ca_start_valid': !!me_ca_start_valid ? me_ca_start_valid.toISOString() : null,
+        'me_ca_end_valid': !!me_ca_end_valid ? me_ca_end_valid.toISOString() : null,
+        'me_ca_get_card': !!me_ca_get_card ? me_ca_get_card.toISOString() : null,
+    };
+    database.ref("memberCard/" + me_ca_id).set(newMemberCard, function (error) {
         if (error) {
             console.error("Error update data:", error);
             message.error('Lỗi khi cập nhật dữ liệu!');

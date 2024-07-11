@@ -1,5 +1,5 @@
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Avatar, Space, Table, TableColumnsType } from "antd";
+import { Avatar, Space, Table, TableColumnsType, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { MemberDTO } from "../../../../stores/MemberStore";
 import { getColorFromChar } from "../../../../utils/getColorFromChar";
@@ -44,8 +44,19 @@ export const TableMember: React.FC<IProps> = (props) => {
         { title: 'Mã độc giả', dataIndex: 'me_code', key: 'me_code' },
         { title: 'Tên độc giả', dataIndex: 'me_name', key: 'me_name' },
         { title: 'CCCD', dataIndex: 'me_identify', key: 'me_identify' },
-        { title: 'Tình trạng', dataIndex: 'me_status', key: 'me_status' },
-        { title: 'Tình trạng thẻ', dataIndex: 'me_has_card', key: 'me_has_card' },
+        // { title: 'Tình trạng', dataIndex: 'me_status', key: 'me_status' },
+        {
+            title: 'Tình trạng thẻ', dataIndex: 'me_has_card', key: 'me_has_card',
+            render: (text: string, record: MemberDTO) => <>
+                {
+                    !!record.me_has_card
+                    ?
+                    <Tag color="green">Đã có thẻ</Tag>
+                    :
+                    <Tag color="red">Chưa có thẻ</Tag>
+                }
+            </>
+        },
         {
             title: 'Chức năng', dataIndex: 'do_action', fixed: 'right', width: 105,
             render: (text: any, record: MemberDTO) => (
@@ -63,7 +74,7 @@ export const TableMember: React.FC<IProps> = (props) => {
         },
     };
 
-    const columnData = columns.slice(0, 7);
+    const columnData = columns.slice(0, 6);
 
     return (
         <Table
