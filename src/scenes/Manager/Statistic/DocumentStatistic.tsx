@@ -21,7 +21,7 @@ function DocumentStatistic() {
 
     const getDocumentCountByMonthYear = (month: number, year: number): number => {
         const count = data.filter(document => {
-            const createAt = document.do_in_create_at;
+            const createAt = dayjs(document.do_in_create_at);
             return createAt && createAt.year() === year && createAt.month() === (month - 1);
         }).length;
 

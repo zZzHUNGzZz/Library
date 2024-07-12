@@ -6,8 +6,48 @@ import { LuFileCheck } from "react-icons/lu";
 import './style.css';
 import BarChart from "./Chart/BarChart";
 import { cssResponsive } from "../../components/Manager/Responsive";
+import { useEffect, useState } from "react";
+import { DocumentInfoDTO, getDocumentInfo } from "../../stores/DocumentInfoStore";
+import moment from "moment";
 
 function DashBroad() {
+    const [data, setData] = useState<DocumentInfoDTO[]>([]);
+    const [numberBookAvailable, setNumberBookAvailable] = useState<number>(0);
+    const [numberBookReady, setNumberBookReady] = useState<number>(0);
+    const [numberBookLoan, setNumberBookLoan] = useState<number>(0);
+    const [numberBookProblem, setNumberBookProblem] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const arrDocument = await getDocumentInfo('');
+            setData(arrDocument);
+        };
+
+        fetchData();
+        calculateData();
+    }, [data]);
+
+    const calculateData = () => {
+        setNumberBookAvailable(data.length);
+        let readyCount = 0;
+        let loanCount = 0;
+        let problemCount = 0;
+
+        data.forEach(item => {
+            if (item.do_in_status === 1) {
+                readyCount++;
+            } else if (item.do_in_status === 2) {
+                loanCount++;
+            } else {
+                problemCount++;
+            }
+        });
+
+        setNumberBookReady(readyCount);
+        setNumberBookLoan(loanCount);
+        setNumberBookProblem(problemCount);
+    }
+
     return (
         <>
             <Row gutter={[16, 8]}>
@@ -16,7 +56,7 @@ function DashBroad() {
                         <Row>
                             <Col span={20}>
                                 <p style={{ fontSize: "17px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Tổng số sách hiện có</p>
-                                <span>2612</span>
+                                <span>{numberBookAvailable}</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
                                 <AiOutlineBook size={30} />
@@ -29,7 +69,7 @@ function DashBroad() {
                         <Row>
                             <Col span={20}>
                                 <p style={{ fontSize: "17px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Sách sẵn sàng cho mượn</p>
-                                <span>2002</span>
+                                <span>{numberBookReady}</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
                                 <LuFileCheck size={30} />
@@ -42,7 +82,7 @@ function DashBroad() {
                         <Row>
                             <Col span={20}>
                                 <p style={{ fontSize: "17px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Sách đang cho mượn</p>
-                                <span>1226</span>
+                                <span>{numberBookLoan}</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
                                 <LuFileBarChart size={30} />
@@ -55,7 +95,7 @@ function DashBroad() {
                         <Row>
                             <Col span={20}>
                                 <p style={{ fontSize: "17px", fontWeight: 500, margin: 0, color: "#ffffff" }}>Sách hỏng, mất, ...</p>
-                                <span>38</span>
+                                <span>{numberBookProblem}</span>
                             </Col>
                             <Col span={4} className="card-content-icon">
                                 <RiFileDamageLine size={30} />

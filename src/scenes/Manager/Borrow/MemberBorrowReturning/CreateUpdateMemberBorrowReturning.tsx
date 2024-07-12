@@ -7,6 +7,7 @@ import TableDocumentInfo from "../../DocumentInfo/TableDocumentInfo";
 import { cssResponsive } from "../../../../components/Manager/Responsive";
 import { DocumentInfoDTO, getDocumentInfo, updateDocumentInfo } from "../../../../stores/DocumentInfoStore";
 import { getMemberNameById } from "../../../../stores/SessionStore";
+import { updateLoanDocument } from "../../../../stores/LoanStore";
 
 interface IProps {
     onCancelData: () => void;
@@ -37,6 +38,7 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
             else {
                 const dataWithIndex = infoArray.filter(item => item.do_in_status == 1).map((item, index) => ({ stt: index, ...item }));
                 setDocumentInfoData(dataWithIndex);
+                await updateLoanDocument(Number(moment().format('M')));
             }
         };
 
@@ -65,6 +67,10 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                 const newDocumentInfo = { ...item, do_in_status: 2, do_in_me_name: value.us_id_borrow };
                 await updateDocumentInfo(newDocumentInfo.do_in_id, newDocumentInfo);
             })
+            for (let i = 0; i <= multiDocumentBorrowSelected.length; i++) {
+                
+                // await updateLoanDocument(Number(mome))
+            }
         }
         if (!!props.memberBorrowReturningSelected) {
             await updateMemberBorrowReturning(props.memberBorrowReturningSelected.br_re_id, value);

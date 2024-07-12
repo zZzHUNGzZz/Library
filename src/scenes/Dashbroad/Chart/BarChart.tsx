@@ -2,6 +2,8 @@ import { Col, Row, message } from 'antd';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { FiMenu } from "react-icons/fi";
+import { getLoanDocument, LoanDTO, updateLoanDocument } from '../../../stores/LoanStore';
+import { useEffect, useState } from 'react';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -19,15 +21,32 @@ export const options = {
 };
 
 function BarChart() {
+    const [data, setData] = useState<LoanDTO[]>([]);
+    const [dataChart, setDataChart] = useState<number[]>([]);
+    const fetchData = async () => {
+        const arr = await getLoanDocument();            
+        setData(arr);
+    };
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        calculatoLoan();
+    }, [data])
+    const calculatoLoan = () => {        
+        const result = Object.values(data)
+        setDataChart(result as any);
+    }
     return (
         <>
             <Row>
-                <Col span={20}>
+                <Col span={24}>
                     <span style={{ fontSize: "18px", fontWeight: 444, color: "black" }}>Thống kê số lượng sách đã được mượn trong 12 tháng qua</span>
                 </Col>
-                <Col span={4} style={{ display: "flex", justifyContent: "end", alignItems: "center", fontSize: "18px", color: "black" }}>
-                    <FiMenu onClick={() => message.info("Chức năng chưa có =))")} />
-                </Col>
+                {/* <Col span={4} style={{ display: "flex", justifyContent: "end", alignItems: "center", fontSize: "18px", color: "black" }}>
+                    <FiMenu onClick={async () => {}} />
+                </Col> */}
             </Row>
             <div style={{ width: "100%", border: "1px solid lightgray", marginBottom: 20 }}></div>
             <Bar
@@ -65,7 +84,7 @@ function BarChart() {
                                 "#f5222d",
                                 "#faad14"
                             ],
-                            data: [2478, 5267, 734, 2002, 784, 2612, 3433, 1226, 1600, 576, 3456, 2345]
+                            data: dataChart
                         }
                     ]
                 }}

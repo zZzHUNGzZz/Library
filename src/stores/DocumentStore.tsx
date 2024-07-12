@@ -27,7 +27,7 @@ export const createDocument = (data: DocumentDTO) => {
         'do_date_publish': !!do_date_publish ? do_date_publish.toISOString() : null,
         'do_date_available': !!do_date_available ? do_date_available.toISOString() : null,
     };
-    const newDocumentRef = database.ref("document/").push()
+    const newDocumentRef = database.ref("document/").push();
     newDocumentRef.set(newDocumentInfo, function (error) {
         if (error) {
             console.error("Error create data:", error);
