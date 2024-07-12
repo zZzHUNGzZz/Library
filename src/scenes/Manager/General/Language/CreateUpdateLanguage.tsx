@@ -7,6 +7,7 @@ import { getBase64 } from "../../../../utils/getBase64";
 import { PlusOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import UploadLanguageImage from "../../../../storage/UploadLanguageImage";
+import { getFileNameFromUrl } from "../../../../utils/getFileNameFromUrl";
 
 interface IProps {
     onCancelData: () => void;
@@ -20,18 +21,23 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isUpload, setIsUpload] = useState(false);
-    const onCancel = () => { props.onCancelData(); }
-
+    
     let urlImage: string = '';
+
     useEffect(() => {
         if (!!props.languageSelected) {
             form.setFieldsValue(props.languageSelected);
+            if (!!props.languageSelected?.la_flag) {
+                urlImage = props.languageSelected?.la_flag;
+                const fileName = getFileNameFromUrl(urlImage);
+                setFileList([{ uid: '-1', name: fileName, status: 'done', url: urlImage }]);
+            }
+            else {
+                setFileList([]);
+            }
         }
-        else {
-            form.resetFields();
-        }
-    })
-
+    }, [props.languageSelected]);
+    
     const onCreateOrUpdateData = async (value: LanguageDTO) => {
         if (!!props.languageSelected) {
             await updateLanguage(props.languageSelected.la_id, value);
@@ -42,8 +48,16 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
             message.success("Thêm mới dữ liệu thành công!");
         }
         props.onCreateOrUpdateSuccess();
+        onCancel();
     }
 
+    const onCancel = () => { 
+        form.resetFields();
+        setFileList([]);
+        setIsUpload(false);
+        props.onCancelData(); 
+    }
+    
     const onFinish: FormProps<LanguageDTO>['onFinish'] = async (values) => {
         if (isUpload) {
             if (fileList.length > 0) {
@@ -94,17 +108,10 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
                     </Col>
                 </Row>
                 <Form.Item
-                    label="Ngôn ngữ"
-                    name="la_title"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
                     label="Ảnh"
                     name="la_flag"
                 >
-                    <ImgCrop rotationSlider aspect={16 / 9}>
+                    <ImgCrop aspect={16 / 9}>
                         <Upload
                             listType="picture-card"
                             fileList={fileList}
@@ -112,7 +119,7 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
                             onChange={handleChange}
                         >
                             {fileList.length === 1 ? null : uploadButton}
-                        </Upload>
+                        </Upload>   
                     </ImgCrop>
                     {!!previewImage &&
                         <Image
@@ -125,6 +132,13 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
                             src={previewImage}
                         />
                     }
+                </Form.Item>
+                <Form.Item
+                    label="Ngôn ngữ"
+                    name="la_title"
+                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
+                >
+                    <Input />
                 </Form.Item>
             </Form>
         </div>

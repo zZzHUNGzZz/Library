@@ -35,7 +35,7 @@ export const TableLanguage: React.FC<IProps> = (props) => {
                 {
                     !!record.la_flag
                         ?
-                        <Image style={{width: 200}} src={record.la_flag!} preview={false} />
+                        <Image style={{width: 150}} src={record.la_flag!} preview={false} />
                         :
                         'Chưa có ảnh'
                 }
