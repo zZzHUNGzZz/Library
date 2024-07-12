@@ -61,8 +61,9 @@ export const TableMemberBorrowReturning: React.FC<IProps> = (props) => {
 
     return (
         <Table
+            className="center-table"
             bordered
-            scroll={{x: 1000}}
+            scroll={{ x: 1000 }}
             columns={props.isExportTable ? columnData : columns}
             dataSource={props.datasource}
             key={'stt'}

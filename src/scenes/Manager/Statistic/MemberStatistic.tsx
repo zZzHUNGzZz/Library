@@ -1,4 +1,4 @@
-import { Card, Col,  Row, Table } from "antd";
+import { Card, Col, Row, Table } from "antd";
 import { useEffect, useState } from "react";
 import { getTotalMember } from "../../../stores/SessionStore";
 
@@ -19,18 +19,18 @@ function DocumentStatistic() {
         getCount();
     }, []);
     const dataSource = [
-        { a: 1, b: 0},
-        { a: 2, b: 0},
-        { a: 3, b: 0},
-        { a: 4, b: 0},
-        { a: 5, b: count},
-        { a: 6, b: 0},
-        { a: 7, b: 0},
-        { a: 8, b: 0},
-        { a: 9, b: 0},
-        { a: 10, b: 0},
-        { a: 11, b: 0},
-        { a: 12, b: 0},
+        { a: 1, b: 0 },
+        { a: 2, b: 0 },
+        { a: 3, b: 0 },
+        { a: 4, b: 0 },
+        { a: 5, b: count },
+        { a: 6, b: 0 },
+        { a: 7, b: 0 },
+        { a: 8, b: 0 },
+        { a: 9, b: 0 },
+        { a: 10, b: 0 },
+        { a: 11, b: 0 },
+        { a: 12, b: 0 },
     ];
 
     const columns = [
@@ -51,6 +51,7 @@ function DocumentStatistic() {
                 <Col span={24}><h1 className="align-content-center">Báo cáo độc giả mới</h1></Col>
             </Row>
             <Table
+                className="center-table"
                 bordered
                 key={'a'}
                 rowKey="a"

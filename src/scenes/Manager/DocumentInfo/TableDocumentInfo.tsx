@@ -74,6 +74,7 @@ export const TableDocumentInfo: React.FC<IProps> = (props) => {
     const columnData = props.isBorrowReturning ? columns.slice(0, 3) : (props.isExportTable ? columns.slice(0, 5) : columns)
     return (
         <Table
+            className="center-table"
             bordered
             columns={columnData}
             dataSource={props.datasource}
@@ -82,7 +83,7 @@ export const TableDocumentInfo: React.FC<IProps> = (props) => {
             scroll={{ x: 700 }}
             onRow={(record) => {
                 return {
-                    onDoubleClick: () => (props.isExportTable || props.isBorrowReturning ) ? undefined : props.onUpdate!(record)
+                    onDoubleClick: () => (props.isExportTable || props.isBorrowReturning) ? undefined : props.onUpdate!(record)
                 };
             }}
             rowSelection={props.isExportTable ? undefined : { ...rowSelection }}

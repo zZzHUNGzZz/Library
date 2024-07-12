@@ -61,6 +61,7 @@ function DocumentStatistic() {
                 <Col span={24}><h1 className="align-content-center">Báo cáo tài liệu</h1></Col>
             </Row>
             <Table
+                className="center-table"
                 bordered
                 key={'stt'}
                 rowKey="stt"

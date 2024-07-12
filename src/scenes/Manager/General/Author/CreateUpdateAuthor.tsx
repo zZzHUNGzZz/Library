@@ -1,6 +1,7 @@
-import { Button, Col, Form, FormProps, Input, Row, message } from "antd"
+import { Button, Col, DatePicker, Form, FormProps, Input, Row, message } from "antd"
 import { AuthorDTO, createAuthor, updateAuthor } from "../../../../stores/AuthorStore";
 import { useEffect } from "react";
+import moment from "moment";
 
 interface IProps {
     onCancelData: () => void;
@@ -71,7 +72,12 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
                     label="Ngày sinh"
                     name="au_date"
                 >
-                    <Input />
+                    <DatePicker
+                        style={{ width: '100%' }}
+                        format={'DD/MM/YYYY'}
+                        placeholder=""
+                        disabledDate={(current) => current > moment().subtract(18, 'year')}
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Địa chỉ"
@@ -102,8 +108,6 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
                 <Form.Item
                     label="Bút danh"
                     name="au_pen_name"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
-
                 >
                     <Input />
                 </Form.Item>

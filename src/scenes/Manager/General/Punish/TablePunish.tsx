@@ -44,6 +44,7 @@ export const TablePunish: React.FC<IProps> = (props) => {
 
     return (
         <Table
+            className="center-table"
             bordered
             columns={props.isExportTable ? columnData : columns}
             dataSource={props.datasource}

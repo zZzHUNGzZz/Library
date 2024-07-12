@@ -55,6 +55,7 @@ export const TableMemberCard: React.FC<IProps> = (props) => {
 
     return (
         <Table
+            className="center-table"
             bordered
             columns={props.isExportTable ? columnData : columns}
             dataSource={props.datasource}

@@ -103,7 +103,6 @@ export const CreateOrUpdateLanguage: React.FC<IProps> = (props) => {
                 <Form.Item
                     label="Ảnh"
                     name="la_flag"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
                     <ImgCrop rotationSlider aspect={16 / 9}>
                         <Upload

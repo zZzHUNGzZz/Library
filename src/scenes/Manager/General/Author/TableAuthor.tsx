@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { AuthorDTO } from "../../../../stores/AuthorStore";
 import { getColorFromChar } from "../../../../utils/getColorFromChar";
 import { getFirstCharOfLastName } from "../../../../utils/getFirstCharOfLastName";
+
+const dayjs = require('dayjs');
 interface IProps {
     onUpdate?: (value: AuthorDTO) => void;
     onDelete?: (id: string) => void;
@@ -43,7 +45,7 @@ export const TableAuthor: React.FC<IProps> = (props) => {
         },
         { title: 'Mã tác giả', dataIndex: 'au_code', key: 'au_code' },
         { title: 'Tên tác giả', dataIndex: 'au_name', key: 'au_name' },
-        { title: 'Ngày sinh', dataIndex: 'au_date', key: 'au_date' },
+        { title: 'Ngày sinh', dataIndex: 'au_date', key: 'au_date', render: (text, record) => <>{!!record.au_date && dayjs(record.au_date)?.format('DD/MM/YYYY')}</>, },
         { title: 'Địa chỉ', dataIndex: 'au_address', key: 'au_address' },
         { title: 'Email', dataIndex: 'au_email', key: 'au_email' },
         { title: 'Học hàm', dataIndex: 'academic_rank', key: 'academic_rank' },
@@ -71,6 +73,7 @@ export const TableAuthor: React.FC<IProps> = (props) => {
 
     return (
         <Table
+            className="center-table"
             bordered
             columns={props.isExportTable ? columnData : columns}
             dataSource={props.datasource}
