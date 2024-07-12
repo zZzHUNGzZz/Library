@@ -1,7 +1,6 @@
 import { message } from "antd";
 import { database } from "../firebase";
-
-const dayjs = require('dayjs');
+import dayjs from 'dayjs';
 
 export interface MemberDTO {
     me_id: string,
@@ -9,7 +8,7 @@ export interface MemberDTO {
     me_code: string | null,
     me_name: string | null,
     me_identify: string | null,
-    me_birthday: string | null,
+    me_birthday: dayjs.Dayjs | null,
     me_sex: string | null,
     me_address: string | null,
     me_more_infor: string | null,
@@ -19,6 +18,7 @@ export interface MemberDTO {
     me_has_card: boolean | null,
     me_is_active: boolean | null,
     me_is_locked: boolean | null,
+    me_create_at: dayjs.Dayjs | null,
 }
 
 export const getMember = async (searchValue: string) => {
@@ -47,6 +47,7 @@ export const getMember = async (searchValue: string) => {
                         me_has_card: member.me_has_card,
                         me_is_active: member.me_is_active,
                         me_is_locked: member.me_is_locked,
+                        me_create_at: !!member.me_create_at ? dayjs(member.me_create_at) : null,
                     });
                 }
             });
@@ -73,11 +74,12 @@ export const createMember = (data: MemberDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    const { me_birthday, ...spreadData } = filteredData
+    const { me_birthday, me_create_at, ...spreadData } = filteredData
     const newMember = {
         ...spreadData,
         'me_birthday': !!me_birthday ? me_birthday.toISOString() : null,
         'me_has_card': false,
+        'me_create_at': dayjs().toISOString(),
     };
     database.ref("member/").push().set(newMember, function (error) {
         if (error) {
@@ -91,12 +93,14 @@ export const updateMember = (me_id: string, data: MemberDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
+    console.log(filteredData);
     const { me_birthday, ...spreadData } = filteredData
+    
     const newMember = {
         ...spreadData,
         'me_birthday': !!me_birthday ? me_birthday.toISOString() : null,
     };
-    database.ref("member/" + me_id).set(newMember, function (error) {
+    database.ref("member/" + me_id).update(newMember, function (error) {
         if (error) {
             console.error("Error update data:", error);
             message.error('Lỗi khi cập nhật dữ liệu!');
@@ -143,6 +147,4 @@ export const memberHasCard = async (me_name: string, createCard: boolean) => {
         throw error;
     }
 }
-
-
 

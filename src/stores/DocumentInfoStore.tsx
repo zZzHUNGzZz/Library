@@ -1,6 +1,7 @@
 import { message } from "antd";
 import { database } from "../firebase";
 import { DocumentDTO, updateTotalBook } from "./DocumentStore";
+import dayjs from 'dayjs';
 
 export interface DocumentInfoDTO {
     do_in_id: string,
@@ -10,6 +11,7 @@ export interface DocumentInfoDTO {
     do_in_status: number | null,
     do_in_note: string | null,
     do_in_me_name: string | null,
+    do_in_create_at: dayjs.Dayjs | null,
 }
 
 
@@ -31,6 +33,7 @@ export const getDocumentInfo = async (searchValue: string) => {
                         do_in_status: documentInfo.do_in_status,
                         do_in_note: documentInfo.do_in_note,
                         do_in_me_name: documentInfo.do_in_me_name,
+                        do_in_create_at: !!documentInfo.do_in_create_at ? dayjs(documentInfo.do_in_create_at) : null,
                     });
                 }
             });
@@ -55,7 +58,7 @@ export const createDocumentInfo = async (do_id: string, document: DocumentDTO) =
     });
     for (let i = 0; i < do_total_book; i++) {
         const next_dkcb = parseInt(last_dkcb.replace('DKCB', ''), 10);
-        const documentInfoData: DocumentInfoDTO = {
+        const documentInfoData = {
             do_in_id: '',
             do_id: do_id,
             do_in_dkcb: 'DKCB' + String(next_dkcb + i + 1).padStart(5, '0'),
@@ -63,6 +66,7 @@ export const createDocumentInfo = async (do_id: string, document: DocumentDTO) =
             do_in_status: 1,
             do_in_note: null,
             do_in_me_name: null,
+            do_in_create_at: dayjs(),
         };
 
         const newDocumentInfoRef = database.ref("documentInfo/").push();
