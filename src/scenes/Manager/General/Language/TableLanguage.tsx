@@ -68,6 +68,7 @@ export const TableLanguage: React.FC<IProps> = (props) => {
             dataSource={props.datasource}
             key={'stt'}
             rowKey="stt"
+            scroll={{x: 500}}
             onRow={(record) => {
                 return {
                     onDoubleClick: () => props.onUpdate!(record)
