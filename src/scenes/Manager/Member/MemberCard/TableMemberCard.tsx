@@ -5,7 +5,7 @@ import { MemberCardDTO } from "../../../../stores/MemberCardStore";
 const dayjs = require('dayjs');
 interface IProps {
     onUpdate?: (value: MemberCardDTO) => void;
-    onDelete?: (id: string) => void;
+    onDelete?: (value: MemberCardDTO) => void;
     setMultiDataSelected?: (data: MemberCardDTO[]) => void;
     datasource?: MemberCardDTO[];
     isExportTable?: boolean;
@@ -39,7 +39,7 @@ export const TableMemberCard: React.FC<IProps> = (props) => {
             render: (text: any, record: MemberCardDTO) => (
                 <div className="align-content-center">
                     <EditTwoTone twoToneColor="#52c41a" onClick={() => props.onUpdate!(record)} />
-                    <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record.me_ca_id)} />
+                    <DeleteTwoTone twoToneColor="#f5222d" onClick={() => props.onDelete!(record)} />
                 </div>
             )
         }

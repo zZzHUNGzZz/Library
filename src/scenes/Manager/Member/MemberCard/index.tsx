@@ -38,9 +38,9 @@ function MemberCard() {
         setIsLoadDone(!isLoadDone);
     }
 
-    const onDeleteMemberCard = async (id: string) => {
+    const onDeleteMemberCard = async (data: MemberCardDTO) => {
         showDeleteConfirm(async () => {
-            await deleteMemberCard([id]);
+            await deleteMemberCard([data]);
             await fetchData();
             message.success("Xóa dữ liệu thành công!");
         })
@@ -48,11 +48,11 @@ function MemberCard() {
     }
 
     const onMultiDeleteMemberCard = () => {
-        const listIdMemberCard = multiDatarSelected?.map(item => item.me_ca_id);
+        // const listIdMemberCard = multiDatarSelected?.map(item => item.me_ca_id);
         showDeleteConfirm(async () => {
-            await deleteMemberCard(listIdMemberCard!);
+            await deleteMemberCard(multiDatarSelected!);
             await fetchData();
-            message.success("Xóa " + listIdMemberCard?.length + " dữ liệu thành công!");
+            message.success("Xóa " + multiDatarSelected?.length + " dữ liệu thành công!");
         })
         setIsLoadDone(!isLoadDone);
     }

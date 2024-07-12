@@ -35,6 +35,8 @@ export const CreateOrUpdateMemberCard: React.FC<IProps> = (props) => {
     })
 
     const onCreateOrUpdateData = async (value: MemberCardDTO) => {
+        console.log(value);
+        
         if (!!props.memberCardSelected) {
             await updateMemberCard(props.memberCardSelected.me_ca_id, value);
             message.success("Cập nhật dữ liệu thành công!");

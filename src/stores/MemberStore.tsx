@@ -77,6 +77,7 @@ export const createMember = (data: MemberDTO) => {
     const newMember = {
         ...spreadData,
         'me_birthday': !!me_birthday ? me_birthday.toISOString() : null,
+        'me_has_card': false,
     };
     database.ref("member/").push().set(newMember, function (error) {
         if (error) {
@@ -114,6 +115,34 @@ export const deleteMember = (me_id: string[]) => {
     })
 }
 
+export const memberHasCard = async (me_name: string, createCard: boolean) => {
+    try {
+        const snapshot = await database.ref("member").once("value");
+        const dataObj = snapshot.val();
+
+        if (dataObj) {
+            let memberUpdated = false;
+
+            Object.keys(dataObj).forEach(key => {
+                const member = dataObj[key];
+                if (member.me_name === me_name) {
+                    database.ref(`member/${key}`).update({ me_has_card: createCard });
+                    memberUpdated = true;
+                }
+            });
+
+            if (memberUpdated) {
+                message.success("Cập nhật thành công!");
+            } else {
+                message.warning("Không tìm thấy thành viên với tên này.");
+            }
+        }
+    } catch (error) {
+        message.error("Lỗi khi cập nhật dữ liệu!");
+        console.error("Error updating data:", error);
+        throw error;
+    }
+}
 
 
 

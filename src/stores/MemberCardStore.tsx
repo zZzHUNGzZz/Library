@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { database } from "../firebase";
+import { memberHasCard } from "./MemberStore";
 
 const dayjs = require('dayjs');
 
@@ -72,6 +73,7 @@ export const createMemberCard = (data: MemberCardDTO) => {
             message.error('Lỗi khi thêm mới dữ liệu!');
         }
     });
+    memberHasCard(data.me_id!, true)
 }
 
 export const updateMemberCard = (me_ca_id: string, data: MemberCardDTO) => {
@@ -93,14 +95,15 @@ export const updateMemberCard = (me_ca_id: string, data: MemberCardDTO) => {
     });
 }
 
-export const deleteMemberCard = (me_ca_id: string[]) => {
-    me_ca_id.forEach(me_ca_id => {
-        database.ref("memberCard/" + me_ca_id).remove(function (error) {
+export const deleteMemberCard = (data: MemberCardDTO[]) => {
+    data.forEach(item => {
+        database.ref("memberCard/" + item.me_ca_id).remove(function (error) {
             if (error) {
                 console.error("Error delete data:", error);
                 message.error('Lỗi khi xóa dữ liệu!');
             }
         });
+        memberHasCard(item.me_id!, false);
     })
 }
 
