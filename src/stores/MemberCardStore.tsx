@@ -67,7 +67,7 @@ export const createMemberCard = (data: MemberCardDTO) => {
         'me_ca_start_valid': !!me_ca_start_valid ? me_ca_start_valid.toISOString() : null,
         'me_ca_end_valid': !!me_ca_end_valid ? me_ca_end_valid.toISOString() : null,
         'me_ca_get_card': !!me_ca_get_card ? me_ca_get_card.toISOString() : null,
-        'me_ca_code': randomCode(),
+        'me_ca_code': randomCode(''),
     };
     database.ref("memberCard/").push().set(newMemberCard, function (error) {
         if (error) {

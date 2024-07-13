@@ -76,7 +76,6 @@ export const CreateOrUpdateAuthor: React.FC<IProps> = (props) => {
                         style={{ width: '100%' }}
                         format={'DD/MM/YYYY'}
                         placeholder=""
-                        disabledDate={(current) => current > moment().subtract(18, 'year')}
                     />
                 </Form.Item>
                 <Form.Item

@@ -1,6 +1,7 @@
 import { message } from "antd";
 import { database } from "../firebase";
 import dayjs from 'dayjs';
+import { randomCode } from "../utils/randomCode";
 
 export interface MemberDTO {
     me_id: string,
@@ -74,12 +75,13 @@ export const createMember = (data: MemberDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    const { me_birthday, me_create_at, ...spreadData } = filteredData
+    const { me_code, me_birthday, me_create_at, ...spreadData } = filteredData
     const newMember = {
         ...spreadData,
         'me_birthday': !!me_birthday ? me_birthday.toISOString() : null,
         'me_has_card': false,
         'me_create_at': dayjs().toISOString(),
+        'me_code': randomCode('ME'),
     };
     database.ref("member/").push().set(newMember, function (error) {
         if (error) {

@@ -138,9 +138,8 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
                 <Form.Item
                     label="Mã độc giả"
                     name="me_code"
-                    rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                 >
-                    <Input />
+                    <Input disabled/>
                 </Form.Item>
                 <Form.Item
                     label="Tên độc giả"

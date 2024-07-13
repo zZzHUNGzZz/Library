@@ -6,7 +6,6 @@ import { SelectedMember } from "../../../../components/Manager/SelectedMember";
 import TableDocumentInfo from "../../DocumentInfo/TableDocumentInfo";
 import { cssResponsive } from "../../../../components/Manager/Responsive";
 import { DocumentInfoDTO, getDocumentInfo, updateDocumentInfo } from "../../../../stores/DocumentInfoStore";
-import { getMemberNameById } from "../../../../stores/SessionStore";
 import { updateLoanDocument } from "../../../../stores/LoanStore";
 
 interface IProps {
@@ -134,9 +133,8 @@ export const CreateOrUpdateMemberBorrowReturning: React.FC<IProps> = (props) => 
                         <Form.Item
                             label="Mã phiếu mượn"
                             name="br_re_code"
-                            rules={[{ required: true, message: 'Dữ liệu bị thiếu!' }]}
                         >
-                            <Input disabled={props.isViewDocumentBorrowed || props.isReturnDocumentBorrowed} />
+                            <Input disabled />
                         </Form.Item>
                     </Col>
                     <Col {...cssResponsive(24, 24, 12, 12, 12, 12)}>

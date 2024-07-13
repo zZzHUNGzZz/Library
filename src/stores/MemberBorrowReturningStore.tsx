@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { database } from "../firebase";
+import { randomCode } from "../utils/randomCode";
 const dayjs = require('dayjs');
 
 export interface MemberBorrowReturningDTO {
@@ -58,9 +59,10 @@ export const createMemberBorrowReturning = (data: MemberBorrowReturningDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    const { br_re_start_at, br_re_end_at, ...spreadData } = filteredData
+    const { br_re_start_at, br_re_end_at, br_re_code, ...spreadData } = filteredData
     const newDMemberBorrowReturning = {
         ...spreadData,
+        'br_re_code': randomCode('MEBR'),
         'br_re_start_at': !!br_re_start_at ? br_re_start_at.toISOString() : null,
         'br_re_end_at': !!br_re_end_at ? br_re_end_at.toISOString() : null,
     };
