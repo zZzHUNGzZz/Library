@@ -8,6 +8,7 @@ import { DeleteOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOut
 import ExportMemberBorrowReturning from "./ExportMemberBorrowReturning";
 import { showDeleteConfirm } from "../../../../utils/showDeleteConfirm";
 import ImportMemberBorrowReturning from "./ImportMemberBorrowReturning";
+import moment from "moment";
 
 function MemberBorrowReturning() {
     const [data, setData] = useState<MemberBorrowReturningDTO[]>([]);
@@ -24,6 +25,7 @@ function MemberBorrowReturning() {
     useEffect(() => { fetchData() }, []);
 
     const fetchData = async () => {
+        
         const infoArray = await getMemberBorrowReturning(valueSearch);
         const dataWithIndex = infoArray.map((item, index) => ({ stt: index, ...item }));
         setData(dataWithIndex);

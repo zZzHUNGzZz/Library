@@ -50,6 +50,7 @@ export const CreateOrUpdateMember: React.FC<IProps> = (props) => {
             message.success("Thêm mới dữ liệu thành công!");
         }
         props.onCreateOrUpdateSuccess();
+        onCancel();
     }
 
     const onCancel = () => {

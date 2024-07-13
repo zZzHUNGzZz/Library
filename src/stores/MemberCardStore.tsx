@@ -1,6 +1,7 @@
 import { message } from "antd";
 import { database } from "../firebase";
 import { memberHasCard } from "./MemberStore";
+import { randomCode } from "../utils/randomCode";
 
 const dayjs = require('dayjs');
 
@@ -60,12 +61,13 @@ export const createMemberCard = (data: MemberCardDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    const { me_ca_start_valid, me_ca_end_valid, me_ca_get_card, ...spreadData } = filteredData
+    const { me_ca_start_valid, me_ca_end_valid, me_ca_get_card, me_ca_code,...spreadData } = filteredData
     const newMemberCard = {
         ...spreadData,
         'me_ca_start_valid': !!me_ca_start_valid ? me_ca_start_valid.toISOString() : null,
         'me_ca_end_valid': !!me_ca_end_valid ? me_ca_end_valid.toISOString() : null,
         'me_ca_get_card': !!me_ca_get_card ? me_ca_get_card.toISOString() : null,
+        'me_ca_code': randomCode(),
     };
     database.ref("memberCard/").push().set(newMemberCard, function (error) {
         if (error) {

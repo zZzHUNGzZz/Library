@@ -2,6 +2,7 @@ import { message } from "antd";
 import { database } from "../firebase";
 import { DocumentDTO, updateTotalBook } from "./DocumentStore";
 import dayjs from 'dayjs';
+import moment from "moment";
 
 export interface DocumentInfoDTO {
     do_in_id: string,
@@ -66,7 +67,7 @@ export const createDocumentInfo = async (do_id: string, document: DocumentDTO) =
             do_in_status: 1,
             do_in_note: null,
             do_in_me_name: null,
-            do_in_create_at: dayjs(),
+            do_in_create_at: moment().toISOString(),
         };
 
         const newDocumentInfoRef = database.ref("documentInfo/").push();
@@ -94,7 +95,12 @@ export const updateDocumentInfo = (do_in_id: string, data: DocumentInfoDTO) => {
     const filteredData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value !== undefined ? value : null])
     );
-    database.ref("documentInfo/" + do_in_id).set(filteredData, function (error) {
+    const { do_in_create_at, ...spreadData } = filteredData
+    const newDocumentInfo = {
+        ...spreadData,
+        'do_in_create_at': !!do_in_create_at ? do_in_create_at.toISOString() : null,
+    };
+    database.ref("documentInfo/" + do_in_id).set(newDocumentInfo, function (error) {
         if (error) {
             console.error("Error update data:", error);
             message.error('Lỗi khi cập nhật dữ liệu!');
